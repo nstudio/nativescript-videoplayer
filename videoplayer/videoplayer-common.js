@@ -1,27 +1,27 @@
-﻿var view = require("ui/core/view");
-
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var view = require("ui/core/view");
+var dependencyObservable = require("ui/core/dependency-observable");
+var proxy = require("ui/core/proxy");
 var VideoPlayer = (function (_super) {
-    console.log('videoplayer function(_super) common.js');
-
-    global.__extends(VideoPlayer, _super);
-
+    __extends(VideoPlayer, _super);
     function VideoPlayer() {
-        _super.call(this);
+        _super.apply(this, arguments);
     }
-
-    console.log('videoplayer defineProperty.src');
-
-    Object.defineProperty(VideoPlayer.prototype, "src", {
+    Object.defineProperty(VideoPlayer.prototype, "video", {
         get: function () {
-            return this._getValue(VideoPlayer.srcProperty);
+            return this._getValue(VideoPlayer.videoProperty);
         },
         set: function (value) {
-            this._setValue(VideoPlayer.srcProperty, value);
-        }
+            this._setValue(VideoPlayer.videoProperty, value);
+        },
+        enumerable: true,
+        configurable: true
     });
-
+    VideoPlayer.videoProperty = new dependencyObservable.Property("video", "VideoPlayer", new proxy.PropertyMetadata(null));
     return VideoPlayer;
-
 })(view.View);
-
 exports.VideoPlayer = VideoPlayer;
