@@ -1,6 +1,4 @@
 ﻿import common = require("./videoplayer-common");
-import utils = require("utils/utils")
-
 global.moduleMerge(common, exports);
 
 export class VideoPlayer extends common.VideoPlayer {
@@ -16,7 +14,7 @@ export class VideoPlayer extends common.VideoPlayer {
 
     public _createUI() {
 
-        var that = new WeakRef(this);
+        //var that = new WeakRef(this);
 
         this._android = new android.widget.VideoView(this._context);
         console.log('this._android: ' + this._android);

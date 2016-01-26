@@ -18,7 +18,7 @@ var VideoPlayer = (function (_super) {
         configurable: true
     });
     VideoPlayer.prototype._createUI = function () {
-        var that = new WeakRef(this);
+        //var that = new WeakRef(this);
         this._android = new android.widget.VideoView(this._context);
         console.log('this._android: ' + this._android);
         var mMediaController = new android.widget.MediaController(this._context);

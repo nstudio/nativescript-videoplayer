@@ -8,8 +8,8 @@ var dependencyObservable = require("ui/core/dependency-observable");
 var proxy = require("ui/core/proxy");
 var VideoPlayer = (function (_super) {
     __extends(VideoPlayer, _super);
-    function VideoPlayer() {
-        _super.apply(this, arguments);
+    function VideoPlayer(options) {
+        _super.call(this, options);
     }
     Object.defineProperty(VideoPlayer.prototype, "video", {
         get: function () {
