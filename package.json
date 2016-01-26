@@ -1,0 +1,28 @@
+{
+  "name": "nativescript-videoplayer",
+  "version": "0.1.0",
+  "description": "A NativeScript plugin to provide an XML widget to implement a video player.",
+  "nativescript": {
+    "platforms": {
+      "android": "1.5.0"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bradmartin/nativescript-videoplayer"
+  },
+  "keywords": [
+    "NativeScript",
+    "native",
+    "script",
+    "video",
+    "video player",
+    "movie",
+    "bradmartin",
+    "Thorum"
+  ],
+  "author": "Brad Martin <bradmartin0905@gmail.com> (https://github.com/bradmartin)",
+  "license": "Apache-2.0",
+  "bugs": "https://github.com/bradmartin/nativescript-videoplayer/issues",
+  "homepage": "https://github.com/bradmartin/nativescript-videoplayer"
+}
