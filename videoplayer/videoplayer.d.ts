@@ -1,19 +1,19 @@
 ﻿/**
- * Contains the VideoPlayer class, which represents a standard videoplayer widget.
+ * Contains the VideoPlayer class, which represents a standard video player widget.
  */
-declare module "ui/videoplayer" {
+
+declare module "videoplayer" {
     import observable = require("data/observable");
     import dependencyObservable = require("ui/core/dependency-observable");
     import view = require("ui/core/view");
 
     /**
-     * Represents a standard Button widget.
+     * Represents a Video Player component.
      */
-    export class VideoPlayer extends view.View {
-        /**
-         * Represents the observable property backing the text property of each Button instance.
-         */
-        public static videoProperty: dependencyObservable.Property;        
+    export class Video extends view.View {
+        public static srcProperty: dependencyObservable.Property;
+        public static isLoadingProperty: dependencyObservable.Property;
+        public static autoplayProperty: dependencyObservable.Property;    
 
         /**
          * Gets the native [android widget](http://developer.android.com/reference/android/widget/VideoView.html) that represents the user interface for this component. Valid only when running on Android OS.
@@ -26,28 +26,35 @@ declare module "ui/videoplayer" {
         ios: any /* AVPlayerViewController */;
 
         /**
-         * Gets or sets the video path displayed by this instance.
+         * Gets or sets the source of the Video. This can be either an URL string or a native video file.
          */
-        video: string;
+        src: any;
 
         /**
-         * A basic method signature to hook an event listener (shortcut alias to the addEventListener method).
-         * @param eventNames - String corresponding to events (e.g. "propertyChange"). Optionally could be used more events separated by `,` (e.g. "propertyChange", "change"). 
-         * @param callback - Callback function which will be executed when event is raised.
-         * @param thisArg - An optional parameter which will be used as `this` context for callback execution.
-         */
-        on(eventNames: string, callback: (data: observable.EventData) => void, thisArg?: any);
+        * Gets or set the autoplay attribute
+        */
+        autoplay: boolean;
+
+       /**
+        * Gets a value indicating if the image is currently loading
+        */
+        isLoading: boolean;
 
     }
-    
-    
+
     /**
-    * Provides common options for creating an videoplayer.
+    * Provides common options for creating a video
     */
     export interface Options extends view.Options {
         /**
-        * Gets or sets the path of the video.
+         * Gets or sets the video source
+         */
+        src: string;
+
+        /**
+        * Gets or set the autoplay attribute
         */
-        video: string;
+        autoplay: boolean;
     }
+
 }

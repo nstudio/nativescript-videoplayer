@@ -1,12 +1,12 @@
 ﻿import common = require("./videoplayer-common");
+import utils = require("utils/utils")
+
 global.moduleMerge(common, exports);
 
-export class VideoPlayer extends common.VideoPlayer {
+export class Video extends common.Video {
     private _android: android.widget.VideoView;
-
-    constructor() {
-        super();
-    }
+    private _mediaController: android.widget.MediaController;
+    private _MediaPlayer: android.media.MediaPlayer;
 
     get android(): android.widget.VideoView {
         return this._android;
@@ -14,29 +14,33 @@ export class VideoPlayer extends common.VideoPlayer {
 
     public _createUI() {
 
-        //var that = new WeakRef(this);
+        var that = new WeakRef(this);
 
-        this._android = new android.widget.VideoView(this._context);
-        console.log('this._android: ' + this._android);
+        this._android = new android.widget.VideoView(this._context);       
+        this._mediaController = new android.widget.MediaController(this._context);
+        this._MediaPlayer = new android.media.MediaPlayer;
 
-        var mMediaController = new android.widget.MediaController(this._context);
-        this._android.setMediaController(mMediaController);
+        this._android.setMediaController(this._mediaController);
 
-        if (this.video)
-            var url = android.net.Uri.parse(this.video);
+        if (this.src) {
+            var url = android.net.Uri.parse(this.src);
             this._android.setVideoURI(url);
+        }
 
-        //this._android.setOnClickListener(new android.view.View.OnClickListener(
-        //    <utils.Owned & android.view.View.IOnClickListener>{
-        //        get owner() {
-        //            return that.get();
-        //        },
+        if (this.autoplay === true) {
+            this._android.requestFocus();
+            this._android.start();
+        }
 
-        //        onClick: function (v) {
-        //            if (this.owner) {
-        //                this.owner._emit(common.Button.tapEvent);
-        //            }
+        //if (this.onComplete) {
+        //    // Create the Complete Listener - this is triggered once a video reaches the end
+        //    this._android.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener({
+        //        //onCompletion: this.onComplete;
+        //        onCompletion: function (args) {
+        //            console.log('Video Done');
         //        }
         //    }));
+        //}        
+                
     }
 }
