@@ -13,7 +13,8 @@ declare module "videoplayer" {
     export class Video extends view.View {
         public static srcProperty: dependencyObservable.Property;
         public static isLoadingProperty: dependencyObservable.Property;
-        public static autoplayProperty: dependencyObservable.Property;    
+        public static autoplayProperty: dependencyObservable.Property;  
+        public static finishedCallbackProperty: dependencyObservable.Property;  
 
         /**
          * Gets the native [android widget](http://developer.android.com/reference/android/widget/VideoView.html) that represents the user interface for this component. Valid only when running on Android OS.
@@ -40,6 +41,11 @@ declare module "videoplayer" {
         */
         isLoading: boolean;
 
+        /*
+        * Gets or sets the finished callback that executes when the video reaches its end.
+        */
+        finishedCallback: Function;
+
     }
 
     /**
@@ -55,6 +61,11 @@ declare module "videoplayer" {
         * Gets or set the autoplay attribute
         */
         autoplay: boolean;
+
+        /*
+        * Gets or sets the finished callback that executes when the video reaches its end.
+        */
+        finishedCallback: Function;
     }
 
 }
