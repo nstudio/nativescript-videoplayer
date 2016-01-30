@@ -1,6 +1,8 @@
 ﻿import common = require("./videoplayer-common");
 import utils = require("utils/utils")
 
+declare var android: any;
+
 global.moduleMerge(common, exports);
 
 export class Video extends common.Video {
@@ -16,7 +18,7 @@ export class Video extends common.Video {
 
         var that = new WeakRef(this);
 
-        this._mVideoView = new android.widget.VideoView(this._context);       
+        this._mVideoView = new android.widget.VideoView(this._context);
         this._mMediaController = new android.widget.MediaController(this._context);
         this._mMediaPlayer = new android.media.MediaPlayer;
 
@@ -24,7 +26,7 @@ export class Video extends common.Video {
         * http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html#setMediaController(android.widget.MediaController)
         */
         this._mVideoView.setMediaController(this._mMediaController);
-        
+
         /**
         * http://developer.android.com/intl/zh-tw/reference/android/widget/MediaController.html#setAnchorView(android.view.View)
         * Set the view that acts as the anchor for the control view. This can for example be a VideoView, or your Activity's main view. When VideoView calls this method, it will use the VideoView's parent as the anchor.
@@ -38,7 +40,7 @@ export class Video extends common.Video {
             } else {
                 let url: string = android.net.Uri.parse(this.src);
                 this._mVideoView.setVideoURI(url);
-            }            
+            }
         }
 
         /*
@@ -56,7 +58,7 @@ export class Video extends common.Video {
         //        //onCompletion: this.onComplete;
         //        onCompletion: this.finishedCallback;
         //    }));
-        //}        
-                
+        //}
+
     }
 }

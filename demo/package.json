@@ -1,15 +1,18 @@
 {
-  "nativescript": {
-    "id": "org.nativescript.videoPlayer",
-    "tns-android": {
-      "version": "1.5.1"
-    }
-  },
-  "dependencies": {
-    "tns-core-modules": "1.5.1"
-  },
-  "devDependencies": {
-    "nativescript-dev-typescript": "^0.2.3",
-    "typescript": "^1.7.5"
-  }
+	"nativescript": {
+		"id": "org.nativescript.videoPlayer",
+		"tns-android": {
+			"version": "1.5.1"
+		},
+		"tns-ios": {
+			"version": "1.5.2"
+		}
+	},
+	"dependencies": {
+		"tns-core-modules": "1.5.1"
+	},
+	"devDependencies": {
+		"nativescript-dev-typescript": "^0.2.3",
+		"typescript": "^1.7.5"
+	}
 }

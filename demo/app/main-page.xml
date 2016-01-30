@@ -1,10 +1,10 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
-      xmlns:VideoPlayer="videoplayer" 
+      xmlns:VideoPlayer="videoplayer"
       loaded="pageLoaded">
     <ScrollView>
         <StackLayout>
             <label text="&lt;VideoPlayer:Video src='someVideo'&gt;" class="title" textWrap="true" />
-            <VideoPlayer:Video loaded="videoplayerLoaded" finished="videoFinished" autoplay="true" height="260" src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" />
+            <VideoPlayer:Video loaded="videoplayerLoaded" finished="videoFinished" autoplay="true" height="260" src="res://big_buck_bunny.mp4" />
         </StackLayout>
-    </ScrollView>    
+    </ScrollView>
 </Page>

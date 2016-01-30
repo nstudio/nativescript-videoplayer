@@ -3,18 +3,19 @@
  */
 
 declare module "videoplayer" {
-    import observable = require("data/observable");
-    import dependencyObservable = require("ui/core/dependency-observable");
-    import view = require("ui/core/view");
+    import {Observable} from "data/observable";// = require("data/observable");
+    import {DependencyObservable,Property} from "ui/core/dependency-observable";
+    import {View, Options as Opts} from "ui/core/view";
+    import {VideoSource} from "video-source";
 
     /**
      * Represents a Video Player component.
      */
-    export class Video extends view.View {
-        public static srcProperty: dependencyObservable.Property;
-        public static isLoadingProperty: dependencyObservable.Property;
-        public static autoplayProperty: dependencyObservable.Property;  
-        public static finishedCallbackProperty: dependencyObservable.Property;  
+    export class Video extends View {
+        public static srcProperty: Property;
+        public static isLoadingProperty: Property;
+        public static autoplayProperty: Property;
+        public static finishedCallbackProperty: Property;
 
         /**
          * Gets the native [android widget](http://developer.android.com/reference/android/widget/VideoView.html) that represents the user interface for this component. Valid only when running on Android OS.
@@ -30,6 +31,8 @@ declare module "videoplayer" {
          * Gets or sets the source of the Video. This can be either an URL string or a native video file.
          */
         src: any;
+
+        videoSource: VideoSource;
 
         /**
         * Gets or set the autoplay attribute
@@ -51,7 +54,7 @@ declare module "videoplayer" {
     /**
     * Provides common options for creating a video
     */
-    export interface Options extends view.Options {
+    export interface Options extends Opts {
         /**
          * Gets or sets the video source
          */
