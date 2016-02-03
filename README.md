@@ -1,5 +1,5 @@
 # NativeScript Video Player :clapper:
-A NativeScript plugin to provide an XML widget for playing videos.
+A NativeScript plugin to provide an XML widget for playing local and remote video files.
 
 #### [Android VideoView](http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html)
 #### [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)
@@ -19,7 +19,10 @@ A NativeScript plugin to provide an XML widget for playing videos.
             finished="videoFinished" 
             autoplay="true" 
             height="300" 
-            src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" />
+            src="~/videos/small.mp4" />
+
+            <!-- Here is a remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->
+            
         </StackLayout>
 </Page>
 ```
@@ -28,7 +31,8 @@ A NativeScript plugin to provide an XML widget for playing videos.
 **src** *required*
 
 Attribute to specify the video file to play, can either be a remote file or local video file. 
-The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.
+
+<sub>The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.</sub>
 
 **autoplay** *optional*
 
@@ -36,5 +40,5 @@ Attribute to set if the video should start playing as soon as possible or to wai
 
 **finished** *optional*
 
-Attribute to specify an event callback to execute once the video reaches the end of its duration.
+Attribute to specify an event callback to execute when the video reaches the end of its duration.
 
