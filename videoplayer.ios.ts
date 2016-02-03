@@ -10,7 +10,6 @@ declare var NSURL, AVPlayer, AVPlayerViewController, UIView;
 
 global.moduleMerge(common, exports);
 
-
 function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
     var video = <Video>data.object;
     video._setNativeVideo(data.newValue ? data.newValue.ios : null);

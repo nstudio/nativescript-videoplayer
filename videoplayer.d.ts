@@ -3,19 +3,27 @@
  */
 
 declare module "videoplayer" {
-    import {Observable} from "data/observable";// = require("data/observable");
-    import {DependencyObservable,Property} from "ui/core/dependency-observable";
-    import {View, Options as Opts} from "ui/core/view";
-    import {VideoSource} from "video-source";
+    import dependencyObservable = require("ui/core/dependency-observable");
+    import videoSource = require("video-source");
+    import view = require("ui/core/view");
 
     /**
      * Represents a Video Player component.
      */
-    export class Video extends View {
-        public static srcProperty: Property;
-        public static isLoadingProperty: Property;
-        public static autoplayProperty: Property;
-        public static finishedCallbackProperty: Property;
+    export class Video extends view.View {
+        public static srcProperty: dependencyObservable.Property;
+        public static videoSourceProperty: dependencyObservable.Property;
+        public static isLoadingProperty: dependencyObservable.Property;
+        
+        /**
+         * Dependency property used to support binding operations for the autoplay of the current video instance.
+         */
+        public static autoplayProperty: dependencyObservable.Property;        
+        
+        /**
+         * String value used when hooking to finished event.
+         */
+        public static finishedEvent: string;
 
         /**
          * Gets the native [android widget](http://developer.android.com/reference/android/widget/VideoView.html) that represents the user interface for this component. Valid only when running on Android OS.
@@ -31,32 +39,47 @@ declare module "videoplayer" {
          * Gets or sets the source of the Video. This can be either an URL string or a native video file.
          */
         src: any;
+        
+        /*
+        * Gets or sets the video source of the video.
+        */
 
-        videoSource: VideoSource;
+        videoSource: videoSource.VideoSource;
 
         /**
         * Gets or set the autoplay attribute
         */
         autoplay: boolean;
 
-       /**
-        * Gets a value indicating if the image is currently loading
-        */
+        /**
+         * Gets a value indicating if the image is currently loading
+         */
         isLoading: boolean;
 
         /*
         * Gets or sets the finished callback that executes when the video reaches its end.
         */
-        finishedCallback: Function;
+        // finishedCallback: Function;
+        
+        /**
+         * Raised when a tap event occurs.
+         */
+        on(event: "finished", callback: (args: observable.EventData) => void, thisArg?: any);
 
     }
 
     /**
     * Provides common options for creating a video
     */
-    export interface Options extends Opts {
+    export interface Options extends view.Options {
+        
+        /*
+        * Gets or set the video source of the video.
+        */
+        videoSource: videoSource.VideoSource;
+        
         /**
-         * Gets or sets the video source
+         * Gets or sets the URL of the video
          */
         src: string;
 
@@ -68,7 +91,7 @@ declare module "videoplayer" {
         /*
         * Gets or sets the finished callback that executes when the video reaches its end.
         */
-        finishedCallback: Function;
+        finished: string;
     }
 
 }

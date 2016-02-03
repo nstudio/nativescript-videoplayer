@@ -1,64 +1,87 @@
-﻿import common = require("./videoplayer-common");
-import utils = require("utils/utils")
+﻿import videoCommon = require("./videoplayer-common");
+import videoSource = require("video-source");
+import dependencyObservable = require("ui/core/dependency-observable");
+import proxy = require("ui/core/proxy");
+import * as enumsModule from "ui/enums";
+import view = require("ui/core/view");
+import utils = require("utils/utils");
 
-declare var android: any;
+global.moduleMerge(videoCommon, exports);
 
-global.moduleMerge(common, exports);
+function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
+    var video = <Video>data.object;
+    if (!video.android) {
+        return;
+    }
 
-export class Video extends common.Video {
-    private _mVideoView: android.widget.VideoView;
-    private _mMediaController: android.widget.MediaController;
-    private _mMediaPlayer: android.media.MediaPlayer;
+    video._setNativeVideo(data.newValue ? data.newValue.android : null);
+}
+
+// register the setNativeValue callback
+(<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
+
+export class Video extends videoCommon.Video {
+    private _android: android.widget.VideoView;
 
     get android(): android.widget.VideoView {
-        return this._mVideoView;
+        return this._android;
     }
 
     public _createUI() {
 
         var that = new WeakRef(this);
 
-        this._mVideoView = new android.widget.VideoView(this._context);
-        this._mMediaController = new android.widget.MediaController(this._context);
-        this._mMediaPlayer = new android.media.MediaPlayer;
+        this._android = new android.widget.VideoView(this._context);
+        var _mMediaController = new android.widget.MediaController(this._context);
 
-        /*
-        * http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html#setMediaController(android.widget.MediaController)
-        */
-        this._mVideoView.setMediaController(this._mMediaController);
-
-        /**
-        * http://developer.android.com/intl/zh-tw/reference/android/widget/MediaController.html#setAnchorView(android.view.View)
-        * Set the view that acts as the anchor for the control view. This can for example be a VideoView, or your Activity's main view. When VideoView calls this method, it will use the VideoView's parent as the anchor.
-        */
-        this._mMediaController.setAnchorView(this._mVideoView);
+        this._android.setMediaController(_mMediaController);
+        _mMediaController.setAnchorView(this._android);
 
         if (this.src) {
-            // Check if src is local file/resource or URL for remote video file and use correct method() for VideoView
             if (utils.isFileOrResourcePath(this.src) === true) {
-                this._mVideoView.setVideoPath(this.src);
+                console.log('src isFileOrResourcePath = TRUE');
+                console.log('fileOrResource src: ' + this.src);
+
+                var url: string = android.net.Uri.parse(this.src);
+                this._android.setVideoURI(url);
             } else {
-                let url: string = android.net.Uri.parse(this.src);
-                this._mVideoView.setVideoURI(url);
+                console.log('src isFileOrResourcePath = FALSE');
+                // var url: string = android.net.Uri.parse(this.src);
+                this._android.setVideoPath(this.src);
+                // this._android.setVideoURI(url);
             }
         }
 
-        /*
-        * http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html#start()
-        * Start playing the video if autoplay: boolean = true;
-        */
         if (this.autoplay === true) {
-            this._mVideoView.requestFocus();
-            this._mVideoView.start();
+            this._android.requestFocus();
+            this._android.start();
         }
 
-        //if (this.finishedCallback) {
-        //    // Create the Complete Listener - this is triggered once a video reaches the end
-        //    this._mVideoView.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener({
-        //        //onCompletion: this.onComplete;
-        //        onCompletion: this.finishedCallback;
-        //    }));
-        //}
+        if (this.finishedCallback) {
+            // Create the Complete Listener - this is triggered once a video reaches the end
+            this._android.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener(
+                {
+                    get owner() {
+                        return that.get();
+                    },
+
+                    onCompletion: function(v) {
+                        if (this.owner) {
+                            this.owner._emit(videoCommon.Video.finishedEvent);
+                        }
+                    }
+                }));
+        }
 
     }
+
+    public _setNativeVideo(nativeVideo: any) {
+        console.log('_setNativeVideo(): ' + nativeVideo);
+        this.android.video = nativeVideo;
+    }
+
+    public setNativeSource(nativePlayerSrc: string) {
+        this.src = nativePlayerSrc;
+    }
+
 }
