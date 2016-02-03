@@ -28,17 +28,17 @@ A NativeScript plugin to provide an XML widget for playing local and remote vide
 ```
 
 ## Attributes
-**src** *required*
+**src** - *required*
 
 Attribute to specify the video file to play, can either be a remote file or local video file. 
 
 <sub>The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.</sub>
 
-**autoplay** *optional*
+**autoplay** - *optional*
 
 Attribute to set if the video should start playing as soon as possible or to wait for user interaction.
 
-**finished** *optional*
+**finished** - *optional*
 
 Attribute to specify an event callback to execute when the video reaches the end of its duration.
 
