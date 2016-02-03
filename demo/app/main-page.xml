@@ -1,10 +1,27 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
-      xmlns:VideoPlayer="videoplayer"
-      loaded="pageLoaded">
+      xmlns:VideoPlayer="videoplayer">
     <ScrollView>
         <StackLayout>
-            <label text="&lt;VideoPlayer:Video src='someVideo'&gt;" class="title" textWrap="true" />
-            <VideoPlayer:Video loaded="videoplayerLoaded" finished="videoFinished" autoplay="true" height="260" src="res://big_buck_bunny.mp4" />
+            <label text="&lt;VideoPlayer:Video src='someVideo'&gt; finished='videoDoneEvent' autoplay='boolean' src='videoSrc'" class="title" textWrap="true" />
+            <!--<VideoPlayer:Video id="customVideoPlayer" 
+            loaded="videoplayerLoaded" 
+            finished="videoFinished" 
+            autoplay="true" 
+            height="300" 
+            src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" />-->
+
+            <VideoPlayer:Video id="customVideoPlayer"
+            loaded="videoplayerLoaded"
+            finished="videoFinished"
+            autoplay="true"
+            height="300"
+            src="http://techslides.com/demos/sample-videos/small.mp4" />
+
         </StackLayout>
     </ScrollView>
 </Page>
+
+
+<!--src="~/videos/boys_dancing.mp4" />-->
+<!--http://techslides.com/demos/sample-videos/small.mp4-->
+<!--https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4-->

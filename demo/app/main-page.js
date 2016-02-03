@@ -1,21 +1,18 @@
-var vmModule = require("./main-view-model");
-             
-function pageLoaded(args) {     
-    var page = args.object;
-    page.bindingContext = vmModule.mainViewModel;
-}
-exports.pageLoaded = pageLoaded;
-
-
 function videoplayerLoaded(args) {
-    var video = args.object;
-    console.log('video: ' + video);
-    console.log('video src: ' + video.src);
+    try {
+        var video = args.object;
+        console.log('video: ' + video);
+        console.log('video android: ' + video.android);
+        console.log('video src: ' + video.src);
+    } catch (error) {
+        console.log(error);
+    }
 }
 exports.videoplayerLoaded = videoplayerLoaded;
 
 function videoFinished(args) {
-    console.log('video finished playing, move to next track.');
+    // alert('Video finished :)');
+    console.log('video finished event executed');
+    // args.object.src = 'http://techslides.com/demos/sample-videos/small.mp4';
 }
 exports.videoFinished = videoFinished;
- 

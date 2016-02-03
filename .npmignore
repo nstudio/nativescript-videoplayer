@@ -1,4 +1,7 @@
 ﻿# generated files
 .vs
 .vs/
-nativescript-snackbar.sln
+nativescript-videoplayer.sln
+.sln
+*.sln
+demo/
