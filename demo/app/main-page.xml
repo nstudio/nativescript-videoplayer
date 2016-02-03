@@ -1,5 +1,5 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
-      xmlns:VideoPlayer="videoplayer">
+      xmlns:VideoPlayer="nativescript-videoplayer">
     <ScrollView>
         <StackLayout>
             <label text="&lt;VideoPlayer:Video src='someVideo'&gt; finished='videoDoneEvent' autoplay='boolean' src='videoSrc'" class="title" textWrap="true" />
