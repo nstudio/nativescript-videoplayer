@@ -3,6 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var fs = require('file-system');
+
 var videoCommon = require("./videoplayer-common");
 var utils = require("utils/utils");
 global.moduleMerge(videoCommon, exports);
@@ -34,8 +36,22 @@ var Video = (function (_super) {
         this._android.setMediaController(_mMediaController);
         _mMediaController.setAnchorView(this._android);
         if (this.src) {
-            if (utils.isFileOrResourcePath(this.src) === true) {
-                console.log('src isFileOrResourcePath = TRUE');
+            var isUrl = false;
+            if (this.src.indexOf("://") !== -1) {
+               if (this.src.indexOf('res://') === -1) {
+                    isUrl = true;
+               }
+            }
+
+            if (!isUrl) {
+                var currentPath = fs.knownFolders.currentApp().path;
+                if (this.src[1] === '/' && (this.src[0] === '.' || this.src[0] === '~')) {
+                    this.src = this.src.substr(2);
+                }
+                if (this.src[0] !== '/') {
+                    this.src = currentPath + '/' + this.src;
+                }
+                console.log('src isFileOrResourcePath = TRUE', this.src);
                 console.log('fileOrResource src: ' + this.src);
                 var url = android.net.Uri.parse(this.src);
                 this._android.setVideoURI(url);
