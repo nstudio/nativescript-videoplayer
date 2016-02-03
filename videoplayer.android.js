@@ -3,10 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var fs = require('file-system');
-
 var videoCommon = require("./videoplayer-common");
-var utils = require("utils/utils");
+var fs = require("file-system");
 global.moduleMerge(videoCommon, exports);
 function onVideoSourcePropertyChanged(data) {
     var video = data.object;
@@ -38,11 +36,10 @@ var Video = (function (_super) {
         if (this.src) {
             var isUrl = false;
             if (this.src.indexOf("://") !== -1) {
-               if (this.src.indexOf('res://') === -1) {
+                if (this.src.indexOf('res://') === -1) {
                     isUrl = true;
-               }
+                }
             }
-
             if (!isUrl) {
                 var currentPath = fs.knownFolders.currentApp().path;
                 if (this.src[1] === '/' && (this.src[0] === '.' || this.src[0] === '~')) {
@@ -51,14 +48,9 @@ var Video = (function (_super) {
                 if (this.src[0] !== '/') {
                     this.src = currentPath + '/' + this.src;
                 }
-                console.log('src isFileOrResourcePath = TRUE', this.src);
-                console.log('fileOrResource src: ' + this.src);
-                var url = android.net.Uri.parse(this.src);
-                this._android.setVideoURI(url);
+                this._android.setVideoURI(android.net.Uri.parse(this.src));
             }
             else {
-                console.log('src isFileOrResourcePath = FALSE');
-                // var url: string = android.net.Uri.parse(this.src);
                 this._android.setVideoPath(this.src);
             }
         }
@@ -81,7 +73,6 @@ var Video = (function (_super) {
         }
     };
     Video.prototype._setNativeVideo = function (nativeVideo) {
-        console.log('_setNativeVideo(): ' + nativeVideo);
         this.android.video = nativeVideo;
     };
     Video.prototype.setNativeSource = function (nativePlayerSrc) {

@@ -1,6 +1,9 @@
 {
 	"nativescript": {
-		"id": "org.nativescript.videoPlayer"
+		"id": "org.nativescript.videoPlayer",
+		"tns-android": {
+			"version": "1.5.1"
+		}
 	},
 	"dependencies": {
 		"nativescript-videoplayer": "file:..",
