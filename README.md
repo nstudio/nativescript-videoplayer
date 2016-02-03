@@ -14,7 +14,7 @@ A NativeScript plugin to provide an XML widget for playing local and remote vide
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
       xmlns:VideoPlayer="videoplayer">
         <StackLayout>
-            <VideoPlayer:Video id="customVideoPlayer" 
+            <VideoPlayer:Video
             loaded="videoplayerLoaded" 
             finished="videoFinished" 
             autoplay="true" 
