@@ -48,7 +48,9 @@ var Video = (function (_super) {
                 if (this.src[1] === '/' && (this.src[0] === '.' || this.src[0] === '~')) {
                     this.src = this.src.substr(2);
                 }
-                this.src = currentPath + '/' + this.src;
+                if (this.src[0] !== '/') {
+                    this.src = currentPath + '/' + this.src;
+                }
                 console.log('src isFileOrResourcePath = TRUE', this.src);
                 console.log('fileOrResource src: ' + this.src);
                 var url = android.net.Uri.parse(this.src);
