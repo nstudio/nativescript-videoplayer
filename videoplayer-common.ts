@@ -1,12 +1,15 @@
-﻿import dependencyObservable = require("ui/core/dependency-observable");
+﻿/// <reference path="../tns-core-modules/tns-core-modules.d.ts" /> Needed for autocompletion and compilation.
+
+import dependencyObservable = require("ui/core/dependency-observable");
 import view = require("ui/core/view");
 import proxy = require("ui/core/proxy");
-import videoSource = require("../video-source");
+import videoSource = require("./video-source/video-source");
 import definition = require("videoplayer");
 import enums = require("ui/enums");
 import platform = require("platform");
 import utils = require("utils/utils");
 import * as types from "utils/types";
+
 
 var SRC = "src";
 var VIDEO_SOURCE = "videoSource";
@@ -37,12 +40,11 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
                 video._setValue(Video.isLoadingProperty, false);
             }
         }
-    } else if (value instanceof videoSource) {
+    } else if (value instanceof videoSource.VideoSource) {
         video.videoSource = value;
     } else {
         video.videoSource = videoSource.fromNativeSource(value);
     }
-    // video._setNativeVideo(data.newValue);
 }
 
 

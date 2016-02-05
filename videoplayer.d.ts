@@ -3,9 +3,9 @@
  */
 
 declare module "videoplayer" {
-    import dependencyObservable = require("ui/core/dependency-observable");
-    import videoSource = require("video-source");
-    import view = require("ui/core/view");
+    import * as dependencyObservable from "ui/core/dependency-observable";
+    import * as videoSource from "./video-source/video-source";
+    import * as view from "ui/core/view";
 
     /**
      * Represents a Video Player component.
@@ -14,12 +14,12 @@ declare module "videoplayer" {
         public static srcProperty: dependencyObservable.Property;
         public static videoSourceProperty: dependencyObservable.Property;
         public static isLoadingProperty: dependencyObservable.Property;
-        
+
         /**
          * Dependency property used to support binding operations for the autoplay of the current video instance.
          */
-        public static autoplayProperty: dependencyObservable.Property;        
-        
+        public static autoplayProperty: dependencyObservable.Property;
+
         /**
          * String value used when hooking to finished event.
          */
@@ -39,7 +39,7 @@ declare module "videoplayer" {
          * Gets or sets the source of the Video. This can be either an URL string or a native video file.
          */
         src: any;
-        
+
         /*
         * Gets or sets the video source of the video.
         */
@@ -60,7 +60,7 @@ declare module "videoplayer" {
         * Gets or sets the finished callback that executes when the video reaches its end.
         */
         // finishedCallback: Function;
-        
+
         /**
          * Raised when a tap event occurs.
          */
@@ -72,12 +72,12 @@ declare module "videoplayer" {
     * Provides common options for creating a video
     */
     export interface Options extends view.Options {
-        
+
         /*
         * Gets or set the video source of the video.
         */
         videoSource: videoSource.VideoSource;
-        
+
         /**
          * Gets or sets the URL of the video
          */

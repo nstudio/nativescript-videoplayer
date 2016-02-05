@@ -5,12 +5,13 @@
   "description": "A NativeScript plugin to provide an XML widget to implement a video player.",
   "nativescript": {
     "platforms": {
-      "android": "1.5.0"
+      "android": "1.5.0",
+      "ios": "1.5.2"
     }
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bradmartin/nativescript-videoplayer"
+    "url": "git+https://github.com/bradmartin/nativescript-videoplayer.git"
   },
   "keywords": [
     "NativeScript",
@@ -27,10 +28,29 @@
       "name": "Nathanael Anderson",
       "email": "nathan@master-technology",
       "url": "https://github.com/nathanaela"
+    },
+    {
+      "name": "Alexander Ziskind",
+      "email": "alex@nuvious.com",
+      "url": "https://github.com/alexziskind1"
     }
   ],
-  "author": "Brad Martin <bradmartin0905@gmail.com> (https://github.com/bradmartin)",
+  "author": {
+    "name": "Brad Martin",
+    "email": "bradmartin0905@gmail.com",
+    "url": "https://github.com/bradmartin"
+  },
   "license": "Apache-2.0",
-  "bugs": "https://github.com/bradmartin/nativescript-videoplayer/issues",
-  "homepage": "https://github.com/bradmartin/nativescript-videoplayer"
+  "bugs": {
+    "url": "https://github.com/bradmartin/nativescript-videoplayer/issues"
+  },
+  "homepage": "https://github.com/bradmartin/nativescript-videoplayer",
+  "readme": "# NativeScript Video Player :clapper:\nA NativeScript plugin to provide an XML widget for playing local and remote video files.\n\n#### [Android VideoView](http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html)\n#### [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)\n\n## Installation\n`npm install nativescript-videoplayer`\n\n## Usage\n\n###\n```XML\n<Page xmlns=\"http://schemas.nativescript.org/tns.xsd\"\n      xmlns:VideoPlayer=\"videoplayer\">\n        <StackLayout>\n            <VideoPlayer:Video\n            loaded=\"videoplayerLoaded\" \n            finished=\"videoFinished\" \n            autoplay=\"true\" \n            height=\"300\" \n            src=\"~/videos/small.mp4\" />\n\n            <!-- Here is a remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->\n            \n        </StackLayout>\n</Page>\n```\n\n## Attributes\n**src** - *required*\n\nAttribute to specify the video file to play, can either be a remote file or local video file. \n\n<sub>The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.</sub>\n\n**autoplay** - *optional*\n\nAttribute to set if the video should start playing as soon as possible or to wait for user interaction.\n\n**finished** - *optional*\n\nAttribute to specify an event callback to execute when the video reaches the end of its duration.\n\n",
+  "readmeFilename": "README.md",
+  "gitHead": "7a5addbe9192a7708fbaac9db42e33f2a156fea6",
+  "_id": "nativescript-videoplayer@0.1.0",
+  "scripts": {},
+  "_shasum": "7bdee571649168a79ded1bf63beb6d7b4b9cfa2a",
+  "_from": "..",
+  "_resolved": "file:.."
 }

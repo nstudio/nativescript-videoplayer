@@ -34,33 +34,23 @@ export class Video extends common.Video {
         this._ios = this._playerController.view;
 
         //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-        //this.src = videoUrlStr;
 
-            //let url: string = NSURL.URLWithString(this.src);
-            //this._ios = new AVPlayer(url);
-            //this._ios.play();
-
-
-        //this._playerController.player = this._ios;
     }
 
-    public _setNativeVideo(nativeVideo: any) {
-        this.ios.video = nativeVideo;
-        //this._src = nativeVideo;
+    public _setNativeVideo(nativeVideoPlayer: any) {
+        if (nativeVideoPlayer != null) {
+            this._player = nativeVideoPlayer;
+            this._playerController.player = this._player;
 
-        //let url: string = NSURL.URLWithString(this._src);
-        this._player = new AVPlayer(nativeVideo);
-        this._playerController.player = this._player;
+            this._player.play();
 
-        this._player.play();
-
-        if (isNaN(this.width) || isNaN(this.height)) {
-            this.requestLayout();
+            if (isNaN(this.width) || isNaN(this.height)) {
+                this.requestLayout();
+            }
         }
     }
 
     public _setNativePlayerSource(nativePlayerSrc: string) {
-        //this.ios = nativePlayer;
         this._src = nativePlayerSrc;
 
             let url: string = NSURL.URLWithString(this._src);
@@ -78,28 +68,4 @@ export class Video extends common.Video {
         return this._ios;
     }
 
-/*
-    public _createUI() {
-
-        this._playerController = new AVPlayerViewController();
-
-        if (this.src) {
-
-            // Check if src is local file/resource or URL for remote video file and use correct method() for VideoView
-            if (utils.isFileOrResourcePath(this.src) === true) {
-                // TODO: how does iOS handle local video files???
-            } else {
-                let url: string = NSURL.URLWithString(this.src);
-                //._player = new AVPlayer(url);
-                this._playerController.player = this._player;
-            }
-
-        }
-
-        // Start playing the video if autoplay: boolean = true;
-        if (this.autoplay === true) {
-            this._player.play();
-        }
-    }
-    */
 }
