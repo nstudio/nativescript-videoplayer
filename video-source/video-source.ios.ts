@@ -2,7 +2,7 @@ import types = require("utils/types");
 import fs = require("file-system");
 import common = require("./video-source-common");
 import enums = require("ui/enums");
-import definition = require("video-source");
+import definition = require("./video-source");
 
 declare var android, AVPlayer, NSBundle, NSURL;
 
@@ -13,9 +13,8 @@ export class VideoSource implements definition.VideoSource {
     public ios: AVPlayer;
 
     public loadFromResource(name: string): boolean {
-        let pa = NSBundle.mainBundle().pathForResourceOfType("big_buck_bunny", "mp4");
-        let videoURL = NSURL.fileURLWithPath(pa);
-        let player = AVPlayer(videoURL);
+        let videoURL = NSBundle.mainBundle().URLForResourceWithExtension(name, null);
+        let player = new AVPlayer(videoURL);
         this.ios = player;
         return this.ios != null;
     }
@@ -25,10 +24,12 @@ export class VideoSource implements definition.VideoSource {
         var fileName = types.isString(path) ? path.trim() : "";
 
         if (fileName.indexOf("~/") === 0) {
-            fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace("~/", ""));
+            fileName = 'file://' + fs.path.join(fs.knownFolders.currentApp().path, fileName.replace("~/", ""));
         }
 
-        //this.ios = UIImage.imageWithContentsOfFile(fileName); //Implement for video files
+        let videoURL = NSURL.URLWithString(fileName);
+        let player = new AVPlayer(videoURL);
+        this.ios = player;
         return this.ios != null;
     }
 
