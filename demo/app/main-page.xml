@@ -9,7 +9,7 @@
             finished="videoFinished"
             autoplay="true"
             height="280"
-            src="~/videos/small.mp4" />
+            src="~/videos/big_buck_bunny.mp4" />
 
         </StackLayout>
     </ScrollView>
