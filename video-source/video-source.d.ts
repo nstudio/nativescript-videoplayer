@@ -18,7 +18,7 @@ declare module "video-source" {
          * Gets the width of this instance. This is a read-only property.
          */
         width: number;  
-        
+         
         /**
          * The iOS-specific [AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html) instance. Will be undefined when running on Android.
          */

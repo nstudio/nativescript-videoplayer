@@ -19,7 +19,7 @@ export function fromNativeSource(source: any): definition.VideoSource {
 }
 
 export function fromUrl(url: string): definition.VideoSource {
-    var video = new definition.VideoSource();
+    var video = new definition.VideoSource(); 
     return video.loadFromUrl(url) ? video : null;
 }
 

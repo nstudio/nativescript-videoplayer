@@ -12,7 +12,7 @@ export class VideoSource implements definition.VideoSource {
     public android: android.widget.VideoView;
     public ios: AVPlayer;
 
-    public loadFromResource(name: string): boolean {
+    public loadFromResource(name: string): boolean { 
         let videoURL = NSBundle.mainBundle().URLForResourceWithExtension(name, null);
         let player = new AVPlayer(videoURL);
         this.ios = player;

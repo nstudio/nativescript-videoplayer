@@ -18,7 +18,7 @@ var fs: typeof fileSystemModule;
 function ensureFS() {
     if (!fs) {
         fs = require("file-system");
-    }
+    } 
 }
 
 var enums: typeof enumsModule;
