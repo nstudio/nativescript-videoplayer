@@ -1,6 +1,6 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "videoplayer.js",
   "description": "A NativeScript plugin to provide an XML widget to implement a video player.",
   "nativescript": {
