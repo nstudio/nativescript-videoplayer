@@ -8,7 +8,7 @@ import definition = require("videoplayer");
 import enums = require("ui/enums");
 import platform = require("platform");
 import utils = require("utils/utils");
-import * as types from "utils/types";
+import * as types from "utils/types"; 
 
 
 var SRC = "src";

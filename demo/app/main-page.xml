@@ -2,7 +2,7 @@
       xmlns:VideoPlayer="nativescript-videoplayer">
     <ScrollView>
         <StackLayout>
-            <label text="&lt;VideoPlayer:Video src='someVideo'&gt; finished='videoDoneEvent' autoplay='boolean' src='videoSrc'" class="title" textWrap="true" />
+            <label text="&lt;VideoPlayer:Video src='someVideo' finished='videoDoneEvent' autoplay='boolean' &gt;" class="title" textWrap="true" />
 
             <VideoPlayer:Video id="customVideoPlayer"
             loaded="videoplayerLoaded"

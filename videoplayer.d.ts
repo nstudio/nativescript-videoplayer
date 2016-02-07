@@ -9,7 +9,7 @@ declare module "videoplayer" {
 
     /**
      * Represents a Video Player component.
-     */
+     */ 
     export class Video extends view.View {
         public static srcProperty: dependencyObservable.Property;
         public static videoSourceProperty: dependencyObservable.Property;

@@ -11,9 +11,5 @@
 	"dependencies": {
 		"nativescript-videoplayer": "file:..",
 		"tns-core-modules": "latest"
-	},
-	"devDependencies": {
-		"nativescript-dev-typescript": "^0.2.3",
-		"typescript": "^1.7.5"
 	}
 }

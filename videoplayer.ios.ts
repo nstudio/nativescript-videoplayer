@@ -13,7 +13,7 @@ global.moduleMerge(common, exports);
 function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
     var video = <Video>data.object;
     video._setNativeVideo(data.newValue ? data.newValue.ios : null);
-}
+} 
 
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>common.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;

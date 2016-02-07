@@ -15,7 +15,7 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
         return;
     }
 
-    video._setNativeVideo(data.newValue ? data.newValue.android : null);
+    video._setNativeVideo(data.newValue ? data.newValue.android : null); 
 }
 
 // register the setNativeValue callback
