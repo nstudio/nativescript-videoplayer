@@ -46,3 +46,6 @@ Attribute to set if the video should start playing as soon as possible or to wai
 
 Attribute to specify an event callback to execute when the video reaches the end of its duration.
 
+## Sample Usage
+
+![Sample Usage](video.gif)

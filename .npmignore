@@ -5,3 +5,5 @@ nativescript-videoplayer.sln
 .sln
 *.sln
 demo/
+*.webinfo
+video.gif
