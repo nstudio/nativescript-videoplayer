@@ -239,5 +239,5 @@ _Pvt_Extensions
 .fake/
 
 node_modules/
-platforms/
+demo/platforms/
 hooks/
