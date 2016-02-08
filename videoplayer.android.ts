@@ -13,7 +13,7 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
     var video = <Video>data.object;
     if (!video.android) {
         return;
-    }
+    }  
 
     video._setNativeVideo(data.newValue ? data.newValue.android : null); 
 }

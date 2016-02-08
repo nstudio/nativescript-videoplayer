@@ -13,8 +13,8 @@ import * as types from "utils/types";
 
 var SRC = "src";
 var VIDEO_SOURCE = "videoSource";
-var VIDEO = "Video";
-var ISLOADING = "isLoading";
+var VIDEO = "Video"; 
+var ISLOADING = "isLoading"; 
 var AUTOPLAY = "autoplay";
 
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
