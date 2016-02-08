@@ -17,7 +17,7 @@ export class VideoSource implements definition.VideoSource {
         let player = new AVPlayer(videoURL);
         this.ios = player;
         return this.ios != null;
-    }
+    } 
 
     public loadFromFile(path: string): boolean {
         var fileName = types.isString(path) ? path.trim() : "";
@@ -35,7 +35,7 @@ export class VideoSource implements definition.VideoSource {
     public loadFromUrl(url: string): boolean {
         let videoURL = NSURL.URLWithString(url);
         let player = new AVPlayer(videoURL);
-        this.ios = player;
+        this.ios = player; 
         return this.ios != null;
     }
 
