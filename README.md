@@ -34,9 +34,7 @@ From your command prompt/terminal go to your app's root folder and execute:
 ## Attributes
 **src** - *required*
 
-Attribute to specify the video file to play, for best performance use local video files if possible. Android currently supports remote video files, we gladly appreciate anyone willing to make a PR to get iOS working with remote video files.
-
-<sub>The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.</sub>
+Attribute to specify the video file to play, for best performance use local video files if possible. The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.
 
 **autoplay - (boolean)** - *optional*
 
@@ -49,3 +47,8 @@ Attribute to specify an event callback to execute when the video reaches the end
 ## Sample Usage
 
 ![Sample Usage](video.gif)
+
+### Contributors
+
+- Alex Ziskind [@digitalix](https://twitter.com/digitalix)
+- Nathanael Anderson [@CongoCart](https://twitter.com/CongoCart)
