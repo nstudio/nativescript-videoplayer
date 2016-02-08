@@ -6,6 +6,12 @@ Android | iOS
 ---------- | -----------
 [Android VideoView](http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html) |  [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)
 
+
+## Sample Usage
+
+![Sample Usage](video.gif)
+
+
 ## Installation
 From your command prompt/terminal go to your app's root folder and execute:
 
@@ -43,10 +49,6 @@ Attribute to set if the video should start playing as soon as possible or to wai
 **finished - (function)** - *optional*
 
 Attribute to specify an event callback to execute when the video reaches the end of its duration.
-
-## Sample Usage
-
-![Sample Usage](video.gif)
 
 ### Contributors
 
