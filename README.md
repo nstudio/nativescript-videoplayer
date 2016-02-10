@@ -22,7 +22,7 @@ From your command prompt/terminal go to your app's root folder and execute:
 ###
 ```XML
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
-      xmlns:VideoPlayer="videoplayer">
+      xmlns:VideoPlayer="nativescript-videoplayer">
         <StackLayout>
             <VideoPlayer:Video
             src="~/videos/small.mp4"
