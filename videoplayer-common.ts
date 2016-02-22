@@ -17,6 +17,12 @@ var VIDEO = "Video";
 var ISLOADING = "isLoading"; 
 var AUTOPLAY = "autoplay";
 
+var ON_OPEN = "opening";
+var ON_PLAY = "playing";
+var ON_TIME_CHANGED = "timeChanged";
+var ON_ERROR = "error";
+var ON_FINISH = "finished";
+
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
 
@@ -49,7 +55,11 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
 
 
 export class Video extends view.View implements definition.Video {
-    public static finishedEvent = "finished";
+    public static finishedEvent = ON_FINISH;
+    public static openingEvent = ON_OPEN;      
+    public static playingEvent = ON_PLAY;
+    public static timeChangedEvent = ON_TIME_CHANGED;
+    public static errorEvent = ON_ERROR;
 
     public static srcProperty = new dependencyObservable.Property(
         SRC,
@@ -104,10 +114,22 @@ export class Video extends view.View implements definition.Video {
         this._setValue(Video.autoplayProperty, value);
     }
 
-    public _setNativeVideo(nativeVideo: any) {
-        //
-    }
-
-    public finishedCallback() { } //TODO
-
+    public _setNativeVideo(nativeVideo: any) { }    
+    
+    public play(): void { }
+    
+    public pause(): void { }    
+    
+    public stop(): void { }
+    
+    public seekTo(msec: number): void { }
+    
+    // public getPosition(): number {        
+    // }
+    // 
+    // public getDuration(): number {        
+    // }
+    // 
+    // public isPlaying(): boolean {         
+    // }    
 }

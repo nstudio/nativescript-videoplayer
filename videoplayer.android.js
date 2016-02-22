@@ -15,6 +15,47 @@ function onVideoSourcePropertyChanged(data) {
 }
 // register the setNativeValue callback
 videoCommon.Video.videoSourceProperty.metadata.onSetNativeValue = onVideoSourcePropertyChanged;
+var MediaPlayerEventListener = (function (_super) {
+    __extends(MediaPlayerEventListener, _super);
+    function MediaPlayerEventListener(owner) {
+        _super.call(this);
+        this._owner = owner;
+        return global.__native(this);
+    }
+    MediaPlayerEventListener.prototype.onEvent = function (event) {
+        var args = {
+            object: this,
+            eventName: "",
+            value: 1
+        };
+        switch (event.type) {
+            case org.videolan.libvlc.MediaPlayer.Event.Opening:
+                args.eventName = videoCommon.Video.openingEvent;
+                break;
+            case org.videolan.libvlc.MediaPlayer.Event.Playing:
+                args.eventName = videoCommon.Video.playingEvent;
+                break;
+            case org.videolan.libvlc.MediaPlayer.Event.TimeChanged:
+                args.eventName = videoCommon.Video.timeChangedEvent;
+                args.value = event.getTimeChanged();
+                break;
+            // case org.videolan.libvlc.MediaPlayer.Event.PositionChanged:
+            //     console.log("PositionChanged " + event.getPositionChanged());
+            //     break;                                
+            case org.videolan.libvlc.MediaPlayer.Event.EncounteredError:
+                args.eventName = videoCommon.Video.errorEvent;
+                break;
+            case org.videolan.libvlc.MediaPlayer.Event.EndReached:
+                args.eventName = videoCommon.Video.finishedEvent;
+                break;
+            default:
+                //console.log(event.type);    
+                return; //we don't care about the rest
+        }
+        this._owner.notify(args);
+    };
+    return MediaPlayerEventListener;
+})(org.videolan.libvlc.MediaPlayer.EventListener);
 var Video = (function (_super) {
     __extends(Video, _super);
     function Video() {
@@ -29,10 +70,13 @@ var Video = (function (_super) {
     });
     Video.prototype._createUI = function () {
         var that = new WeakRef(this);
-        this._android = new android.widget.VideoView(this._context);
-        var _mMediaController = new android.widget.MediaController(this._context);
-        this._android.setMediaController(_mMediaController);
-        _mMediaController.setAnchorView(this._android);
+        var vlcTextute = new com.coolapps.vlcsurfaceviewlib.VlcSurfaceView(this._context);
+        var vlc = vlcTextute.getLibVLC();
+        var player = vlcTextute.getMediaPlayer();
+        var mediaPlayerEventListener = new MediaPlayerEventListener(this);
+        player.setEventListener(mediaPlayerEventListener);
+        this._android = vlcTextute;
+        this._player = player;
         if (this.src) {
             var isUrl = false;
             if (this.src.indexOf("://") !== -1) {
@@ -48,35 +92,53 @@ var Video = (function (_super) {
                 if (this.src[0] !== '/') {
                     this.src = currentPath + '/' + this.src;
                 }
-                this._android.setVideoURI(android.net.Uri.parse(this.src));
             }
             else {
-                this._android.setVideoPath(this.src);
+                this.src = android.net.Uri.parse(this.src);
             }
+            var media = new org.videolan.libvlc.Media(vlc, this.src);
+            player.setMedia(media);
         }
         if (this.autoplay === true) {
-            this._android.requestFocus();
-            this._android.start();
-        }
-        if (this.finishedCallback) {
-            // Create the Complete Listener - this is triggered once a video reaches the end
-            this._android.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener({
-                get owner() {
-                    return that.get();
-                },
-                onCompletion: function (v) {
-                    if (this.owner) {
-                        this.owner._emit(videoCommon.Video.finishedEvent);
-                    }
-                }
-            }));
+            //todo a bit of an ugly fix
+            setTimeout(function () {
+                player.play();
+            }, 100);
         }
     };
     Video.prototype._setNativeVideo = function (nativeVideo) {
-        this.android.video = nativeVideo;
+        if (nativeVideo) {
+            var vlc = this.android.getLibVLC();
+            var media = new org.videolan.libvlc.Media(vlc, nativeVideo);
+            this._player.setMedia(media);
+        }
+        else {
+            this.stop();
+        }
     };
     Video.prototype.setNativeSource = function (nativePlayerSrc) {
         this.src = nativePlayerSrc;
+    };
+    Video.prototype.play = function () {
+        this._player.play();
+    };
+    Video.prototype.pause = function () {
+        this._player.pause();
+    };
+    Video.prototype.stop = function () {
+        this._player.stop();
+    };
+    Video.prototype.seekTo = function (msec) {
+        this._player.setTime(msec);
+    };
+    Video.prototype.getPosition = function () {
+        return this._player.getTime();
+    };
+    Video.prototype.getDuration = function () {
+        return this._player.getLength();
+    };
+    Video.prototype.isPlaying = function () {
+        return this._player.isPlaying();
     };
     return Video;
 })(videoCommon.Video);

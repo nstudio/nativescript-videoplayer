@@ -16,6 +16,11 @@ var VIDEO_SOURCE = "videoSource";
 var VIDEO = "Video";
 var ISLOADING = "isLoading";
 var AUTOPLAY = "autoplay";
+var ON_OPEN = "opening";
+var ON_PLAY = "playing";
+var ON_TIME_CHANGED = "timeChanged";
+var ON_ERROR = "error";
+var ON_FINISH = "finished";
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
 function onSrcPropertyChanged(data) {
@@ -86,11 +91,16 @@ var Video = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Video.prototype._setNativeVideo = function (nativeVideo) {
-        //
-    };
-    Video.prototype.finishedCallback = function () { }; //TODO
-    Video.finishedEvent = "finished";
+    Video.prototype._setNativeVideo = function (nativeVideo) { };
+    Video.prototype.play = function () { };
+    Video.prototype.pause = function () { };
+    Video.prototype.stop = function () { };
+    Video.prototype.seekTo = function (msec) { };
+    Video.finishedEvent = ON_FINISH;
+    Video.openingEvent = ON_OPEN;
+    Video.playingEvent = ON_PLAY;
+    Video.timeChangedEvent = ON_TIME_CHANGED;
+    Video.errorEvent = ON_ERROR;
     Video.srcProperty = new dependencyObservable.Property(SRC, VIDEO, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.None, onSrcPropertyChanged));
     Video.videoSourceProperty = new dependencyObservable.Property(VIDEO_SOURCE, VIDEO, new proxy.PropertyMetadata(undefined, dependencyObservable.PropertyMetadataSettings.None));
     Video.isLoadingProperty = new dependencyObservable.Property(ISLOADING, VIDEO, new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None));

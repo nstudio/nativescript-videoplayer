@@ -17,26 +17,88 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 
     video._setNativeVideo(data.newValue ? data.newValue.android : null); 
 }
-
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
 
-export class Video extends videoCommon.Video {
-    private _android: android.widget.VideoView;
+class MediaPlayerEventListener extends org.videolan.libvlc.MediaPlayer.EventListener {
+    private _owner: Video;
+    
+    constructor(owner) {
+        super();
+        this._owner = owner;
+        return global.__native(this);
+    }
 
-    get android(): android.widget.VideoView {
+    public onEvent(event) {                      
+        var args: any = {
+            object: this,
+            eventName: "",
+            value: 1
+        };
+        
+        switch (event.type) {
+            case org.videolan.libvlc.MediaPlayer.Event.Opening:                
+                args.eventName = videoCommon.Video.openingEvent;
+                break;
+            case org.videolan.libvlc.MediaPlayer.Event.Playing:                   
+                args.eventName = videoCommon.Video.playingEvent;
+                break;
+            case org.videolan.libvlc.MediaPlayer.Event.TimeChanged:
+                args.eventName = videoCommon.Video.timeChangedEvent;
+                args.value = event.getTimeChanged();
+                break;
+            // case org.videolan.libvlc.MediaPlayer.Event.PositionChanged:
+            //     console.log("PositionChanged " + event.getPositionChanged());
+            //     break;                                
+            case org.videolan.libvlc.MediaPlayer.Event.EncounteredError:                
+                args.eventName = videoCommon.Video.errorEvent;                
+                break;
+            case org.videolan.libvlc.MediaPlayer.Event.EndReached:                
+                args.eventName = videoCommon.Video.finishedEvent;                
+                break;
+            default:    
+                //console.log(event.type);    
+                return; //we don't care about the rest
+                
+            // case Event.Stopped:            
+            // case Event.Paused:
+            // case Event.Vout:                
+            // case Event.ESAdded:
+            // case Event.ESDeleted:
+            // case Event.SeekableChanged:
+            // case Event.PausableChanged:                    
+                                
+            // public float getPositionChanged() {        
+            // public int getVoutCount() {        
+            // public int getEsChangedType() {        
+            // public boolean getPausable() {        
+            // public boolean getSeekable() {            
+        }        
+        
+        this._owner.notify(args);
+    }		
+}
+
+export class Video extends videoCommon.Video {
+    private _android: com.coolapps.vlcsurfaceviewlib.VlcSurfaceView;
+    private _player: org.videolan.libvlc.MediaPlayer;
+
+    get android(): com.coolapps.vlcsurfaceviewlib.VlcSurfaceView {
         return this._android;
     }
 
     public _createUI() {
-
         var that = new WeakRef(this);
-
-        this._android = new android.widget.VideoView(this._context);
-        var _mMediaController = new android.widget.MediaController(this._context);
-
-        this._android.setMediaController(_mMediaController);
-        _mMediaController.setAnchorView(this._android);
+        
+        var vlcTextute = new com.coolapps.vlcsurfaceviewlib.VlcSurfaceView(this._context);        
+        var vlc = vlcTextute.getLibVLC();        
+        var player = vlcTextute.getMediaPlayer();
+        
+        var mediaPlayerEventListener = new MediaPlayerEventListener(this);
+		player.setEventListener(mediaPlayerEventListener);
+        
+        this._android = vlcTextute;
+        this._player = player;
 
         if (this.src) {
             var isUrl = false;
@@ -57,43 +119,61 @@ export class Video extends videoCommon.Video {
                 if (this.src[0] !== '/') {
                     this.src = currentPath + '/' + this.src;
                 }
-
-                this._android.setVideoURI(android.net.Uri.parse(this.src));
-            } else {
-                this._android.setVideoPath(this.src);
+            } else { 
+                this.src = android.net.Uri.parse(this.src);
             }
-
+                                    
+            var media = new org.videolan.libvlc.Media(vlc, this.src);
+            player.setMedia(media);
         }
 
         if (this.autoplay === true) {
-            this._android.requestFocus();
-            this._android.start();
-        }
-
-        if (this.finishedCallback) {
-            // Create the Complete Listener - this is triggered once a video reaches the end
-            this._android.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener(
-                {
-                    get owner() {
-                        return that.get();
-                    },
-
-                    onCompletion: function(v) {
-                        if (this.owner) {
-                            this.owner._emit(videoCommon.Video.finishedEvent);
-                        }
-                    }
-                }));
-        }
-
+            //todo a bit of an ugly fix
+            setTimeout(function() {
+                player.play();
+            }, 100);
+        }        
     }
 
-    public _setNativeVideo(nativeVideo: any) {
-        this.android.video = nativeVideo;
+    public _setNativeVideo(nativeVideo: any) {                 
+        if (nativeVideo) { 
+            var vlc = this.android.getLibVLC();
+            var media = new org.videolan.libvlc.Media(vlc, nativeVideo);
+            this._player.setMedia(media);
+        } else {
+            this.stop();
+        }    
     }
 
     public setNativeSource(nativePlayerSrc: string) {
         this.src = nativePlayerSrc;
     }
-
+    
+    public play(): void {                        
+        this._player.play();
+    }
+    
+    public pause(): void {                        
+        this._player.pause();
+    }
+    
+    public stop(): void {                        
+        this._player.stop();
+    }
+    
+    public seekTo(msec: number): void {        
+        this._player.setTime(msec);        
+    }
+    
+    public getPosition(): number {
+        return this._player.getTime();            
+    }
+        
+    public getDuration(): number {
+        return this._player.getLength();            
+    }
+    
+    public isPlaying(): boolean {
+        return this._player.isPlaying();
+    }
 }
