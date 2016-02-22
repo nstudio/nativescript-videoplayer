@@ -1,0 +1,12 @@
+{
+  "nativescript": {
+    "id": "org.nativescript.VideoDemo",
+    "tns-android": {
+      "version": "1.5.1"
+    }
+  },
+  "dependencies": {
+    "nativescript-videoplayer": "file:videoplayer",
+    "tns-core-modules": "1.5.2"
+  }
+}

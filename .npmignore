@@ -1,9 +1,0 @@
-﻿# generated files
-.vs
-.vs/
-nativescript-videoplayer.sln
-.sln
-*.sln
-demo/
-*.webinfo
-video.gif
