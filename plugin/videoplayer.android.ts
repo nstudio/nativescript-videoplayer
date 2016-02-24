@@ -176,4 +176,8 @@ export class Video extends videoCommon.Video {
     public isPlaying(): boolean {
         return this._player.isPlaying();
     }
+    
+    public getState(): number {
+        return this._player.getPlayerState();
+    }        
 }

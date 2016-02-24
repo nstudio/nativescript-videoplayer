@@ -140,6 +140,9 @@ var Video = (function (_super) {
     Video.prototype.isPlaying = function () {
         return this._player.isPlaying();
     };
+    Video.prototype.getState = function () {
+        return this._player.getPlayerState();
+    };
     return Video;
 })(videoCommon.Video);
 exports.Video = Video;
