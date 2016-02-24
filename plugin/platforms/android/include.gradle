@@ -1,0 +1,13 @@
+//default elements
+android { 
+    productFlavors {
+        "nativescript-videoplayer" {
+            dimension "nativescript-videoplayer"
+        }
+    }
+}
+
+//optional elements
+dependencies {
+    compile 'de.mrmaffen:vlc-android-sdk:3.0.0'
+}

@@ -1,0 +1,27 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd"
+      loaded="pageLoaded"
+      unloaded="pageUnloaded"
+      xmlns:VideoPlayer="nativescript-videoplayer">
+    <GridLayout rows="*, 100, 100">
+        <VideoPlayer:Video id="customVideoPlayer"
+                           rowSpan="3"
+                           height="320"                                                                                 
+                           playing="{{ playing }}"
+                           opening="{{ opening }}"
+                           timeChanged="{{ timeChanged }}"        
+                           finished="{{ finished }}"                                              
+                           error="{{ error }}"
+                           autoplay="true"
+                           src="{{ videoUrl }}" />                                    
+                                     
+        <Label row="1" horizontalAlignment="center" verticalAlignment="center" text="Subtitles be here..." />                                     
+                                                             
+        <GridLayout row="2" columns="100, *, auto" backgroundColor="black">
+            <Button tap="{{ play }}" text="play" visibility="{{ playVisibility }}" />
+            <Button tap="{{ pause }}" text="pause" visibility="{{ pauseVisibility }}" />
+            <Slider col="1" value="{{ videoTime }}" maxValue="{{ videoDuration }}" />
+        </GridLayout>
+    </GridLayout>
+</Page>
+<!--      Copy/Paste the url below to view a remote video file       -->
+<!--      https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4    -->
