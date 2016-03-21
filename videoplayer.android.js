@@ -33,6 +33,8 @@ var Video = (function (_super) {
         var _mMediaController = new android.widget.MediaController(this._context);
         this._android.setMediaController(_mMediaController);
         _mMediaController.setAnchorView(this._android);
+        // setZOrderOnTop(true) - force the video to be visible. There is a layering issue with varying devices that can sometimes put the video beneath the current frame.
+        this._android.setZOrderOnTop(true);
         if (this.src) {
             var isUrl = false;
             if (this.src.indexOf("://") !== -1) {

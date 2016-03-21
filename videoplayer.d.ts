@@ -2,7 +2,7 @@
  * Contains the VideoPlayer class, which represents a standard video player widget.
  */
 
-declare module "videoplayer" {
+declare module "nativescript-videoplayer" {
     import * as dependencyObservable from "ui/core/dependency-observable";
     import * as videoSource from "./video-source/video-source";
     import * as view from "ui/core/view";

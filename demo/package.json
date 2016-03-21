@@ -1,11 +1,11 @@
 {
 	"nativescript": {
-		"id": "org.nativescript.videoPlayer",
-		"tns-android": {
-			"version": "1.5.1"
-		},
-		"tns-ios": {
-			"version": "1.5.2"
+		"id": "org.nativescript.videoplayer",
+    "tns-android": {
+      "version": "1.7.0"
+    },
+    "tns-ios": {
+			"version": "1.7.0"
 		}
 	},
 	"dependencies": {

@@ -38,6 +38,9 @@ export class Video extends videoCommon.Video {
         this._android.setMediaController(_mMediaController);
         _mMediaController.setAnchorView(this._android);
 
+        // setZOrderOnTop(true) - force the video to be visible. There is a layering issue with varying devices that can sometimes put the video beneath the current frame.
+        this._android.setZOrderOnTop(true);
+
         if (this.src) {
             var isUrl = false;
 

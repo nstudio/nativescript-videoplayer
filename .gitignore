@@ -8,6 +8,7 @@
 *.sln.docstates
 .sln
 *.sln
+nativescript-audioplayer.sln
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 .webinfo

@@ -1,5 +1,5 @@
 # NativeScript Video Player :clapper:
-A NativeScript plugin to provide an XML widget for playing local and remote video files.
+A NativeScript plugin to provide the ability to play local and remote videos.
 
 #### Platform controls used: 
 Android | iOS
@@ -9,7 +9,7 @@ Android | iOS
 
 ## Sample Usage
 
-![Sample Usage](video.gif)
+![Sample Usage](screens/video.gif)
 
 
 ## Installation
@@ -22,7 +22,7 @@ From your command prompt/terminal go to your app's root folder and execute:
 ###
 ```XML
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
-      xmlns:VideoPlayer="videoplayer">
+      xmlns:VideoPlayer="nativescript-videoplayer">
         <StackLayout>
             <VideoPlayer:Video
             src="~/videos/small.mp4"
