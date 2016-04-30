@@ -1,3 +1,6 @@
+[![npm](https://img.shields.io/npm/v/nativescript-videoplayer.svg)](https://www.npmjs.com/package/nativescript-videoplayer)
+[![npm](https://img.shields.io/npm/dt/nativescript-videoplayer.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-videoplayer)
+
 # NativeScript Video Player :clapper:
 A NativeScript plugin to provide the ability to play local and remote videos.
 
