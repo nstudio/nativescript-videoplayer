@@ -1,3 +1,4 @@
+"use strict";
 var types = require("utils/types");
 var common = require("./video-source-common");
 global.moduleMerge(common, exports);
@@ -27,11 +28,8 @@ var VideoSource = (function () {
         ensureUtils();
         var res = utils.ad.getApplicationContext().getResources();
         if (res) {
-            //var identifier: number = res.getIdentifier(name, 'drawable', utils.ad.getApplication().getPackageName());
-            //console.log('identifier: ' + identifier);
             var UrlPath = "android.resource://org.nativescript.videoPlayer/R.raw." + name;
             console.log('uri: ' + UrlPath);
-            // var uri: string = android.net.Uri.parse("android.resource://" + utils.ad.getApplication().getPackageName() + "/R.raw." + name);
             this.android = UrlPath;
         }
         return this.android != null;
@@ -76,5 +74,6 @@ var VideoSource = (function () {
         configurable: true
     });
     return VideoSource;
-})();
+}());
 exports.VideoSource = VideoSource;
+//# sourceMappingURL=video-source.android.js.map

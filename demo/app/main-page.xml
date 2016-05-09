@@ -4,13 +4,19 @@
         <StackLayout>
             <label text="&lt;VideoPlayer:Video src='someVideo' finished='videoDoneEvent' autoplay='boolean' &gt;" class="title" textWrap="true" />
 
+            <GridLayout rows="*" columns="*, *">
             <VideoPlayer:Video id="customVideoPlayer"
             loaded="videoplayerLoaded"
             finished="videoFinished"
             autoplay="true"
             height="280"
-            src="~/videos/big_buck_bunny.mp4" />
+            src="~/videos/big_buck_bunny.mp4"
+            row="0" colSpan="2" />
 
+                <Label text="ON TOP" row="0" col="1" />
+            </GridLayout>
+
+            
         </StackLayout>
     </ScrollView>
 </Page>

@@ -1,5 +1,5 @@
+"use strict";
 var utils = require("utils/utils");
-// This is used for definition purposes only, it does not generate JavaScript for it.
 var definition = require("./video-source");
 function fromResource(name) {
     var video = new definition.VideoSource();
@@ -35,3 +35,4 @@ function isFileOrResourcePath(path) {
     return utils.isFileOrResourcePath(path);
 }
 exports.isFileOrResourcePath = isFileOrResourcePath;
+//# sourceMappingURL=video-source-common.js.map

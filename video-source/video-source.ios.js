@@ -1,3 +1,4 @@
+"use strict";
 var types = require("utils/types");
 var fs = require("file-system");
 var common = require("./video-source-common");
@@ -32,5 +33,6 @@ var VideoSource = (function () {
         return source != null;
     };
     return VideoSource;
-})();
+}());
 exports.VideoSource = VideoSource;
+//# sourceMappingURL=video-source.ios.js.map

@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -13,7 +14,6 @@ function onVideoSourcePropertyChanged(data) {
     }
     video._setNativeVideo(data.newValue ? data.newValue.android : null);
 }
-// register the setNativeValue callback
 videoCommon.Video.videoSourceProperty.metadata.onSetNativeValue = onVideoSourcePropertyChanged;
 var Video = (function (_super) {
     __extends(Video, _super);
@@ -33,7 +33,6 @@ var Video = (function (_super) {
         var _mMediaController = new android.widget.MediaController(this._context);
         this._android.setMediaController(_mMediaController);
         _mMediaController.setAnchorView(this._android);
-        // setZOrderOnTop(true) - force the video to be visible. There is a layering issue with varying devices that can sometimes put the video beneath the current frame.
         this._android.setZOrderOnTop(true);
         if (this.src) {
             var isUrl = false;
@@ -61,7 +60,6 @@ var Video = (function (_super) {
             this._android.start();
         }
         if (this.finishedCallback) {
-            // Create the Complete Listener - this is triggered once a video reaches the end
             this._android.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener({
                 get owner() {
                     return that.get();
@@ -81,5 +79,6 @@ var Video = (function (_super) {
         this.src = nativePlayerSrc;
     };
     return Video;
-})(videoCommon.Video);
+}(videoCommon.Video));
 exports.Video = Video;
+//# sourceMappingURL=videoplayer.android.js.map

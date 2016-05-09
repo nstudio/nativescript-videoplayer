@@ -1,9 +1,9 @@
-﻿# generated files
+﻿﻿# generated files
 .vs
 .vs/
-nativescript-audioplayer.sln
 .sln
 *.sln
 demo/
-*.webinfo
 screens/
+*.png
+*.log

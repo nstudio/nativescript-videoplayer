@@ -1,10 +1,15 @@
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var common = require("./videoplayer-common");
 global.moduleMerge(common, exports);
 function onVideoSourcePropertyChanged(data) {
     var video = data.object;
     video._setNativeVideo(data.newValue ? data.newValue.ios : null);
 }
-// register the setNativeValue callback
 common.Video.videoSourceProperty.metadata.onSetNativeValue = onVideoSourcePropertyChanged;
 var Video = (function (_super) {
     __extends(Video, _super);
@@ -14,7 +19,6 @@ var Video = (function (_super) {
         this._player = new AVPlayer();
         this._playerController.player = this._player;
         this._ios = this._playerController.view;
-        //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     }
     Video.prototype._setNativeVideo = function (nativeVideoPlayer) {
         if (nativeVideoPlayer != null) {
@@ -44,5 +48,6 @@ var Video = (function (_super) {
         configurable: true
     });
     return Video;
-})(common.Video);
+}(common.Video));
 exports.Video = Video;
+//# sourceMappingURL=videoplayer.ios.js.map
