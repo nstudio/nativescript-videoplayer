@@ -21,6 +21,8 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
 
+declare var android: any;
+
 export class Video extends videoCommon.Video {
     private _android: android.widget.VideoView;
 
@@ -37,9 +39,6 @@ export class Video extends videoCommon.Video {
 
         this._android.setMediaController(_mMediaController);
         _mMediaController.setAnchorView(this._android);
-
-        // setZOrderOnTop(true) - force the video to be visible. There is a layering issue with varying devices that can sometimes put the video beneath the current frame.
-        this._android.setZOrderOnTop(true);
 
         if (this.src) {
             var isUrl = false;
