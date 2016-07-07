@@ -33,6 +33,10 @@ export class Video extends common.Video {
         this._playerController.player = this._player;
         this._ios = this._playerController.view;
 
+        if (this.controls === false) {
+            this._playerController.showsPlaybackControls = false;
+        }        
+
         //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
 
     }
@@ -62,6 +66,14 @@ export class Video extends common.Video {
         if (isNaN(this.width) || isNaN(this.height)) {
             this.requestLayout();
         }
+    }
+
+    public play() {
+        this._player.play();
+    }
+
+    public pause() {
+        this._player.pause();
     }
 
     get ios(): UIView {
