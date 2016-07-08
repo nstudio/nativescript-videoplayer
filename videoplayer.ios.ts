@@ -6,7 +6,7 @@ import enums = require("ui/enums");
 import definition = require("videoplayer");
 import * as typesModule from "utils/types";
 
-declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, CMTimeGetSeconds;
+declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds;
 
 global.moduleMerge(common, exports);
 
@@ -82,20 +82,8 @@ export class Video extends common.Video {
     }
 
     public seekToTime(time: number) {
-        console.log("seekToTime");
-        console.log("currentTime from seekToTime" + this._player.currentTime());
-        console.log("currentTime.value from seekToTime " + this._player.currentTime().value);
-        console.log("currentTime.timescale from seekToTime " + this._player.currentTime().timescale);
         this._player.seekToTime(CMTimeMakeWithSeconds(10, this._player.currentTime().timescale));
-        console.log("currentTime from seekToTime" + this._player.currentTime());
-        console.log("currentTime.value from seekToTime " + this._player.currentTime().value);
-        console.log("currentTime.timescale from seekToTime " + this._player.currentTime().timescale);
     }
-
-    // public currentTime() {
-    //     console.log("currentTime");
-    //     this._player.currentTime();
-    // }
 
     get ios(): UIView {
         return this._ios;
