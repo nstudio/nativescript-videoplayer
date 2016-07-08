@@ -6,7 +6,7 @@ import enums = require("ui/enums");
 import definition = require("videoplayer");
 import * as typesModule from "utils/types";
 
-declare var NSURL, AVPlayer, AVPlayerViewController, UIView;
+declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, CMTimeGetSeconds;
 
 global.moduleMerge(common, exports);
 
@@ -33,9 +33,7 @@ export class Video extends common.Video {
         this._playerController.player = this._player;
         this._ios = this._playerController.view;
 
-        if (this.controls === false) {
-            this._playerController.showsPlaybackControls = false;
-        }        
+
 
         //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
 
@@ -44,24 +42,31 @@ export class Video extends common.Video {
     public _setNativeVideo(nativeVideoPlayer: any) {
         if (nativeVideoPlayer != null) {
             this._player = nativeVideoPlayer;
-            this._playerController.player = this._player;
 
-            this._player.play();
-
-            if (isNaN(this.width) || isNaN(this.height)) {
-                this.requestLayout();
-            }
+            this._init();
         }
     }
 
     public _setNativePlayerSource(nativePlayerSrc: string) {
         this._src = nativePlayerSrc;
+        let url: string = NSURL.URLWithString(this._src);
+        this._player = new AVPlayer(url);
 
-            let url: string = NSURL.URLWithString(this._src);
-            this._player = new AVPlayer(url);
-            this._playerController.player = this._player;
+        this._init();
 
+    }
+
+    public _init() {
+
+        if (this.controls === false) {
+            this._playerController.showsPlaybackControls = false;
+        }
+
+        this._playerController.player = this._player;
+
+        if (this.autoplay === true) {
             this._player.play();
+        }
 
         if (isNaN(this.width) || isNaN(this.height)) {
             this.requestLayout();
@@ -75,6 +80,22 @@ export class Video extends common.Video {
     public pause() {
         this._player.pause();
     }
+
+    public seekToTime(time: number) {
+        console.log("seekToTime");
+        console.log("currentTime from seekToTime" + this._player.currentTime());
+        console.log("currentTime.value from seekToTime " + this._player.currentTime().value);
+        console.log("currentTime.timescale from seekToTime " + this._player.currentTime().timescale);
+        this._player.seekToTime(CMTimeMakeWithSeconds(10, this._player.currentTime().timescale));
+        console.log("currentTime from seekToTime" + this._player.currentTime());
+        console.log("currentTime.value from seekToTime " + this._player.currentTime().value);
+        console.log("currentTime.timescale from seekToTime " + this._player.currentTime().timescale);
+    }
+
+    // public currentTime() {
+    //     console.log("currentTime");
+    //     this._player.currentTime();
+    // }
 
     get ios(): UIView {
         return this._ios;
