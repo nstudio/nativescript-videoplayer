@@ -52,6 +52,11 @@ declare module "nativescript-videoplayer" {
         autoplay: boolean;
 
         /**
+        * Gets or set the controls attribute
+        */
+        controls: boolean;
+
+        /**
          * Gets a value indicating if the image is currently loading
          */
         isLoading: boolean;
