@@ -105,7 +105,7 @@ export class Video extends common.Video {
     }
 
     public get currentTime():any {
-        return this._player.currentTime().value / this._player.currentTime().timescale;
+        return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
     }
 
     get ios(): UIView {
