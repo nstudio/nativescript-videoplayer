@@ -13,7 +13,7 @@ global.moduleMerge(common, exports);
 function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
     var video = <Video>data.object;
     video._setNativeVideo(data.newValue ? data.newValue.ios : null);
-} 
+}
 
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>common.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
@@ -71,6 +71,16 @@ export class Video extends common.Video {
         if (isNaN(this.width) || isNaN(this.height)) {
             this.requestLayout();
         }
+
+        if (this.finishedCallback) {
+            application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
+                console.log("AVPlayerItemDidPlayToEndTimeNotification: " + notification);
+                this._finishedEvent;
+                this._player.seekToTime(CMTimeMakeWithSeconds(0, this._player.currentTime().timescale));
+                this._player.play();
+                // this._emit(common.Video.finishedEvent);
+            });
+        }
     }
 
     public play() {
@@ -79,6 +89,10 @@ export class Video extends common.Video {
 
     public pause() {
         this._player.pause();
+    }
+
+    public mute(mute: boolean) {
+        this._player.muted = mute;
     }
 
     public seekToTime(time: number) {
