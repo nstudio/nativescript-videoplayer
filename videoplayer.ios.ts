@@ -5,8 +5,10 @@ import utils = require("utils/utils")
 import enums = require("ui/enums");
 import definition = require("videoplayer");
 import * as typesModule from "utils/types";
+import application = require("application");
+import view = require("ui/core/view");
 
-declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds;
+declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake;
 
 global.moduleMerge(common, exports);
 
@@ -17,6 +19,7 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>common.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
+
 
 export class Video extends common.Video {
     private _player: AVPlayer;
@@ -32,8 +35,6 @@ export class Video extends common.Video {
         this._player = new AVPlayer();
         this._playerController.player = this._player;
         this._ios = this._playerController.view;
-
-
 
         //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
 
@@ -58,6 +59,8 @@ export class Video extends common.Video {
 
     public _init() {
 
+        var that = new WeakRef(this);
+
         if (this.controls === false) {
             this._playerController.showsPlaybackControls = false;
         }
@@ -65,7 +68,7 @@ export class Video extends common.Video {
         this._playerController.player = this._player;
 
         if (this.autoplay === true) {
-            this._player.play();
+            this.play();
         }
 
         if (isNaN(this.width) || isNaN(this.height)) {
@@ -74,11 +77,13 @@ export class Video extends common.Video {
 
         if (this.finishedCallback) {
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
-                console.log("AVPlayerItemDidPlayToEndTimeNotification: " + notification);
-                this._finishedEvent;
-                this._player.seekToTime(CMTimeMakeWithSeconds(0, this._player.currentTime().timescale));
-                this._player.play();
-                // this._emit(common.Video.finishedEvent);
+                // console.log("AVPlayerItemDidPlayToEndTimeNotification: " + notification);
+                this._emit(common.Video.finishedEvent);
+                if (this.loop === true) {
+                    // Go in 5ms for more seamless looping
+                    this.seekToTime(CMTimeMake(5, 100));
+                    this.play();
+                }
             });
         }
     }
@@ -96,7 +101,7 @@ export class Video extends common.Video {
     }
 
     public seekToTime(time: number) {
-        this._player.seekToTime(CMTimeMakeWithSeconds(10, this._player.currentTime().timescale));
+        this._player.seekToTime(CMTimeMakeWithSeconds(time, this._player.currentTime().timescale));
     }
 
     public get currentTime():any {
@@ -106,5 +111,6 @@ export class Video extends common.Video {
     get ios(): UIView {
         return this._ios;
     }
+
 
 }
