@@ -99,6 +99,10 @@ export class Video extends common.Video {
         this._player.seekToTime(CMTimeMakeWithSeconds(10, this._player.currentTime().timescale));
     }
 
+    public get currentTime():any {
+        return this._player.currentTime().value / this._player.currentTime().timescale;
+    }
+
     get ios(): UIView {
         return this._ios;
     }
