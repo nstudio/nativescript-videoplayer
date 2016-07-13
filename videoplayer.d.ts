@@ -52,6 +52,16 @@ declare module "nativescript-videoplayer" {
         autoplay: boolean;
 
         /**
+        * Gets or set the controls attribute
+        */
+        controls: boolean;
+
+        /**
+        * Gets or set the loop attribute
+        */
+        loop: boolean;        
+
+        /**
          * Gets a value indicating if the image is currently loading
          */
         isLoading: boolean;
@@ -92,6 +102,18 @@ declare module "nativescript-videoplayer" {
         * Gets or sets the finished callback that executes when the video reaches its end.
         */
         finished: string;
+
+        /**
+        * Gets or set the controls attribute
+        */
+        controls: boolean;
+
+        /**
+        * Gets or set the loop attribute
+        */
+        loop: boolean;
+
+
     }
 
 }
