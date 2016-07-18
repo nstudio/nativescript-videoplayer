@@ -34,6 +34,8 @@ export class Video extends common.Video {
 
         this._player = new AVPlayer();
         this._playerController.player = this._player;
+        // showsPlaybackControls must be set to false on init to avoid any potential 'Unable to simultaneously satisfy constraints' errors 
+        this._playerController.showsPlaybackControls = false;
         this._ios = this._playerController.view;
 
         //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
@@ -57,12 +59,12 @@ export class Video extends common.Video {
 
     }
 
-    public _init() {
+    private _init() {
 
-        var that = new WeakRef(this);
+        var self = this;
 
-        if (this.controls === false) {
-            this._playerController.showsPlaybackControls = false;
+        if (this.controls !== false) {
+            this._playerController.showsPlaybackControls = true;
         }
 
         this._playerController.player = this._player;
@@ -78,7 +80,7 @@ export class Video extends common.Video {
         if (this.finishedCallback) {
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
                 // console.log("AVPlayerItemDidPlayToEndTimeNotification: " + notification);
-                this._emit(common.Video.finishedEvent);
+                self._emit(common.Video.finishedEvent);
                 if (this.loop === true) {
                     // Go in 5ms for more seamless looping
                     this.seekToTime(CMTimeMake(5, 100));
@@ -86,6 +88,24 @@ export class Video extends common.Video {
                 }
             });
         }
+
+        // if (this.playingCallback) {
+        // var nsCenter = NSNotificationCenter.defaultCenter();
+        // nsCenter.addObserverForNameObjectQueueUsingBlock(addPeriodicTimeObserverForInterval, null, null, function () {
+        //     console.log("playing");
+        // });
+        // }
+
+    }
+
+    public destroy() {
+        if (this.finishedCallback) {
+            application.ios.removeNotificationObserver(observer, AVPlayerItemDidPlayToEndTimeNotification);
+        }
+
+        this.pause();
+        this._player = null; //de-allocates the AVPlayer
+        this._playerController = null;
     }
 
     public play() {
@@ -104,7 +124,7 @@ export class Video extends common.Video {
         this._player.seekToTime(CMTimeMakeWithSeconds(time, this._player.currentTime().timescale));
     }
 
-    public get currentTime():any {
+    public get currentTime(): any {
         return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
     }
 
