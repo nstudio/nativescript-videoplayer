@@ -43,39 +43,39 @@ From your command prompt/terminal go to your app's root folder and execute:
 ```
 
 ## Attributes
-**src** - *required*
+- **src** - *required*
 
 Set the video file to play, for best performance use local video files if possible. The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.
 
-**autoplay - (boolean)** - *optional*
+- **autoplay - (boolean)** - *optional*
 
 Set if the video should start playing as soon as possible or to wait for user interaction.
 
-**finished - (function)** - *optional*
+- **finished - (function)** - *optional*
 
 Attribute to specify an event callback to execute when the video reaches the end of its duration.
 
-**controls - (boolean)** - *optional*
+- **controls - (boolean)** - *optional*
 
 Set to use the native video player's media playback controls.
 
 
 ## API
 
-**play()** - start playing the video
-**pause()** - pause the video
-**seekToTime(time: number)** - seek the video to a time (milliseconds)
-**getDuration()** - returns the duration of the video (milliseconds)
-**getCurrentTime()** - returns the current time in the video duration (milliseconds)
-**destroy()** - destroy the video player and free resources
+- **play()** - start playing the video
+- **pause()** - pause the video
+- **seekToTime(time: number)** - seek the video to a time (milliseconds)
+- **getDuration()** - returns the duration of the video (milliseconds)
+- **getCurrentTime()** - returns the current time in the video duration (milliseconds)
+- **destroy()** - destroy the video player and free resources
 
-#### Android only
+### Android only
 
-**stop()** - stop the playback - this resets the player and remove the video src
+- **stop()** - stop the playback - this resets the player and remove the video src
 
-#### iOS only
+### iOS only
 
-**mute(boolean)** - mute the current video
+- **mute(boolean)** - mute the current video
 
 
 ### Contributors
