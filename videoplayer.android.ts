@@ -13,9 +13,9 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
     var video = <Video>data.object;
     if (!video.android) {
         return;
-    }  
+    }
 
-    video._setNativeVideo(data.newValue ? data.newValue.android : null); 
+    video._setNativeVideo(data.newValue ? data.newValue.android : null);
 }
 
 // register the setNativeValue callback
@@ -35,10 +35,12 @@ export class Video extends videoCommon.Video {
         var that = new WeakRef(this);
 
         this._android = new android.widget.VideoView(this._context);
-        var _mMediaController = new android.widget.MediaController(this._context);
 
-        this._android.setMediaController(_mMediaController);
-        _mMediaController.setAnchorView(this._android);
+        if (this.controls !== false || this.controls === undefined) {
+            var _mMediaController = new android.widget.MediaController(this._context);
+            this._android.setMediaController(_mMediaController);
+            _mMediaController.setAnchorView(this._android);
+        }
 
         if (this.src) {
             var isUrl = false;
@@ -80,22 +82,81 @@ export class Video extends videoCommon.Video {
                         return that.get();
                     },
 
-                    onCompletion: function(v) {
+                    onCompletion: function (v) {
                         if (this.owner) {
                             this.owner._emit(videoCommon.Video.finishedEvent);
+                            if (this.loop === true) {
+                                this._android.requestFocus();
+                                this._android.seekTo(0);
+                                this._android.start();
+                            }
                         }
                     }
                 }));
         }
 
+
     }
 
     public _setNativeVideo(nativeVideo: any) {
-        this.android.video = nativeVideo;
+        this.android.src = nativeVideo;
     }
 
     public setNativeSource(nativePlayerSrc: string) {
         this.src = nativePlayerSrc;
     }
+
+
+    public play() {
+        this._android.start();
+    }
+
+    public pause() {
+        if (this._android.canPause()) {
+            this._android.pause();
+        }
+    }
+
+    public mute(mute: boolean) {
+        console.log('no mute for android with this version');
+        return;
+    }
+
+
+    public stop() {
+        this._android.stopPlayback();
+    }
+
+
+    public seekToTime(time: number) {
+        this._android.seekTo(time);
+    }
+
+
+    public isPlaying(): boolean {
+        return this._android.isPlaying();
+    }
+
+
+    public getDuration() {
+        return this._android.getDuration();
+    }
+
+
+    public getCurrentTime(): any {
+        // let duration = this._android.getDuration();
+        let currentPosition = this._android.getCurrentPosition();
+        // let currentTime = duration - currentPosition;
+        return currentPosition;
+    }
+
+
+    public destroy() {
+        this.src = null;
+        this._android.stopPlayback();
+        this._android = null;
+    }
+
+
 
 }

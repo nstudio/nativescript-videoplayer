@@ -3,13 +3,14 @@
  */
 
 declare module "nativescript-videoplayer" {
+    import * as observable from "data/observable";
     import * as dependencyObservable from "ui/core/dependency-observable";
-    import * as videoSource from "./video-source/video-source";
     import * as view from "ui/core/view";
+    import * as videoSource from "./video-source/video-source";
 
     /**
      * Represents a Video Player component.
-     */ 
+     */
     export class Video extends view.View {
         public static srcProperty: dependencyObservable.Property;
         public static videoSourceProperty: dependencyObservable.Property;
@@ -59,12 +60,48 @@ declare module "nativescript-videoplayer" {
         /**
         * Gets or set the loop attribute
         */
-        loop: boolean;        
+        loop: boolean;
 
         /**
          * Gets a value indicating if the image is currently loading
          */
         isLoading: boolean;
+
+
+        /**
+         * Play the video src file
+         */
+        play();
+
+        /**
+         * Pause the video.
+         */
+        pause();
+
+        /**
+         * Stop the video.
+         */
+        stop();
+
+        /**
+         * Seek the video to a specific time (milliseconds).
+         */
+        seekToTime(time: number);
+
+        /**
+         * Get the current time of the video playing.
+         */
+        getCurrentTime();
+
+        /**
+         * Get the video duration.
+         */
+        getDuration();
+
+        /**
+         * Removes all references to native objects to free up resources.
+         */
+        destroy();
 
         /*
         * Gets or sets the finished callback that executes when the video reaches its end.
@@ -74,14 +111,14 @@ declare module "nativescript-videoplayer" {
         /**
          * Raised when a tap event occurs.
          */
-        on(event: "finished", callback: (args: observable.EventData) => void, thisArg?: any);
+        // on(event: "finished", callback: (args: observable.EventData) => void, thisArg?: any);
 
     }
 
     /**
     * Provides common options for creating a video
     */
-    export interface Options extends view.Options {
+    export interface Options {
 
         /*
         * Gets or set the video source of the video.

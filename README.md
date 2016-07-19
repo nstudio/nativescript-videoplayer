@@ -12,7 +12,9 @@ Android | iOS
 
 ## Sample Usage
 
-![Sample Usage](screens/video.gif)
+Sample 1 | Sample 2
+--------- | --------
+![Sample Usage](./screens/video.gif) | ![Sample 2](./screens/videoPlayer.gif)
 
 
 ## Installation

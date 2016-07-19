@@ -5,7 +5,6 @@
 }
 
 button {
-    font-size: 42;
     horizontal-align: center;
 }
 
@@ -13,4 +12,9 @@ button {
     font-size: 20;
     color: #284848;
     horizontal-align: center;
+}
+
+ActionBar {
+    background-color: #f44336;
+    color: #fff;
 }

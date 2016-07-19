@@ -39,14 +39,7 @@ export class VideoSource implements definition.VideoSource {
 
         var res = utils.ad.getApplicationContext().getResources();
         if (res) {
-            //var identifier: number = res.getIdentifier(name, 'drawable', utils.ad.getApplication().getPackageName());
-            //console.log('identifier: ' + identifier);
-
             var UrlPath = "android.resource://org.nativescript.videoPlayer/R.raw." + name;
-            console.log('uri: ' + UrlPath);
-
-            // var uri: string = android.net.Uri.parse("android.resource://" + utils.ad.getApplication().getPackageName() + "/R.raw." + name);
-
             this.android = UrlPath;
 
         }
@@ -67,7 +60,6 @@ export class VideoSource implements definition.VideoSource {
         var fileName = types.isString(path) ? path.trim() : "";
         if (fileName.indexOf("~/") === 0) {
             fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace("~/", ""));
-            console.log('fileName: ' + fileName);
         }
 
         this.android = fileName;

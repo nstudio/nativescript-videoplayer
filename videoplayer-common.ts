@@ -1,6 +1,4 @@
-﻿/// <reference path="../tns-core-modules/tns-core-modules.d.ts" /> Needed for autocompletion and compilation.
-
-import dependencyObservable = require("ui/core/dependency-observable");
+﻿import dependencyObservable = require("ui/core/dependency-observable");
 import view = require("ui/core/view");
 import proxy = require("ui/core/proxy");
 import videoSource = require("./video-source/video-source");

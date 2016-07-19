@@ -1,4 +1,4 @@
-var application = require("application");
-application.mainModule = "main-page";
-application.cssFile = "./app.css";
-application.start();
+"use strict";
+var application = require('application');
+application.start({ moduleName: 'main-page' });
+//# sourceMappingURL=app.js.map

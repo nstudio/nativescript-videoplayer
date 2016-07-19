@@ -38,14 +38,15 @@ export class Video extends common.Video {
         this._playerController.showsPlaybackControls = false;
         this._ios = this._playerController.view;
 
-        //var videoUrlStr = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    }
 
+    get ios(): UIView {
+        return this._ios;
     }
 
     public _setNativeVideo(nativeVideoPlayer: any) {
         if (nativeVideoPlayer != null) {
             this._player = nativeVideoPlayer;
-
             this._init();
         }
     }
@@ -56,7 +57,6 @@ export class Video extends common.Video {
         this._player = new AVPlayer(url);
 
         this._init();
-
     }
 
     private _init() {
@@ -79,7 +79,6 @@ export class Video extends common.Video {
 
         if (this.finishedCallback) {
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
-                // console.log("AVPlayerItemDidPlayToEndTimeNotification: " + notification);
                 self._emit(common.Video.finishedEvent);
                 if (this.loop === true) {
                     // Go in 5ms for more seamless looping
@@ -88,24 +87,6 @@ export class Video extends common.Video {
                 }
             });
         }
-
-        // if (this.playingCallback) {
-        // var nsCenter = NSNotificationCenter.defaultCenter();
-        // nsCenter.addObserverForNameObjectQueueUsingBlock(addPeriodicTimeObserverForInterval, null, null, function () {
-        //     console.log("playing");
-        // });
-        // }
-
-    }
-
-    public destroy() {
-        if (this.finishedCallback) {
-            application.ios.removeNotificationObserver(observer, AVPlayerItemDidPlayToEndTimeNotification);
-        }
-
-        this.pause();
-        this._player = null; //de-allocates the AVPlayer
-        this._playerController = null;
     }
 
     public play() {
@@ -124,13 +105,23 @@ export class Video extends common.Video {
         this._player.seekToTime(CMTimeMakeWithSeconds(time, this._player.currentTime().timescale));
     }
 
-    public get currentTime(): any {
+    public getDuration(): any {
+        /// need to implement
+    }
+
+    public get getCurrentTime(): any {
         return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
     }
 
-    get ios(): UIView {
-        return this._ios;
-    }
 
+    public destroy() {
+        if (this.finishedCallback) {
+            application.ios.removeNotificationObserver(observer, AVPlayerItemDidPlayToEndTimeNotification);
+        }
+
+        this.pause();
+        this._player = null; //de-allocates the AVPlayer
+        this._playerController = null;
+    }
 
 }
