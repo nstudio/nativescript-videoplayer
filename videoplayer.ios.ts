@@ -81,7 +81,7 @@ export class Video extends common.Video {
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
                 // console.log("AVPlayerItemDidPlayToEndTimeNotification: " + notification);
                 self._emit(common.Video.finishedEvent);
-                if (this.loop === true) {
+                if (this.loop === true && this._player !== null) {
                     // Go in 5ms for more seamless looping
                     this.seekToTime(CMTimeMake(5, 100));
                     this.play();
