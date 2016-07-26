@@ -100,7 +100,7 @@ export class Video extends common.Video {
 
     public destroy() {
         if (this.finishedCallback) {
-            application.ios.removeNotificationObserver(observer, AVPlayerItemDidPlayToEndTimeNotification);
+            application.ios.removeNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification);
         }
 
         this.pause();
