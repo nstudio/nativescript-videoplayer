@@ -124,7 +124,10 @@ export class Video extends common.Video {
         this._player.seekToTime(CMTimeMakeWithSeconds(time, this._player.currentTime().timescale));
     }
 
-    public get currentTime(): any {
+    public get getCurrentTime(): any {
+        if (this._player === null) {
+            return false;
+        }
         return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
     }
 
