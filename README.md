@@ -30,7 +30,7 @@ From your command prompt/terminal go to your app's root folder and execute:
       xmlns:VideoPlayer="nativescript-videoplayer">
         <StackLayout>
                
-            <Video:Video id="nativeVideoPlayer"
+            <VideoPlayer:Video id="nativeVideoPlayer"
             controls="true" finished="{{ videoFinished }}"
             loop="true" autoplay="false" height="280" 
             src="~/videos/big_buck_bunny.mp4" 
