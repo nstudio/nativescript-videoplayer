@@ -1,162 +1,130 @@
-﻿import videoCommon = require("./videoplayer-common");
-import videoSource = require("video-source");
+﻿import common = require("./videoplayer-common");
 import dependencyObservable = require("ui/core/dependency-observable");
-import fs = require("file-system");
 import proxy = require("ui/core/proxy");
-import * as enumsModule from "ui/enums";
+import utils = require("utils/utils")
+import enums = require("ui/enums");
+import definition = require("videoplayer");
+import * as typesModule from "utils/types";
+import application = require("application");
 import view = require("ui/core/view");
-import utils = require("utils/utils");
 
-global.moduleMerge(videoCommon, exports);
+declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake;
+
+global.moduleMerge(common, exports);
 
 function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
     var video = <Video>data.object;
-    if (!video.android) {
-        return;
-    }
-
-    video._setNativeVideo(data.newValue ? data.newValue.android : null);
+    video._setNativeVideo(data.newValue ? data.newValue.ios : null);
 }
 
 // register the setNativeValue callback
-(<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
+(<proxy.PropertyMetadata>common.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
 
-declare var android: any;
 
-export class Video extends videoCommon.Video {
-    private _android: android.widget.VideoView;
+export class Video extends common.Video {
+    private _player: AVPlayer;
+    private _playerController: AVPlayerViewController;
+    private _ios: UIView;
+    private _src: string;
 
-    get android(): android.widget.VideoView {
-        return this._android;
+    constructor(options?: definition.Options) {
+        super(options);
+
+        this._playerController = new AVPlayerViewController();
+
+        this._player = new AVPlayer();
+        this._playerController.player = this._player;
+        // showsPlaybackControls must be set to false on init to avoid any potential 'Unable to simultaneously satisfy constraints' errors 
+        this._playerController.showsPlaybackControls = false;
+        this._ios = this._playerController.view;
+
     }
 
-    public _createUI() {
+    get ios(): UIView {
+        return this._ios;
+    }
 
-        var that = new WeakRef(this);
+    public _setNativeVideo(nativeVideoPlayer: any) {
+        if (nativeVideoPlayer != null) {
+            this._player = nativeVideoPlayer;
+            this._init();
+        }
+    }
 
-        this._android = new android.widget.VideoView(this._context);
+    public _setNativePlayerSource(nativePlayerSrc: string) {
+        this._src = nativePlayerSrc;
+        let url: string = NSURL.URLWithString(this._src);
+        this._player = new AVPlayer(url);
 
-        if (this.controls !== false || this.controls === undefined) {
-            var _mMediaController = new android.widget.MediaController(this._context);
-            this._android.setMediaController(_mMediaController);
-            _mMediaController.setAnchorView(this._android);
+        this._init();
+    }
+
+    private _init() {
+
+        var self = this;
+
+        if (this.controls !== false) {
+            this._playerController.showsPlaybackControls = true;
         }
 
-        if (this.src) {
-            var isUrl = false;
-
-            if (this.src.indexOf("://") !== -1) {
-                if (this.src.indexOf('res://') === -1) {
-                    isUrl = true;
-                }
-            }
-
-            if (!isUrl) {
-                var currentPath = fs.knownFolders.currentApp().path;
-
-                if (this.src[1] === '/' && (this.src[0] === '.' || this.src[0] === '~')) {
-                    this.src = this.src.substr(2);
-                }
-
-                if (this.src[0] !== '/') {
-                    this.src = currentPath + '/' + this.src;
-                }
-
-                this._android.setVideoURI(android.net.Uri.parse(this.src));
-            } else {
-                this._android.setVideoPath(this.src);
-            }
-
-        }
+        this._playerController.player = this._player;
 
         if (this.autoplay === true) {
-            this._android.requestFocus();
-            this._android.start();
+            this.play();
+        }
+
+        if (isNaN(this.width) || isNaN(this.height)) {
+            this.requestLayout();
         }
 
         if (this.finishedCallback) {
-            // Create the Complete Listener - this is triggered once a video reaches the end
-            this._android.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener(
-                {
-                    get owner() {
-                        return that.get();
-                    },
-
-                    onCompletion: function (v) {
-                        if (this.owner) {
-                            this.owner._emit(videoCommon.Video.finishedEvent);
-                            if (this.loop === true) {
-                                this._android.requestFocus();
-                                this._android.seekTo(0);
-                                this._android.start();
-                            }
-                        }
-                    }
-                }));
+            application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
+                self._emit(common.Video.finishedEvent);
+                if (this.loop === true && this._player !== null) {
+                    // Go in 5ms for more seamless looping
+                    this.seekToTime(CMTimeMake(5, 100));
+                    this.play();
+                }
+            });
         }
-
-
     }
-
-    public _setNativeVideo(nativeVideo: any) {
-        this.android.src = nativeVideo;
-    }
-
-    public setNativeSource(nativePlayerSrc: string) {
-        this.src = nativePlayerSrc;
-    }
-
 
     public play() {
-        this._android.start();
+        this._player.play();
     }
 
     public pause() {
-        if (this._android.canPause()) {
-            this._android.pause();
-        }
+        this._player.pause();
     }
 
     public mute(mute: boolean) {
-        console.log('no mute for android with this version');
-        return;
+        this._player.muted = mute;
     }
-
-
-    public stop() {
-        this._android.stopPlayback();
-    }
-
 
     public seekToTime(time: number) {
-        this._android.seekTo(time);
+        this._player.seekToTime(CMTimeMakeWithSeconds(time, this._player.currentTime().timescale));
     }
 
-
-    public isPlaying(): boolean {
-        return this._android.isPlaying();
+    public getDuration(): any {
+        /// need to implement
     }
 
-
-    public getDuration() {
-        return this._android.getDuration();
-    }
-
-
-    public getCurrentTime(): any {
-        // let duration = this._android.getDuration();
-        let currentPosition = this._android.getCurrentPosition();
-        // let currentTime = duration - currentPosition;
-        return currentPosition;
+    public get getCurrentTime(): any {
+        if (this._player === null) {
+            return false;
+        }
+        return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
     }
 
 
     public destroy() {
-        this.src = null;
-        this._android.stopPlayback();
-        this._android = null;
+        if (this.finishedCallback) {
+            application.ios.removeNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification);
+        }
+
+        this.pause();
+        this._player = null; //de-allocates the AVPlayer
+        this._playerController = null;
     }
-
-
 
 }

@@ -80,7 +80,7 @@ export class Video extends common.Video {
         if (this.finishedCallback) {
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
                 self._emit(common.Video.finishedEvent);
-                if (this.loop === true) {
+                if (this.loop === true && this._player !== null) {
                     // Go in 5ms for more seamless looping
                     this.seekToTime(CMTimeMake(5, 100));
                     this.play();
@@ -110,13 +110,16 @@ export class Video extends common.Video {
     }
 
     public get getCurrentTime(): any {
+        if (this._player === null) {
+            return false;
+        }
         return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
     }
 
 
     public destroy() {
         if (this.finishedCallback) {
-            application.ios.removeNotificationObserver(observer, AVPlayerItemDidPlayToEndTimeNotification);
+            application.ios.removeNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification);
         }
 
         this.pause();
