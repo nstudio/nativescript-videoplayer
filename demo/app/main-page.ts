@@ -11,15 +11,11 @@ import { Video } from 'nativescript-videoplayer';
 export function pageLoaded(args: EventData) {
     // Get the event sender    
     let page = <Page>args.object;
+    page.bindingContext = new HelloWorldModel(page);
 
     if (isAndroid && device.sdkVersion >= "21") {
         let window = android.startActivity.getWindow();
         window.setStatusBarColor(new Color("#d32f2f").android);
     }
-
-    setTimeout(function () {
-        let videoPlayer = topmost().getViewById('nativeVideoPlayer');
-        page.bindingContext = new HelloWorldModel(videoPlayer);
-    }, 0);
 
 }

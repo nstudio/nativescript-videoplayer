@@ -1,5 +1,8 @@
 import { Observable } from 'data/observable';
 import { EventData } from 'data/observable';
+import { Page } from 'ui/page';
+import { isAndroid, isIOS } from 'platform';
+import { topmost } from 'ui/frame';
 import { setInterval } from "timer";
 import { Video } from 'nativescript-videoplayer';
 
@@ -9,13 +12,14 @@ export class HelloWorldModel extends Observable {
   public videoDuration: any;
   private _videoPlayer: Video;
 
-  constructor(videoPlayer: Video) {
+  constructor(mainpage: Page) {
     super();
 
-    this._videoPlayer = videoPlayer;
+    this._videoPlayer = <Video>mainpage.getViewById('nativeVideoPlayer');
     this.currentTime = '';
     this.videoDuration = '';
-    this.trackVideoCurrentPosition();
+    this.getVideoDuration();
+    // this.trackVideoCurrentPosition();
   }
 
   /**
@@ -47,7 +51,9 @@ export class HelloWorldModel extends Observable {
    * Stop the video player
    */
   public stopVideo() {
-    this._videoPlayer.stop();
+    if (isAndroid) {
+      this._videoPlayer.stop();
+    }
   }
 
 
@@ -57,6 +63,7 @@ export class HelloWorldModel extends Observable {
   public getVideoDuration() {
     let videoDuration = this._videoPlayer.getDuration();
     console.log('Video Duration: ' + videoDuration);
+    this.set('videoDuration', videoDuration);
   }
 
 
@@ -65,7 +72,7 @@ export class HelloWorldModel extends Observable {
    */
   public goToTime() {
     try {
-      this._videoPlayer.seekToTime(30000);
+      this._videoPlayer.seekToTime(3000);
     } catch (err) {
       console.log(err);
     }
@@ -103,10 +110,14 @@ export class HelloWorldModel extends Observable {
 
 
   private trackVideoCurrentPosition(): number {
+    // if (isAndroid) {
     let trackInterval = setInterval(() => {
-      this.set('currentTime', this._videoPlayer.getCurrentTime());
-    }, 100);
+      var x = this._videoPlayer.getCurrentTime();
+      this.set('currentTime', x);
+    }, 200);
     return trackInterval;
+    // }
+
   }
 
 

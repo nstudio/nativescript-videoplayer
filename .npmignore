@@ -1,9 +1,12 @@
-﻿﻿# generated files
-.vs
-.vs/
-.sln
-*.sln
-demo/
+﻿﻿demo/
 screens/
+app/
+.vscode/
 *.png
 *.log
+*.ts
+!index.d.ts
+!videoplayer.d.ts
+!video-source/video-source.d.ts
+tsconfig.json
+README.md
