@@ -42,32 +42,38 @@ export class Video extends videoCommon.Video {
             _mMediaController.setAnchorView(this._android);
         }
 
-        if (this.src) {
-            var isUrl = false;
+        setTimeout(() => {
+            // If using Angular, there are problems with initilisation in some scenarios, as in, code will run before Angular has kicked in. This is a known consideration.
+            // So wrapping this in a timeout ensures that the element exists before this code is run. 
+            // Todo: Make a more elegant solution to this. Most likely have an argument that states its Angular and then manually initialise it once its initialised.
+            if (this.src) {
+                var isUrl = false;
 
-            if (this.src.indexOf("://") !== -1) {
-                if (this.src.indexOf('res://') === -1) {
-                    isUrl = true;
+                if (this.src.indexOf("://") !== -1) {
+                    if (this.src.indexOf('res://') === -1) {
+                        isUrl = true;
+                    }
                 }
+
+                if (!isUrl) {
+                    var currentPath = fs.knownFolders.currentApp().path;
+
+                    if (this.src[1] === '/' && (this.src[0] === '.' || this.src[0] === '~')) {
+                        this.src = this.src.substr(2);
+                    }
+
+                    if (this.src[0] !== '/') {
+                        this.src = currentPath + '/' + this.src;
+                    }
+
+                    this._android.setVideoURI(android.net.Uri.parse(this.src));
+                } else {
+                    this._android.setVideoPath(this.src);
+                }
+
             }
 
-            if (!isUrl) {
-                var currentPath = fs.knownFolders.currentApp().path;
-
-                if (this.src[1] === '/' && (this.src[0] === '.' || this.src[0] === '~')) {
-                    this.src = this.src.substr(2);
-                }
-
-                if (this.src[0] !== '/') {
-                    this.src = currentPath + '/' + this.src;
-                }
-
-                this._android.setVideoURI(android.net.Uri.parse(this.src));
-            } else {
-                this._android.setVideoPath(this.src);
-            }
-
-        }
+        })
 
         if (this.autoplay === true) {
             this._android.requestFocus();
