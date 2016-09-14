@@ -63,6 +63,11 @@ declare module "nativescript-videoplayer" {
         loop: boolean;
 
         /**
+        * Gets or set the loop attribute
+        */
+        muted: boolean;
+
+        /**
          * Gets a value indicating if the image is currently loading
          */
         isLoading: boolean;
@@ -150,6 +155,10 @@ declare module "nativescript-videoplayer" {
         */
         loop: boolean;
 
+        /**
+        * Gets or set the loop attribute
+        */
+        muted: boolean;
 
     }
 

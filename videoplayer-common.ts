@@ -87,6 +87,12 @@ export class Video extends view.View implements definition.Video {
         new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
     );
 
+    public static mutedProperty = new dependencyObservable.Property(
+        MUTED,
+        VIDEO,
+        new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
+    );
+
     constructor(options?: definition.Options) {
         super(options);
     }
@@ -128,6 +134,13 @@ export class Video extends view.View implements definition.Video {
     }
     set loop(value: any) {
         this._setValue(Video.loopProperty, value);
+    }
+
+    get muted(): any {
+        return this._getValue(Video.mutedProperty);
+    }
+    set muted(value: any) {
+        this._setValue(Video.mutedProperty, value);
     }
 
     public _setNativeVideo(nativeVideo: any) {

@@ -77,6 +77,10 @@ export class Video extends common.Video {
             this.requestLayout();
         }
 
+        if (this.muted === true) {
+            this._player.muted = true;
+        }
+
         if (this.finishedCallback) {
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
                 self._emit(common.Video.finishedEvent);
@@ -101,8 +105,9 @@ export class Video extends common.Video {
         this._player.muted = mute;
     }
 
-    public seekToTime(time: number) {
-        this._player.seekToTime(CMTimeMakeWithSeconds(time, this._player.currentTime().timescale));
+    public seekToTime(ms: number) {
+        let seconds = ms / 1000.0;
+        this._player.seekToTime(CMTimeMakeWithSeconds(seconds, this._player.currentTime().timescale));
     }
 
     public getDuration(): any {
@@ -113,7 +118,7 @@ export class Video extends common.Video {
         if (this._player === null) {
             return false;
         }
-        return Math.round(this._player.currentTime().value / this._player.currentTime().timescale);
+        return (this._player.currentTime().value / this._player.currentTime().timescale) * 1000;
     }
 
 

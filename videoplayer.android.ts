@@ -80,16 +80,21 @@ export class Video extends videoCommon.Video {
             this._android.start();
         }
 
-        if (this.loop === true) {
 
-            this._android.setOnPreparedListener(new android.media.MediaPlayer.OnPreparedListener(
-                {
-                    onPrepared: function (mp) {
+
+        this._android.setOnPreparedListener(new android.media.MediaPlayer.OnPreparedListener(
+            {
+                onPrepared: function (mp) {
+                    if (this.loop === true) {
                         mp.setLooping(true);
                     }
-                }));
+                    if (this.muted === true) {
+                        mp.setVolume(0, 0);
+                    }
+                }
+            }));
 
-        }
+
 
         if (this.finishedCallback) {
             // Create the Complete Listener - this is triggered once a video reaches the end
@@ -140,9 +145,8 @@ export class Video extends videoCommon.Video {
     }
 
 
-    public seekToTime(time: number) {
-        let _time = time * 1000;
-        this._android.seekTo(_time);
+    public seekToTime(ms: number) {
+        this._android.seekTo(ms);
     }
 
 
@@ -160,10 +164,7 @@ export class Video extends videoCommon.Video {
         if (this._android === null) {
             return false;
         }
-        // let duration = this._android.getDuration();
-        let currentPosition = this._android.getCurrentPosition() / 1000;
-        // let currentTime = duration - currentPosition;
-        return Math.round(currentPosition);
+        return this._android.getCurrentPosition();
     }
 
 
