@@ -59,6 +59,10 @@ Attribute to specify an event callback to execute when the video reaches the end
 
 Set to use the native video player's media playback controls.
 
+- **muted - (boolean)** - *optional*
+
+Set to mute the native video player.
+
 
 ## API
 
