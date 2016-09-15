@@ -16,6 +16,7 @@ var ISLOADING = "isLoading";
 var AUTOPLAY = "autoplay";
 var CONTROLS = "controls";
 var LOOP = "loop";
+var MUTED = "muted";
 
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
