@@ -82,12 +82,19 @@ export class Video extends common.Video {
         }
 
         if (this.finishedCallback) {
+
             application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, (notification: NSNotification) => {
-                self._emit(common.Video.finishedEvent);
-                if (this.loop === true && this._player !== null) {
-                    // Go in 5ms for more seamless looping
-                    this.seekToTime(CMTimeMake(5, 100));
-                    this.play();
+                // Notification is triggered for every instance of the iOS video player.
+                // This code ensures that the callback is only sent to the correct one by checking the notification for the source URL.
+                var notificationString = notification.toString();
+                // Check if src exists in notification, notification is structured liek so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
+                if (notificationString.includes(self.src)) {
+                    self._emit(common.Video.finishedEvent);
+                    if (this.loop === true && this._player !== null) {
+                        // Go in 5ms for more seamless looping
+                        this.seekToTime(CMTimeMake(5, 100));
+                        this.play();
+                    }
                 }
             });
         }

@@ -75,24 +75,28 @@ export class Video extends videoCommon.Video {
 
         })
 
-        var loop = this.loop;
-        var muted = this.muted;
-        var autoplay = this.autoplay;
-
         // Create the Preparped Listener - this is triggered once a video is ready
 
         this._android.setOnPreparedListener(new android.media.MediaPlayer.OnPreparedListener(
             {
+                get owner() {
+                    return that.get();
+                },
+
                 onPrepared: function (mp) {
-                    if (loop === true) {
+                    if (this.owner.loop === true) {
                         mp.setLooping(true);
                     }
-                    if (muted === true) {
+                    if (this.owner.muted === true) {
                         mp.setVolume(0, 0);
                     }
-                    if (autoplay === true) {
+                    if (this.owner.autoplay === true) {
                         mp.start();
                     }
+                    if (this.owner) {
+                        this.owner._emit(videoCommon.Video.loadingCompleteEvent);
+                    }
+
                 }
             }));
 

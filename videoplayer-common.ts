@@ -51,6 +51,7 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
 
 export class Video extends view.View implements definition.Video {
     public static finishedEvent = "finished";
+    public static loadingCompleteEvent = "loadingComplete";
 
     public static srcProperty = new dependencyObservable.Property(
         SRC,
@@ -149,5 +150,8 @@ export class Video extends view.View implements definition.Video {
     }
 
     public finishedCallback() { } //TODO
+
+    public loadingCompleteEventCallback() { } //TODO
+
 
 }
