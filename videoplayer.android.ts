@@ -84,9 +84,9 @@ export class Video extends videoCommon.Video {
                 },
 
                 onPrepared: function (mp) {
-                    if (this.owner.loop === true) {
-                        mp.setLooping(true);
-                    }
+                    // if (this.owner.loop === true) {
+                    //     mp.setLooping(true);
+                    // }
                     if (this.owner.muted === true) {
                         mp.setVolume(0, 0);
                     }
@@ -108,9 +108,13 @@ export class Video extends videoCommon.Video {
                         return that.get();
                     },
 
-                    onCompletion: function (v) {
+                    onCompletion: function (mp) {
                         if (this.owner) {
                             this.owner._emit(videoCommon.Video.finishedEvent);
+                        }
+                        if (this.owner.loop === true) {
+                            mp.seekTo(5);
+                            mp.start();
                         }
                     }
                 }));
