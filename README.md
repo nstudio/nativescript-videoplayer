@@ -61,11 +61,11 @@ Set to use the native video player's media playback controls.
 
 - **muted - (boolean)** - *optional*
 
-Set to mute the native video player.
+Mute the native video player.
 
 - **loop - (boolean)** - *optional*
 
-Sets the video to loop once playback has finished.
+Sets the native video player to loop once playback has finished.
 
 
 ## API
