@@ -76,7 +76,6 @@ Set to mute the native video player.
 ### Android only
 
 - **stop()** - stop the playback - this resets the player and remove the video src
-
 - **loadingComplete - (function)** - *optional* - Attribute to specify an event callback to execute when the video has loaded.
 
 ### iOS only
