@@ -61,7 +61,7 @@ Set to use the native video player's media playback controls.
 
 - **muted - (boolean)** - *optional*
 
-Mute the native video player.
+Mutes the native video player.
 
 - **loop - (boolean)** - *optional*
 
