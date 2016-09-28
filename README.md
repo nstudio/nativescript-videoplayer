@@ -33,8 +33,7 @@ From your command prompt/terminal go to your app's root folder and execute:
             <VideoPlayer:Video id="nativeVideoPlayer"
             controls="true" finished="{{ videoFinished }}"
             loop="true" autoplay="false" height="280" 
-            src="~/videos/big_buck_bunny.mp4" 
-            row="0" colSpan="2" />
+            src="~/videos/big_buck_bunny.mp4" />
 
             <!-- Remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->
             
