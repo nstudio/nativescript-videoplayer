@@ -1,5 +1,5 @@
 ﻿import videoCommon = require("./videoplayer-common");
-import videoSource = require("video-source");
+import videoSource = require("./video-source/video-source");
 import dependencyObservable = require("ui/core/dependency-observable");
 import fs = require("file-system");
 import proxy = require("ui/core/proxy");
@@ -22,11 +22,14 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 (<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
 
 declare var android: any;
+let _mMediaController: any = null;
+let _mediaPlayer = null;
+
 
 export class Video extends videoCommon.Video {
-    private _android: android.widget.VideoView;
+    private _android: any; /// android.widget.VideoView
 
-    get android(): android.widget.VideoView {
+    get android(): any {
         return this._android;
     }
 
@@ -37,7 +40,7 @@ export class Video extends videoCommon.Video {
         this._android = new android.widget.VideoView(this._context);
 
         if (this.controls !== false || this.controls === undefined) {
-            var _mMediaController = new android.widget.MediaController(this._context);
+            _mMediaController = new android.widget.MediaController(this._context);
             this._android.setMediaController(_mMediaController);
             _mMediaController.setAnchorView(this._android);
         }
@@ -87,6 +90,7 @@ export class Video extends videoCommon.Video {
                     // if (this.owner.loop === true) {
                     //     mp.setLooping(true);
                     // }
+                    _mediaPlayer = mp;
                     if (this.owner.muted === true) {
                         mp.setVolume(0, 0);
                     }
@@ -143,8 +147,15 @@ export class Video extends videoCommon.Video {
     }
 
     public mute(mute: boolean) {
-        console.log('no mute for android with this version');
-        return;
+        // console.log('no mute for android with this version');
+        // return;
+        if (_mediaPlayer) {
+            if (mute === true) {
+                _mediaPlayer.setVolume(0, 0);
+            } else if (mute === false) {
+                _mediaPlayer.setVolume(1, 1);
+            }
+        }
     }
 
 
@@ -158,17 +169,17 @@ export class Video extends videoCommon.Video {
     }
 
 
-    public get isPlaying(): boolean {
+    public isPlaying(): boolean {
         return this._android.isPlaying();
     }
 
 
-    public get getDuration() {
+    public getDuration() {
         return this._android.getDuration();
     }
 
 
-    public get getCurrentTime(): any {
+    public getCurrentTime(): any {
         if (this._android === null) {
             return false;
         }

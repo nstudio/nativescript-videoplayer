@@ -2,7 +2,7 @@
 import view = require("ui/core/view");
 import proxy = require("ui/core/proxy");
 import videoSource = require("./video-source/video-source");
-import definition = require("videoplayer");
+import definition = require("./videoplayer");
 import enums = require("ui/enums");
 import platform = require("platform");
 import utils = require("utils/utils");
@@ -49,9 +49,10 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
 }
 
 
-export class Video extends view.View implements definition.Video {
+export class Video extends view.View {
     public static finishedEvent = "finished";
     public static loadingCompleteEvent = "loadingComplete";
+    _emit: any;
 
     public static srcProperty = new dependencyObservable.Property(
         SRC,
@@ -95,8 +96,8 @@ export class Video extends view.View implements definition.Video {
         new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
     );
 
-    constructor(options?: definition.Options) {
-        super(options);
+    constructor() {
+        super();
     }
 
     get videoSource(): videoSource.VideoSource {

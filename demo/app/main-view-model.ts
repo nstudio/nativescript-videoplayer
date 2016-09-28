@@ -19,7 +19,7 @@ export class HelloWorldModel extends Observable {
     this.currentTime = '';
     this.videoDuration = '';
     this.getVideoDuration();
-    // this.trackVideoCurrentPosition();
+    this.trackVideoCurrentPosition();
   }
 
   /**
@@ -72,12 +72,20 @@ export class HelloWorldModel extends Observable {
    */
   public goToTime() {
     try {
-      this._videoPlayer.seekToTime(3000);
+      this._videoPlayer.seekToTime(30000);
     } catch (err) {
       console.log(err);
     }
   }
 
+
+  public muteVideo() {
+    this._videoPlayer.mute(true);
+  }
+
+  public unmuteVideo() {
+    this._videoPlayer.mute(false);
+  }
 
 
   /**

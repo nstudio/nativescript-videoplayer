@@ -7,6 +7,8 @@
       <StackLayout orientation="horizontal" margin="10">
         <Label text="Current Time: " textWrap="true" />
         <Label text="{{ currentTime }}" class="message" textWrap="true" />
+      </StackLayout>
+      <StackLayout orientation="horizontal" margin="10">
         <Label text="Video Duration: " textWrap="true" />
         <Label text="{{ videoDuration }}" class="message" textWrap="true" />
       </StackLayout>
@@ -22,7 +24,9 @@
         </android>
       </StackLayout>
       <StackLayout orientation="horizontal">
-        <Button text="Go to 30 seconds" width="50%" tap="{{ goToTime }}" />
+        <Button text="Mute" width="33%" tap="{{ muteVideo }}" />
+        <Button text="UnMute" width="33%" tap="{{ unmuteVideo }}" />
+        <Button text="Go to 30 seconds" width="33%" tap="{{ goToTime }}" />
       </StackLayout>
     </StackLayout>
   </ScrollView>

@@ -4,16 +4,19 @@
         "module": "commonjs",
         "removeComments": true,
         "experimentalDecorators": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "noEmitOnError": false,
+        "noEmitHelpers": true,
+        "noImplicitUseStrict": true
     },
     "files": [
-      "demo/node_modules/tns-core-modules/tns-core-modules.d.ts",
-      "videoplayer-common.ts",
-      "videoplayer.ios.ts",
-      "videoplayer.android.ts",
-      "video-source/video-source-common.ts",
-      "video-source/video-source.ios.ts",
-      "video-source/video-source.android.ts"
+        "demo/node_modules/tns-core-modules/tns-core-modules.d.ts",
+        "videoplayer-common.ts",
+        "videoplayer.ios.ts",
+        "videoplayer.android.ts",
+        "video-source/video-source-common.ts",
+        "video-source/video-source.ios.ts",
+        "video-source/video-source.android.ts"
     ],
     "compileOnSave": false
 }
