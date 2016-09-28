@@ -147,8 +147,6 @@ export class Video extends videoCommon.Video {
     }
 
     public mute(mute: boolean) {
-        // console.log('no mute for android with this version');
-        // return;
         if (_mediaPlayer) {
             if (mute === true) {
                 _mediaPlayer.setVolume(0, 0);
