@@ -2,7 +2,7 @@
 *.js.map
 *.log
 *.d.ts
-!index.d.ts
+!videoplayer.d.ts
 demo/lib
 demo/app/*.js
 demo/*.d.ts
