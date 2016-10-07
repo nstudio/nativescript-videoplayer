@@ -8,7 +8,7 @@ import * as typesModule from "utils/types";
 import application = require("application");
 import view = require("ui/core/view");
 
-declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake;
+declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero;
 
 global.moduleMerge(common, exports);
 
@@ -113,7 +113,8 @@ export class Video extends common.Video {
 
     public seekToTime(ms: number) {
         let seconds = ms / 1000.0;
-        this._player.seekToTime(CMTimeMakeWithSeconds(seconds, this._player.currentTime().timescale));
+        let time = CMTimeMakeWithSeconds(seconds, this._player.currentTime().timescale);
+        this._player.seekToTimeToleranceBeforeToleranceAfter(time, kCMTimeZero, kCMTimeZero);
     }
 
     public getDuration(): any {
@@ -135,7 +136,6 @@ export class Video extends common.Video {
         this.pause();
         this._player.replaceCurrentItemWithPlayerItem(null); //de-allocates the AVPlayer
         this._playerController = null;
-        this._ios = null;
     }
 
 }
