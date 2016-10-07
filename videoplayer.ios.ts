@@ -3,12 +3,13 @@ import dependencyObservable = require("ui/core/dependency-observable");
 import proxy = require("ui/core/proxy");
 import utils = require("utils/utils")
 import enums = require("ui/enums");
-import definition = require("videoplayer");
-import * as typesModule from "utils/types";
-import application = require("application");
 import view = require("ui/core/view");
+import definition = require("./videoplayer");
+import * as typesModule from "utils/types";
+import * as application from 'application';
 
-declare var NSURL, AVPlayer, AVPlayerViewController, UIView, CMTimeMakeWithSeconds, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero;
+declare var NSURL, AVPlayer, AVPlayerViewController, AVPlayerItemDidPlayToEndTimeNotification, UIView, CMTimeMakeWithSeconds, NSNotification, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero;
+
 
 global.moduleMerge(common, exports);
 
@@ -22,13 +23,13 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 
 
 export class Video extends common.Video {
-    private _player: AVPlayer;
-    private _playerController: AVPlayerViewController;
-    private _ios: UIView;
+    private _player: any; /// AVPlayer
+    private _playerController: any; /// AVPlayerViewController
+    private _ios: any; /// UIView
     private _src: string;
 
-    constructor(options?: definition.Options) {
-        super(options);
+    constructor() {
+        super();
 
         this._playerController = new AVPlayerViewController();
 
@@ -40,7 +41,7 @@ export class Video extends common.Video {
 
     }
 
-    get ios(): UIView {
+    get ios(): any {
         return this._ios;
     }
 
@@ -86,7 +87,7 @@ export class Video extends common.Video {
         }
     }
 
-    private AVPlayerItemDidPlayToEndTimeNotification(notification: NSNotification) {
+    private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
         var notificationString = notification.toString();
         // Check if src exists in notification, notification is structured liek so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
         if (notificationString.includes(this.src)) {
@@ -121,7 +122,7 @@ export class Video extends common.Video {
         /// need to implement
     }
 
-    public get getCurrentTime(): any {
+    public getCurrentTime(): any {
         if (this._player === null) {
             return false;
         }

@@ -1,5 +1,5 @@
 ﻿import types = require("utils/types");
-import definition = require("video-source");
+import definition = require("./video-source");
 import common = require("./video-source-common");
 import * as utilsModule from "utils/utils";
 import * as fileSystemModule from "file-system";
@@ -8,7 +8,7 @@ import * as enumsModule from "ui/enums";
 global.moduleMerge(common, exports);
 
 var utils: typeof utilsModule;
-function ensureUtils() { 
+function ensureUtils() {
     if (!utils) {
         utils = require("utils/utils");
     }
@@ -18,7 +18,7 @@ var fs: typeof fileSystemModule;
 function ensureFS() {
     if (!fs) {
         fs = require("file-system");
-    } 
+    }
 }
 
 var enums: typeof enumsModule;
@@ -28,9 +28,11 @@ function ensureEnums() {
     }
 }
 
+declare var android, AVPlayer: any;
+
 export class VideoSource implements definition.VideoSource {
-    public android: android.widget.VideoView;
-    public ios: AVPlayer;
+    public android: any; /// android.widget.VideoView
+    public ios: any; /// AVPlayer
 
     public loadFromResource(name: string): boolean {
         this.android = null;

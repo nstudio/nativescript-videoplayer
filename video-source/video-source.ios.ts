@@ -9,15 +9,17 @@ declare var android, AVPlayer, NSBundle, NSURL;
 global.moduleMerge(common, exports);
 
 export class VideoSource implements definition.VideoSource {
-    public android: android.widget.VideoView;
-    public ios: AVPlayer;
+    public android: any; /// android.widget.VideoView
+    public ios: any; /// AVPlayer
+    height: any;
+    width: any;
 
-    public loadFromResource(name: string): boolean { 
+    public loadFromResource(name: string): boolean {
         let videoURL = NSBundle.mainBundle().URLForResourceWithExtension(name, null);
         let player = new AVPlayer(videoURL);
         this.ios = player;
         return this.ios != null;
-    } 
+    }
 
     public loadFromFile(path: string): boolean {
         var fileName = types.isString(path) ? path.trim() : "";
@@ -31,11 +33,11 @@ export class VideoSource implements definition.VideoSource {
         this.ios = player;
         return this.ios != null;
     }
-    
+
     public loadFromUrl(url: string): boolean {
         let videoURL = NSURL.URLWithString(url);
         let player = new AVPlayer(videoURL);
-        this.ios = player; 
+        this.ios = player;
         return this.ios != null;
     }
 

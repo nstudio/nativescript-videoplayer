@@ -1,16 +1,16 @@
 {
   "nativescript": {
-    "id": "org.nativescript.videoplayer",
-    "tns-android": {
-      "version": "2.2.0"
-    },
+    "id": "org.nativescript.demo",
     "tns-ios": {
-      "version": "2.2.1"
+      "version": "2.3.0"
+    },
+    "tns-android": {
+      "version": "2.3.0"
     }
   },
   "dependencies": {
     "nativescript-videoplayer": "file:..",
-    "tns-core-modules": "latest"
+    "tns-core-modules": "^2.3.0"
   },
   "devDependencies": {
     "babel-traverse": "6.8.0",

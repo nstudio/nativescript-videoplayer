@@ -33,8 +33,7 @@ From your command prompt/terminal go to your app's root folder and execute:
             <VideoPlayer:Video id="nativeVideoPlayer"
             controls="true" finished="{{ videoFinished }}"
             loop="true" autoplay="false" height="280" 
-            src="~/videos/big_buck_bunny.mp4" 
-            row="0" colSpan="2" />
+            src="~/videos/big_buck_bunny.mp4" />
 
             <!-- Remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->
             
@@ -67,24 +66,26 @@ Mutes the native video player.
 
 Sets the native video player to loop once playback has finished.
 
+- **loadingComplete - (function)** - *optional*  **ANDROID ONLY**
+
+Attribute to specify an event callback to execute when the video has loaded.
+
 
 ## API
 
 - **play()** - start playing the video
 - **pause()** - pause the video
 - **seekToTime(time: number)** - seek the video to a time (milliseconds)
-- **getDuration()** - returns the duration of the video (milliseconds)
 - **getCurrentTime()** - returns the current time in the video duration (milliseconds)
 - **destroy()** - destroy the video player and free resources
+- **mute(boolean)** - mute the current video
 
 ### Android only
 
+- **getDuration()** - returns the duration of the video (milliseconds)
 - **stop()** - stop the playback - this resets the player and remove the video src
-- **loadingComplete - (function)** - *optional* - Attribute to specify an event callback to execute when the video has loaded.
 
-### iOS only
 
-- **mute(boolean)** - mute the current video
 
 
 ### Contributors
