@@ -119,8 +119,10 @@ export class Video extends common.Video {
         this._player.seekToTimeToleranceBeforeToleranceAfter(time, kCMTimeZero, kCMTimeZero);
     }
 
-    public getDuration(): any {
-        /// need to implement
+    public getDuration(): number {
+        let seconds = CMTimeGetSeconds(this._player.currentItem.asset.duration);
+        let miliseconds = seconds*1000.0;
+        return miliseconds;
     }
 
     public getCurrentTime(): any {
