@@ -45,11 +45,11 @@ export declare class Video extends View {
 
 
     /**
-     * *** ANDROID ONLY ***
      * Returns the duration of the video in milliseconds.
      * @returns {number} Video duration in milliseconds.
      */
     getDuration(): number;
+    
 
     /**
      * *** ANDROID ONLY ***
