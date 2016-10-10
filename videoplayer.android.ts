@@ -128,7 +128,7 @@ export class Video extends videoCommon.Video {
     }
 
     public _setNativeVideo(nativeVideo: any) {
-        this.android.src = nativeVideo;
+        this._android.src = nativeVideo;
     }
 
     public setNativeSource(nativePlayerSrc: string) {
