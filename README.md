@@ -41,6 +41,14 @@ From your command prompt/terminal go to your app's root folder and execute:
 </Page>
 ```
 
+## Angular Native (NativeScript Angular) Usage
+``` TS
+// somewhere at top of your component or bootstrap file
+import {registerElement} from "nativescript-angular/element-registry";
+registerElement("VideoPlayer", () => require("nativescript-videoplayer").Video);
+// documentation: https://docs.nativescript.org/angular/plugins/angular-third-party.html#simple-elements
+```
+
 ## Attributes
 - **src** - *required*
 
