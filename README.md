@@ -48,6 +48,13 @@ import {registerElement} from "nativescript-angular/element-registry";
 registerElement("VideoPlayer", () => require("nativescript-videoplayer").Video);
 // documentation: https://docs.nativescript.org/angular/plugins/angular-third-party.html#simple-elements
 ```
+ *With AngularNative you have to explicitly close all components so the correct template code is below.*
+``` XML
+  <VideoPlayer
+      src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+      autoplay="true" 
+      height="300"></VideoPlayer>
+```
 
 ## Attributes
 - **src** - *required*
