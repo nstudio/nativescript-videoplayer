@@ -89,8 +89,9 @@ export class Video extends common.Video {
 
     private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
         var notificationString = notification.toString();
+        var source = this.src.replace("~","");
         // Check if src exists in notification, notification is structured liek so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
-        if (notificationString.includes(this.src)) {
+        if (notificationString.includes(source)) {
             this._emit(common.Video.finishedEvent);
             if (this.loop === true && this._player !== null) {
                 // Go in 5ms for more seamless looping
@@ -115,11 +116,15 @@ export class Video extends common.Video {
     public seekToTime(ms: number) {
         let seconds = ms / 1000.0;
         let time = CMTimeMakeWithSeconds(seconds, this._player.currentTime().timescale);
-        this._player.seekToTimeToleranceBeforeToleranceAfter(time, kCMTimeZero, kCMTimeZero);
+        this._player.seekToTimeToleranceBeforeToleranceAfterCompletionHandler(time, kCMTimeZero, kCMTimeZero, (isFinished) => {
+            this._emit(common.Video.seekToTimeCompleteEvent);
+        });
     }
 
-    public getDuration(): any {
-        /// need to implement
+    public getDuration(): number {
+        let seconds = CMTimeGetSeconds(this._player.currentItem.asset.duration);
+        let miliseconds = seconds*1000.0;
+        return miliseconds;
     }
 
     public getCurrentTime(): any {

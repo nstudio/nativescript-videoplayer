@@ -45,11 +45,11 @@ export declare class Video extends View {
 
 
     /**
-     * *** ANDROID ONLY ***
      * Returns the duration of the video in milliseconds.
      * @returns {number} Video duration in milliseconds.
      */
     getDuration(): number;
+    
 
     /**
      * *** ANDROID ONLY ***
@@ -64,5 +64,12 @@ export declare class Video extends View {
      * @param {function} callback - The callback function to execute.
      */
     loadingComplete(callback: Function): void;
+
+    /**
+     * *** IOS ONLY ***
+     * Callback to execute when the video has finished seekToTime.
+     * @param {function} callback - The callback function to execute.
+    */
+    seekToTimeComplete(callback: Function): void;
 
 }

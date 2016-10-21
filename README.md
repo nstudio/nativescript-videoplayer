@@ -41,6 +41,21 @@ From your command prompt/terminal go to your app's root folder and execute:
 </Page>
 ```
 
+## Angular Native (NativeScript Angular) Usage
+``` TS
+// somewhere at top of your component or bootstrap file
+import {registerElement} from "nativescript-angular/element-registry";
+registerElement("VideoPlayer", () => require("nativescript-videoplayer").Video);
+// documentation: https://docs.nativescript.org/angular/plugins/angular-third-party.html#simple-elements
+```
+ *With AngularNative you have to explicitly close all components so the correct template code is below.*
+``` XML
+  <VideoPlayer
+      src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+      autoplay="true" 
+      height="300"></VideoPlayer>
+```
+
 ## Attributes
 - **src** - *required*
 
@@ -70,6 +85,10 @@ Sets the native video player to loop once playback has finished.
 
 Attribute to specify an event callback to execute when the video has loaded.
 
+- **seekToTimeComplete - (function)** - *optional*  **IOS ONLY**
+
+Attribute to specify an event callback to execute when the video has finished seekToTime.
+
 
 ## API
 
@@ -77,15 +96,13 @@ Attribute to specify an event callback to execute when the video has loaded.
 - **pause()** - pause the video
 - **seekToTime(time: number)** - seek the video to a time (milliseconds)
 - **getCurrentTime()** - returns the current time in the video duration (milliseconds)
+- **getDuration()** - returns the duration of the video (milliseconds)
 - **destroy()** - destroy the video player and free resources
 - **mute(boolean)** - mute the current video
 
 ### Android only
 
-- **getDuration()** - returns the duration of the video (milliseconds)
 - **stop()** - stop the playback - this resets the player and remove the video src
-
-
 
 
 ### Contributors

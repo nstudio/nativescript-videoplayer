@@ -1,6 +1,6 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "1.0.9",
+  "version": "1.1.2",
   "main": "videoplayer.js",
   "typings": "videoplayer.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
@@ -40,6 +40,16 @@
       "name": "Blake Nussey",
       "email": "blake@stageme.com",
       "url": "https://github.com/bnussey"
+    },
+    {
+      "name": "Juan Manuel Campos Olvera",
+      "email": "juan4106@hotmail.com",
+      "url": "https://github.com/juanmcampos"
+    },
+    {
+      "name": "Ivo Georgiev",
+      "email": "ivo@strem.io",
+      "url": "https://github.com/Ivshti"
     }
   ],
   "author": {
@@ -52,15 +62,15 @@
     "url": "https://github.com/bradmartin/nativescript-videoplayer/issues"
   },
   "scripts": {
-        "build": "tsc",
-        "demo.ios": "npm run preparedemo && cd demo && tns emulate ios",
-        "demo.android": "npm run preparedemo && cd demo && tns run android",
-        "debug.ios": "npm run preparedemo && cd demo && tns debug ios --emulator",
-        "debug.android": "npm run preparedemo && cd demo && tns debug android --emulator",
-        "preparedemo": "npm run build && cd demo && tns plugin remove nativescript-advanced-webview && tns plugin add .. && tns install",
-        "setup": "cd demo && npm install && cd .. && npm run build && cd demo && tns plugin add .. && cd ..",
-        "start": "npm run demo.android"
-    },
+    "build": "tsc",
+    "demo.ios": "npm run preparedemo && cd demo && tns emulate ios",
+    "demo.android": "npm run preparedemo && cd demo && tns run android",
+    "debug.ios": "npm run preparedemo && cd demo && tns debug ios --emulator",
+    "debug.android": "npm run preparedemo && cd demo && tns debug android --emulator",
+    "preparedemo": "npm run build && cd demo && tns plugin remove nativescript-advanced-webview && tns plugin add .. && tns install",
+    "setup": "cd demo && npm install && cd .. && npm run build && cd demo && tns plugin add .. && cd ..",
+    "start": "npm run demo.android"
+  },
   "homepage": "https://github.com/bradmartin/nativescript-videoplayer",
   "readme": "# NativeScript Video Player :clapper:\nA NativeScript plugin to provide an XML widget for playing local and remote video files.\n\n#### [Android VideoView](http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html)\n#### [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)\n\n## Installation\n`npm install nativescript-videoplayer`\n\n## Usage\n\n###\n```XML\n<Page xmlns=\"http://schemas.nativescript.org/tns.xsd\"\n      xmlns:VideoPlayer=\"videoplayer\">\n        <StackLayout>\n            <VideoPlayer:Video\n            loaded=\"videoplayerLoaded\" \n            finished=\"videoFinished\" \n            autoplay=\"true\" \n            height=\"300\" \n            src=\"~/videos/small.mp4\" />\n\n            <!-- Here is a remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->\n            \n        </StackLayout>\n</Page>\n```\n\n## Attributes\n**src** - *required*\n\nAttribute to specify the video file to play, can either be a remote file or local video file. \n\n<sub>The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.</sub>\n\n**autoplay** - *optional*\n\nAttribute to set if the video should start playing as soon as possible or to wait for user interaction.\n\n**finished** - *optional*\n\nAttribute to specify an event callback to execute when the video reaches the end of its duration.\n\n",
   "readmeFilename": "README.md",

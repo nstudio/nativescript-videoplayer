@@ -52,6 +52,7 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
 export class Video extends view.View {
     public static finishedEvent = "finished";
     public static loadingCompleteEvent = "loadingComplete";
+    public static seekToTimeCompleteEvent = "seekToTimeComplete";
     _emit: any;
 
     public static srcProperty = new dependencyObservable.Property(
@@ -154,5 +155,5 @@ export class Video extends view.View {
 
     public loadingCompleteEventCallback() { } //TODO
 
-
+    public seekToTimeCompleteEventCallback() { } //TODO
 }
