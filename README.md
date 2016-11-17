@@ -85,7 +85,7 @@ Sets the native video player to loop once playback has finished.
 
 Attribute to specify an event callback to execute when the video has loaded.
 
-- **seekToTimeComplete - (function)** - *optional*  **IOS ONLY**
+- **seekToTimeComplete - (function)** - *optional*
 
 Attribute to specify an event callback to execute when the video has finished seekToTime.
 

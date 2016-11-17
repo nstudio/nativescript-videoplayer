@@ -85,7 +85,6 @@ export class Video extends videoCommon.Video {
                 get owner() {
                     return that.get();
                 },
-
                 onPrepared: function (mp) {
                     // if (this.owner.loop === true) {
                     //     mp.setLooping(true);
@@ -100,7 +99,16 @@ export class Video extends videoCommon.Video {
                     if (this.owner) {
                         this.owner._emit(videoCommon.Video.loadingCompleteEvent);
                     }
-
+                    mp.setOnSeekCompleteListener(new android.media.MediaPlayer.OnSeekCompleteListener({
+                        get owner() {
+                            return that.get();
+                        },
+                        onSeekComplete: function (mp) {
+                            if (this.owner) {
+                                this.owner._emit(videoCommon.Video.seekToTimeCompleteEvent);
+                            }
+                        }
+                    }))
                 }
             }));
 
@@ -111,7 +119,6 @@ export class Video extends videoCommon.Video {
                     get owner() {
                         return that.get();
                     },
-
                     onCompletion: function (mp) {
                         if (this.owner) {
                             this.owner._emit(videoCommon.Video.finishedEvent);
