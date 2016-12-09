@@ -99,6 +99,9 @@ export class Video extends videoCommon.Video {
                     if (this.owner) {
                         this.owner._emit(videoCommon.Video.loadingCompleteEvent);
                     }
+                    if (this.owner.loop === true) {
+                        mp.setLooping(true);
+                    }
                     mp.setOnSeekCompleteListener(new android.media.MediaPlayer.OnSeekCompleteListener({
                         get owner() {
                             return that.get();
@@ -122,10 +125,6 @@ export class Video extends videoCommon.Video {
                     onCompletion: function (mp) {
                         if (this.owner) {
                             this.owner._emit(videoCommon.Video.finishedEvent);
-                        }
-                        if (this.owner.loop === true) {
-                            mp.seekTo(5);
-                            mp.start();
                         }
                     }
                 }));
