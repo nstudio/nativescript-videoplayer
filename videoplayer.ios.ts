@@ -88,15 +88,19 @@ export class Video extends common.Video {
     }
 
     private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
-        var notificationString = notification.toString();
-        var source = this.src.replace("~","");
-        // Check if src exists in notification, notification is structured liek so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
-        if (notificationString.includes(source)) {
-            this._emit(common.Video.finishedEvent);
-            if (this.loop === true && this._player !== null) {
-                // Go in 5ms for more seamless looping
-                this.seekToTime(CMTimeMake(5, 100));
-                this.play();
+        if (this._player.currentItem) {
+            // This will match exactly to the object from the notification so can ensure only looping the video that has finished.
+            let currentItem = this._player.currentItem.toString();
+            let notificationString = notification.toString();
+            // Notification is structured like so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
+            // Check if object exists in notification.
+            if (notificationString.includes(currentItem)) {
+                this._emit(common.Video.finishedEvent);
+                if (this.loop === true && this._player !== null) {
+                    // Go in 5ms for more seamless looping
+                    this.seekToTime(CMTimeMake(5, 100));
+                    this.play();
+                }
             }
         }
     }
@@ -123,7 +127,7 @@ export class Video extends common.Video {
 
     public getDuration(): number {
         let seconds = CMTimeGetSeconds(this._player.currentItem.asset.duration);
-        let miliseconds = seconds*1000.0;
+        let miliseconds = seconds * 1000.0;
         return miliseconds;
     }
 
