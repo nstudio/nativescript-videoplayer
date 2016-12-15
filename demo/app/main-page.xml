@@ -4,17 +4,17 @@
   <ActionBar title="Native Video" />
   <ScrollView>
     <StackLayout>
-      <StackLayout orientation="horizontal" margin="10">
+        <GridLayout rows="auto" columns="auto,*,auto,auto" margin="10">
+
         <Label text="Current Time: " textWrap="true" />
-        <Label text="{{ currentTime }}" class="message" textWrap="true" />
-      </StackLayout>
-      <StackLayout orientation="horizontal" margin="10">
-        <Label text="Video Duration: " textWrap="true" />
-        <Label text="{{ videoDuration }}" class="message" textWrap="true" />
-      </StackLayout>
-      <GridLayout rows="*" columns="*, *">
-        <Label text="Label On Top of Video View" row="0" colSpan="2" color="#fff" horizontalAlignment="center" />
-        <Video:Video id="nativeVideoPlayer" controls="true" finished="{{ videoFinished }}" loop="true" autoplay="false" height="280" src="~/videos/big_buck_bunny.mp4" row="0" colSpan="2" />
+        <Label col="1" text="{{ currentTime }}" class="message" textWrap="true" />
+
+        <Label col="2" text="Video Duration: " textWrap="true" />
+        <Label col="3" text="{{ videoDuration }}" class="message" textWrap="true" />
+        </GridLayout>
+      <GridLayout rows="*" columns="*, *" backgroundColor="#000000">
+        <Video:Video id="nativeVideoPlayer" controls="true"  loadingComplete="{{ videoCompleted }}" finished="{{ videoFinished }}" loop="false" autoplay="false" height="280" src="~/videos/big_buck_bunny.mp4" row="0" colSpan="2"/>
+        <Label text="Label On Top of Video View" row="0" colSpan="2" color="#fff" horizontalAlignment="center"/>
       </GridLayout>
       <StackLayout orientation="horizontal">
         <Button text="Pause" width="33%" tap="{{ pauseVideo }}" />
@@ -28,6 +28,8 @@
         <Button text="UnMute" width="33%" tap="{{ unmuteVideo }}" />
         <Button text="Go to 30 seconds" width="33%" tap="{{ goToTime }}" />
       </StackLayout>
+
+      <Button text="Animate" width="33%" tap="{{ animate }}"/>
     </StackLayout>
   </ScrollView>
 </Page>
