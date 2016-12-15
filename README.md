@@ -7,7 +7,7 @@ A NativeScript plugin to provide the ability to play local and remote videos.
 #### Platform controls used: 
 Android | iOS
 ---------- | -----------
-[Android VideoView](http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html) |  [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)
+[Android MediaPlayer](https://developer.android.com/reference/android/media/MediaPlayer.html) |  [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)
 
 
 ## Sample Usage
@@ -80,6 +80,10 @@ Mutes the native video player.
 - **loop - (boolean)** - *optional*
 
 Sets the native video player to loop once playback has finished.
+
+- **aspect - (boolean)** - *optional*  **ANDROID ONLY**
+
+Defaults to true. If set to false, the aspect ratio of the video will not be honored and it will fill the entire container available.Ï
 
 - **loadingComplete - (function)** - *optional*  **ANDROID ONLY**
 

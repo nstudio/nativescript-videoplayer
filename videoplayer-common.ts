@@ -17,6 +17,7 @@ var AUTOPLAY = "autoplay";
 var CONTROLS = "controls";
 var LOOP = "loop";
 var MUTED = "muted";
+var ASPECT = "aspect";
 
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
@@ -96,6 +97,11 @@ export class Video extends view.View {
         VIDEO,
         new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
     );
+    public static aspectProperty = new dependencyObservable.Property(
+        ASPECT,
+        VIDEO,
+        new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
+    );
 
     constructor() {
         super();
@@ -146,6 +152,14 @@ export class Video extends view.View {
     set muted(value: any) {
         this._setValue(Video.mutedProperty, value);
     }
+
+    get aspect(): any {
+        return this._getValue(Video.aspectProperty);
+    }
+    set aspect(value: any) {
+        this._setValue(Video.aspectProperty, value);
+    }
+
 
     public _setNativeVideo(nativeVideo: any) {
         //
