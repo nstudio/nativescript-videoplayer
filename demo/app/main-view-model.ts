@@ -11,14 +11,15 @@ export class HelloWorldModel extends Observable {
   public currentTime: any;
   public videoDuration: any;
   private _videoPlayer: Video;
+  private completed: boolean;
 
   constructor(mainpage: Page) {
     super();
 
+    this.completed = false;
     this._videoPlayer = <Video>mainpage.getViewById('nativeVideoPlayer');
     this.currentTime = '';
     this.videoDuration = '';
-    this.getVideoDuration();
     this.trackVideoCurrentPosition();
   }
 
@@ -26,8 +27,9 @@ export class HelloWorldModel extends Observable {
    * Video Finished callback
    */
   public videoFinished(args) {
-    console.log('video finished event executed');
+    this.completed = true;    
   }
+
 
 
   /**
@@ -43,7 +45,7 @@ export class HelloWorldModel extends Observable {
    */
   public playVideo() {
     this._videoPlayer.play();
-    this.set('videoDuration', this._videoPlayer.getDuration());
+    this.completed = false;
   }
 
 
@@ -78,6 +80,44 @@ export class HelloWorldModel extends Observable {
     }
   }
 
+
+  public animate() {
+    console.log("Animation");
+
+    const enums = require("ui/enums");
+    this._videoPlayer.animate({
+      rotate: 360,
+      duration: 3000,
+      curve: enums.AnimationCurve.spring
+    }).then( () => {
+      return this._videoPlayer.animate({
+        rotate: 0,
+        duration: 3000,
+        curve: enums.AnimationCurve.spring
+      });
+    }).then( () => {
+        return this._videoPlayer.animate({
+           scale: {x: .5, y: .5},
+           duration: 1000,
+           curve: enums.AnimationCurve.spring
+         });
+
+    }).then( () => {
+          return this._videoPlayer.animate({
+            scale: {x: 1.5, y: 1.5},
+            duration: 3000,
+            curve: enums.AnimationCurve.spring
+          });
+    }).then( () => {
+      return this._videoPlayer.animate({
+        scale: {x: 1.0, y: 1.0},
+        duration: 3000,
+        curve: enums.AnimationCurve.spring
+      });
+
+    });
+
+  }
 
   public muteVideo() {
     this._videoPlayer.mute(true);
@@ -118,13 +158,19 @@ export class HelloWorldModel extends Observable {
 
 
   private trackVideoCurrentPosition(): number {
-    // if (isAndroid) {
     let trackInterval = setInterval(() => {
-      var x = this._videoPlayer.getCurrentTime();
+      let x,y;
+      if (this.completed) {
+        x = "";
+        y = "";
+      } else {
+        x = this._videoPlayer.getCurrentTime();
+        y = this._videoPlayer.getDuration();
+      }
       this.set('currentTime', x);
+      this.set('videoDuration', y);
     }, 200);
     return trackInterval;
-    // }
 
   }
 
