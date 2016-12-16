@@ -81,11 +81,11 @@ Mutes the native video player.
 
 Sets the native video player to loop once playback has finished.
 
-- **aspect - (boolean)** - *optional*  **ANDROID ONLY**
+- **fill - (boolean)** - *optional*  **ANDROID ONLY**
 
-Defaults to true. If set to false, the aspect ratio of the video will not be honored and it will fill the entire container available.Ï
+If set to true, the aspect ratio of the video will not be honored and it will fill the entire space available.
 
-- **loadingComplete - (function)** - *optional*  **ANDROID ONLY**
+- **loadingComplete - (function)** - *optional*
 
 Attribute to specify an event callback to execute when the video has loaded.
 

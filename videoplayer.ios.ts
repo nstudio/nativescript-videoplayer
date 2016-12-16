@@ -8,7 +8,7 @@ import definition = require("./videoplayer");
 import * as typesModule from "utils/types";
 import * as application from 'application';
 
-declare var NSURL, AVPlayer, AVPlayerViewController, AVPlayerItemDidPlayToEndTimeNotification, UIView, CMTimeMakeWithSeconds, NSNotification, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero;
+declare var NSURL, AVPlayer, AVPlayerViewController, AVPlayerItemDidPlayToEndTimeNotification, UIView, CMTimeMakeWithSeconds, NSNotification, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero, AVPlayerItemStatusReadyToPlay;
 
 
 global.moduleMerge(common, exports);
@@ -27,6 +27,8 @@ export class Video extends common.Video {
     private _playerController: any; /// AVPlayerViewController
     private _ios: any; /// UIView
     private _src: string;
+    private _AVPlayerItemDidPlayToEndTimeObserver: any;
+    private _observer: NSObject;
 
     constructor() {
         super();
@@ -38,6 +40,8 @@ export class Video extends common.Video {
         // showsPlaybackControls must be set to false on init to avoid any potential 'Unable to simultaneously satisfy constraints' errors 
         this._playerController.showsPlaybackControls = false;
         this._ios = this._playerController.view;
+        this._observer = PlayerObserverClass.alloc();
+        this._observer["_owner"] = this;
 
     }
 
@@ -70,10 +74,6 @@ export class Video extends common.Video {
 
         this._playerController.player = this._player;
 
-        if (this.autoplay === true) {
-            this.play();
-        }
-
         if (isNaN(this.width) || isNaN(this.height)) {
             this.requestLayout();
         }
@@ -82,25 +82,22 @@ export class Video extends common.Video {
             this._player.muted = true;
         }
 
+        this._player.currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
+
         if (this.finishedCallback) {
-            application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, this.AVPlayerItemDidPlayToEndTimeNotification.bind(this));
+            this._AVPlayerItemDidPlayToEndTimeObserver = application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, this.AVPlayerItemDidPlayToEndTimeNotification.bind(this));
         }
     }
 
     private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
-        if (this._player.currentItem) {
-            // This will match exactly to the object from the notification so can ensure only looping the video that has finished.
-            let currentItem = this._player.currentItem.toString();
-            let notificationString = notification.toString();
+        if (this._player.currentItem && this._player.currentItem === notification.object) {
+            // This will match exactly to the object from the notification so can ensure only looping and finished event for the video that has finished.
             // Notification is structured like so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
-            // Check if object exists in notification.
-            if (notificationString.includes(currentItem)) {
-                this._emit(common.Video.finishedEvent);
-                if (this.loop === true && this._player !== null) {
-                    // Go in 5ms for more seamless looping
-                    this.seekToTime(CMTimeMake(5, 100));
-                    this.play();
-                }
+            this._emit(common.Video.finishedEvent);
+            if (this.loop === true && this._player !== null) {
+                // Go in 5ms for more seamless looping
+                this.seekToTime(CMTimeMake(5, 100));
+                this.play();
             }
         }
     }
@@ -141,11 +138,29 @@ export class Video extends common.Video {
 
     public destroy() {
         if (this.finishedCallback) {
-            application.ios.removeNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification);
+            application.ios.removeNotificationObserver(this._AVPlayerItemDidPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);
         }
+        this._player.currentItem.removeObserverForKeyPath(this._observer, "status");
         this.pause();
         this._player.replaceCurrentItemWithPlayerItem(null); //de-allocates the AVPlayer
         this._playerController = null;
     }
 
+    private _loadingComplete() {
+        this._emit(common.Video.loadingCompleteEvent);
+    }
+
+}
+
+class PlayerObserverClass extends NSObject {
+    observeValueForKeyPathOfObjectChangeContext(path: string, obj: Object, change: NSDictionary<any, any>, context: any) {
+        if (path === "status") {
+            if (this["_owner"]._player.currentItem.status === AVPlayerItemStatusReadyToPlay) {
+                this["_owner"]._loadingComplete();
+                if (this["_owner"].autoplay === true) {
+                    this["_owner"].play();
+                }
+            }
+        }
+    }
 }

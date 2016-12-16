@@ -157,7 +157,7 @@ export class Video extends videoCommon.Video {
 
                     this.owner.mediaState = SURFACE_READY;
 
-                    if (this.owner.aspect !== false) {
+                    if (this.owner.fill !== true) {
                         this.owner._setupAspectRatio();
                     }
 
@@ -198,7 +198,7 @@ export class Video extends videoCommon.Video {
                     this.owner.videoHeight = mediaPlayer.getVideoHeight();
                     if (this.owner.videoWidth !== 0 && this.owner.videoHeight !== 0) {
                         this.owner._android.getSurfaceTexture().setDefaultBufferSize(this.owner.videoWidth, this.owner.videoHeight);
-                        if (this.owner.aspect !== false) {
+                        if (this.owner.fill !== true) {
                             this.owner._setupAspectRatio();
                         }
                     }

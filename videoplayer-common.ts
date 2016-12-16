@@ -8,7 +8,6 @@ import platform = require("platform");
 import utils = require("utils/utils");
 import * as types from "utils/types";
 
-
 var SRC = "src";
 var VIDEO_SOURCE = "videoSource";
 var VIDEO = "Video";
@@ -17,7 +16,7 @@ var AUTOPLAY = "autoplay";
 var CONTROLS = "controls";
 var LOOP = "loop";
 var MUTED = "muted";
-var ASPECT = "aspect";
+var FILL = "fill";
 
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
@@ -97,8 +96,8 @@ export class Video extends view.View {
         VIDEO,
         new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
     );
-    public static aspectProperty = new dependencyObservable.Property(
-        ASPECT,
+    public static fillProperty = new dependencyObservable.Property(
+        FILL,
         VIDEO,
         new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
     );
@@ -153,13 +152,12 @@ export class Video extends view.View {
         this._setValue(Video.mutedProperty, value);
     }
 
-    get aspect(): any {
-        return this._getValue(Video.aspectProperty);
+    get fill(): any {
+        return this._getValue(Video.fillProperty);
     }
-    set aspect(value: any) {
-        this._setValue(Video.aspectProperty, value);
+    set fill(value: any) {
+        this._setValue(Video.fillProperty, value);
     }
-
 
     public _setNativeVideo(nativeVideo: any) {
         //
