@@ -27,8 +27,11 @@ export class Video extends common.Video {
     private _playerController: any; /// AVPlayerViewController
     private _ios: any; /// UIView
     private _src: string;
-    private _AVPlayerItemDidPlayToEndTimeObserver: any;
+    private _didPlayToEndTimeObserver: any;
+    private _didPlayToEndTimeActive: boolean;
     private _observer: NSObject;
+    private _observerActive: boolean;
+
 
     constructor() {
         super();
@@ -82,11 +85,16 @@ export class Video extends common.Video {
             this._player.muted = true;
         }
 
-        this._player.currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
-
-        if (this.finishedCallback) {
-            this._AVPlayerItemDidPlayToEndTimeObserver = application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, this.AVPlayerItemDidPlayToEndTimeNotification.bind(this));
+        if (!this._observerActive) {
+            this._player.currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
+            this._observerActive = true;
         }
+
+        if (!this._didPlayToEndTimeActive) {
+            this._didPlayToEndTimeObserver = application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, this.AVPlayerItemDidPlayToEndTimeNotification.bind(this));
+            this._didPlayToEndTimeActive = true;
+        }
+
     }
 
     private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
@@ -137,10 +145,15 @@ export class Video extends common.Video {
 
 
     public destroy() {
-        if (this.finishedCallback) {
-            application.ios.removeNotificationObserver(this._AVPlayerItemDidPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);
+        if (this._didPlayToEndTimeActive) {
+            application.ios.removeNotificationObserver(this._didPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);
+            this._didPlayToEndTimeActive = false;
         }
-        this._player.currentItem.removeObserverForKeyPath(this._observer, "status");
+
+        if (this._observerActive = true) {
+            this._player.currentItem.removeObserverForKeyPath(this._observer, "status");
+            this._observerActive = false;
+        }
         this.pause();
         this._player.replaceCurrentItemWithPlayerItem(null); //de-allocates the AVPlayer
         this._playerController = null;
