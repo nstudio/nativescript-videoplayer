@@ -10,7 +10,6 @@ import * as application from 'application';
 
 declare var NSURL, AVPlayer, AVPlayerViewController, AVPlayerItemDidPlayToEndTimeNotification, UIView, CMTimeMakeWithSeconds, NSNotification, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero, AVPlayerItemStatusReadyToPlay;
 
-
 global.moduleMerge(common, exports);
 
 function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
@@ -20,7 +19,6 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>common.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
-
 
 export class Video extends common.Video {
     private _player: any; /// AVPlayer
@@ -32,12 +30,9 @@ export class Video extends common.Video {
     private _observer: NSObject;
     private _observerActive: boolean;
 
-
     constructor() {
         super();
-
         this._playerController = new AVPlayerViewController();
-
         this._player = new AVPlayer();
         this._playerController.player = this._player;
         // showsPlaybackControls must be set to false on init to avoid any potential 'Unable to simultaneously satisfy constraints' errors 
@@ -45,7 +40,6 @@ export class Video extends common.Video {
         this._ios = this._playerController.view;
         this._observer = PlayerObserverClass.alloc();
         this._observer["_owner"] = this;
-
     }
 
     get ios(): any {
@@ -54,8 +48,19 @@ export class Video extends common.Video {
 
     public _setNativeVideo(nativeVideoPlayer: any) {
         if (nativeVideoPlayer != null) {
-            this._player = nativeVideoPlayer;
-            this._init();
+            let currentItem = this._player.currentItem;
+            if (currentItem !== null) {
+                // Need to set to null so the previous video is not shown while its loading
+                this._player.replaceCurrentItemWithPlayerItem(null);
+                this._removeStatusObserver(currentItem);
+                this._addStatusObserver(nativeVideoPlayer);
+                this._player.replaceCurrentItemWithPlayerItem(nativeVideoPlayer);
+            }
+            else {
+                this._addStatusObserver(nativeVideoPlayer);
+                this._player.replaceCurrentItemWithPlayerItem(nativeVideoPlayer);
+                this._init();
+            }
         }
     }
 
@@ -63,7 +68,6 @@ export class Video extends common.Video {
         this._src = nativePlayerSrc;
         let url: string = NSURL.URLWithString(this._src);
         this._player = new AVPlayer(url);
-
         this._init();
     }
 
@@ -83,11 +87,6 @@ export class Video extends common.Video {
 
         if (this.muted === true) {
             this._player.muted = true;
-        }
-
-        if (!this._observerActive) {
-            this._player.currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
-            this._observerActive = true;
         }
 
         if (!this._didPlayToEndTimeActive) {
@@ -151,8 +150,7 @@ export class Video extends common.Video {
         }
 
         if (this._observerActive = true) {
-            this._player.currentItem.removeObserverForKeyPath(this._observer, "status");
-            this._observerActive = false;
+            this._removeStatusObserver(this._player.currentItem);
         }
         this.pause();
         this._player.replaceCurrentItemWithPlayerItem(null); //de-allocates the AVPlayer
@@ -161,6 +159,16 @@ export class Video extends common.Video {
 
     private _loadingComplete() {
         this._emit(common.Video.loadingCompleteEvent);
+    }
+
+    private _addStatusObserver(currentItem) {
+        currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
+        this._observerActive = true;
+    }
+
+    private _removeStatusObserver(currentItem) {
+        currentItem.removeObserverForKeyPath(this._observer, "status");
+        this._observerActive = false;
     }
 
 }

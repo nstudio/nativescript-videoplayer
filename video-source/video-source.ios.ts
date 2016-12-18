@@ -4,19 +4,19 @@ import common = require("./video-source-common");
 import enums = require("ui/enums");
 import definition = require("./video-source");
 
-declare var android, AVPlayer, NSBundle, NSURL;
+declare var android, AVPlayerItem, NSBundle, NSURL;
 
 global.moduleMerge(common, exports);
 
 export class VideoSource implements definition.VideoSource {
     public android: any; /// android.widget.VideoView
-    public ios: any; /// AVPlayer
+    public ios: any; /// AVPlayerItem
     height: any;
     width: any;
 
     public loadFromResource(name: string): boolean {
         let videoURL = NSBundle.mainBundle().URLForResourceWithExtension(name, null);
-        let player = new AVPlayer(videoURL);
+        let player = new AVPlayerItem(videoURL);
         this.ios = player;
         return this.ios != null;
     }
@@ -29,14 +29,14 @@ export class VideoSource implements definition.VideoSource {
         }
 
         let videoURL = NSURL.URLWithString(fileName);
-        let player = new AVPlayer(videoURL);
+        let player = new AVPlayerItem(videoURL);
         this.ios = player;
         return this.ios != null;
     }
 
     public loadFromUrl(url: string): boolean {
         let videoURL = NSURL.URLWithString(url);
-        let player = new AVPlayer(videoURL);
+        let player = new AVPlayerItem(videoURL);
         this.ios = player;
         return this.ios != null;
     }
