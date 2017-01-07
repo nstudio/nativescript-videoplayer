@@ -29,6 +29,7 @@ export class Video extends common.Video {
     private _didPlayToEndTimeActive: boolean;
     private _observer: NSObject;
     private _observerActive: boolean;
+    private _videoLoaded: boolean;
 
     constructor() {
         super();
@@ -51,6 +52,7 @@ export class Video extends common.Video {
             let currentItem = this._player.currentItem;
             if (currentItem !== null) {
                 // Need to set to null so the previous video is not shown while its loading
+                this._videoLoaded = false;
                 this._player.replaceCurrentItemWithPlayerItem(null);
                 this._removeStatusObserver(currentItem);
                 this._addStatusObserver(nativeVideoPlayer);
@@ -158,6 +160,7 @@ export class Video extends common.Video {
     }
 
     private _loadingComplete() {
+        this._videoLoaded = true;
         this._emit(common.Video.loadingCompleteEvent);
     }
 
@@ -176,7 +179,7 @@ export class Video extends common.Video {
 class PlayerObserverClass extends NSObject {
     observeValueForKeyPathOfObjectChangeContext(path: string, obj: Object, change: NSDictionary<any, any>, context: any) {
         if (path === "status") {
-            if (this["_owner"]._player.currentItem.status === AVPlayerItemStatusReadyToPlay) {
+            if (this["_owner"]._player.currentItem.status === AVPlayerItemStatusReadyToPlay && !this["_owner"]._videoLoaded) {
                 this["_owner"]._loadingComplete();
                 if (this["_owner"].autoplay === true) {
                     this["_owner"].play();
