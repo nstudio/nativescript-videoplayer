@@ -5,6 +5,7 @@ import fs = require("file-system");
 import proxy = require("ui/core/proxy");
 import view = require("ui/core/view");
 import utils = require("utils/utils");
+import timer = require("timer");
 
 global.moduleMerge(videoCommon, exports);
 
@@ -20,7 +21,7 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 // register the setNativeValue callback
 (<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
 
-declare const android: any;
+declare const android: any, java: any;
 
 const STATE_IDLE = 0;
 const STATE_PLAYING = 1;
@@ -44,13 +45,14 @@ export class Video extends videoCommon.Video {
     private mediaController;
     private preSeekTime;
     private currentBufferPercentage;
-
+    private _playbackTimeObserver;
+    private _playbackTimeObserverActive: boolean;
 
     constructor() {
         super();
         this._android = null;
-        this. videoWidth = 0;
-        this. videoHeight = 0;
+        this.videoWidth = 0;
+        this.videoHeight = 0;
 
         this._src = null;
 
@@ -79,12 +81,12 @@ export class Video extends videoCommon.Video {
             get owner(): Video {
                 return that.get();
             },
-            onTouch: function(/* view, event */) {
+            onTouch: function (/* view, event */) {
                 this.owner.toggleMediaControllerVisibility();
                 return false;
             }
         }));
-        
+
         this._android.setSurfaceTextureListener(new android.view.TextureView.SurfaceTextureListener(
             {
                 get owner(): Video {
@@ -169,6 +171,11 @@ export class Video extends videoCommon.Video {
                         this.owner.play();
                     }
 
+                    if (this.owner.observeCurrentTime && !this.owner._playbackTimeObserverActive) {
+                        this._addPlaybackTimeObserver();
+                    }
+
+
                     this.owner._emit(videoCommon.Video.loadingCompleteEvent);
                     if (this.owner.loop === true) {
                         mp.setLooping(true);
@@ -192,7 +199,7 @@ export class Video extends videoCommon.Video {
             get owner(): Video {
                 return that.get();
             },
-            onVideoSizeChanged: function(mediaPlayer /*, width, height */) {
+            onVideoSizeChanged: function (mediaPlayer /*, width, height */) {
                 if (this.owner) {
                     this.owner.videoWidth = mediaPlayer.getVideoWidth();
                     this.owner.videoHeight = mediaPlayer.getVideoHeight();
@@ -290,7 +297,7 @@ export class Video extends videoCommon.Video {
 
         let viewWidth = this._android.getWidth();
         let viewHeight = this._android.getHeight();
-        let aspectRatio = this. videoHeight / this. videoWidth;
+        let aspectRatio = this.videoHeight / this.videoWidth;
         //console.log("W/H", viewHeight, "x", viewWidth, "x", aspectRatio);
 
 
@@ -394,7 +401,7 @@ export class Video extends videoCommon.Video {
         this.playState = STATE_IDLE;
         this.release();
     }
-    
+
     public seekToTime(ms: number): void {
         if (!this.mediaPlayer) {
             this.preSeekTime = ms;
@@ -404,26 +411,26 @@ export class Video extends videoCommon.Video {
         }
         this.mediaPlayer.seekTo(ms);
     }
-    
+
     public isPlaying(): boolean {
         if (!this.mediaPlayer) { return false; }
         return this.mediaPlayer.isPlaying();
     }
-    
+
     public getDuration(): number {
         if (!this.mediaPlayer || this.mediaState === SURFACE_WAITING || this.playState === STATE_IDLE) {
             return 0;
         }
         return this.mediaPlayer.getDuration();
     }
-    
+
     public getCurrentTime(): number {
         if (!this.mediaPlayer) {
             return 0;
         }
         return this.mediaPlayer.getCurrentPosition();
     }
-    
+
     public destroy() {
         this.release();
         this.src = null;
@@ -431,24 +438,42 @@ export class Video extends videoCommon.Video {
         this.mediaPlayer = null;
         this.mediaController = null;
     }
-    
-    private release() : void {
+
+    private release(): void {
         if (this.mediaPlayer !== null) {
             this.mediaState = SURFACE_WAITING;
             this.mediaPlayer.reset();
             this.mediaPlayer.release();
             this.mediaPlayer = null;
+            if (this._playbackTimeObserverActive) {
+                this._removePlaybackTimeObserver();
+            }
             let am = utils.ad.getApplicationContext().getSystemService(android.content.Context.AUDIO_SERVICE);
             am.abandonAudioFocus(null);
         }
     }
 
     public suspendEvent(): void {
-            this.release();
+        this.release();
     }
-    
+
     public resumeEvent(): void {
         this._openVideo();
+    }
+
+    private _addPlaybackTimeObserver() {
+        this._playbackTimeObserverActive = true;
+        this._playbackTimeObserver = timer.setInterval(() => {
+            if (this.mediaPlayer.isPlaying) {
+                let _milliseconds = this.mediaPlayer.getCurrentPosition();
+                this._setValue(Video.currentTimeProperty, _milliseconds);
+            }
+        }, 500);
+    }
+
+    private _removePlaybackTimeObserver() {
+        timer.clearInterval(this._playbackTimeObserver);
+        this._playbackTimeObserverActive = false;
     }
 
 }

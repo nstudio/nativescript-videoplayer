@@ -7,8 +7,9 @@ import view = require("ui/core/view");
 import definition = require("./videoplayer");
 import * as typesModule from "utils/types";
 import * as application from 'application';
+var timer = require("timer");
 
-declare var NSURL, AVPlayer, AVPlayerViewController, AVPlayerItemDidPlayToEndTimeNotification, UIView, CMTimeMakeWithSeconds, NSNotification, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero, AVPlayerItemStatusReadyToPlay;
+declare var NSURL, AVPlayer, AVPlayerItem, NSObjectAVPlayer, AVPlayerViewController, AVPlayerItemDidPlayToEndTimeNotification, UIView, CMTimeMakeWithSeconds, NSNotification, NSNotificationCenter, CMTimeGetSeconds, CMTimeMake, kCMTimeZero, AVPlayerItemStatusReadyToPlay, AVAsset;
 
 global.moduleMerge(common, exports);
 
@@ -30,6 +31,10 @@ export class Video extends common.Video {
     private _observer: NSObject;
     private _observerActive: boolean;
     private _videoLoaded: boolean;
+    private _playbackTimeObserver: any;
+    private _playbackTimeObserverActive: boolean;
+    private _playbackStartEventListener: any;
+    private _playbackStartEventListenerActive: boolean;
 
     constructor() {
         super();
@@ -50,20 +55,25 @@ export class Video extends common.Video {
     public _setNativeVideo(nativeVideoPlayer: any) {
         if (nativeVideoPlayer != null) {
             let currentItem = this._player.currentItem;
+            this._addStatusObserver(nativeVideoPlayer);
+            this._autoplayCheck();
             if (currentItem !== null) {
-                // Need to set to null so the previous video is not shown while its loading
                 this._videoLoaded = false;
+                // Need to set to null so the previous video is not shown while its loading
                 this._player.replaceCurrentItemWithPlayerItem(null);
                 this._removeStatusObserver(currentItem);
-                this._addStatusObserver(nativeVideoPlayer);
                 this._player.replaceCurrentItemWithPlayerItem(nativeVideoPlayer);
             }
             else {
-                this._addStatusObserver(nativeVideoPlayer);
                 this._player.replaceCurrentItemWithPlayerItem(nativeVideoPlayer);
                 this._init();
             }
         }
+    }
+
+    public updateAsset(nativeVideoAsset: AVAsset) {
+        let newPlayerItem = AVPlayerItem.playerItemWithAsset(nativeVideoAsset)
+        this._setNativeVideo(newPlayerItem);
     }
 
     public _setNativePlayerSource(nativePlayerSrc: string) {
@@ -76,6 +86,10 @@ export class Video extends common.Video {
     private _init() {
 
         var self = this;
+
+        if (!this._playbackStartEventListenerActive) {
+            this._addPlaybackStartEventListener();
+        }
 
         if (this.controls !== false) {
             this._playerController.showsPlaybackControls = true;
@@ -94,6 +108,10 @@ export class Video extends common.Video {
         if (!this._didPlayToEndTimeActive) {
             this._didPlayToEndTimeObserver = application.ios.addNotificationObserver(AVPlayerItemDidPlayToEndTimeNotification, this.AVPlayerItemDidPlayToEndTimeNotification.bind(this));
             this._didPlayToEndTimeActive = true;
+        }
+
+        if (this.observeCurrentTime && !this._playbackTimeObserverActive) {
+            this._addPlaybackTimeObserver();
         }
 
     }
@@ -133,8 +151,8 @@ export class Video extends common.Video {
 
     public getDuration(): number {
         let seconds = CMTimeGetSeconds(this._player.currentItem.asset.duration);
-        let miliseconds = seconds * 1000.0;
-        return miliseconds;
+        let milliseconds = seconds * 1000.0;
+        return milliseconds;
     }
 
     public getCurrentTime(): any {
@@ -144,16 +162,24 @@ export class Video extends common.Video {
         return (this._player.currentTime().value / this._player.currentTime().timescale) * 1000;
     }
 
-
     public destroy() {
         if (this._didPlayToEndTimeActive) {
             application.ios.removeNotificationObserver(this._didPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);
             this._didPlayToEndTimeActive = false;
         }
 
+        if (this._playbackTimeObserverActive) {
+            this._removePlaybackTimeObserver();
+        }
+
         if (this._observerActive = true) {
             this._removeStatusObserver(this._player.currentItem);
         }
+
+        if (this._playbackStartEventListenerActive) {
+            this._removePlaybackStartEventListener();
+        }
+
         this.pause();
         this._player.replaceCurrentItemWithPlayerItem(null); //de-allocates the AVPlayer
         this._playerController = null;
@@ -164,14 +190,51 @@ export class Video extends common.Video {
         this._emit(common.Video.loadingCompleteEvent);
     }
 
+    private _addPlaybackStartEventListener() {
+        this._playbackStartEventListenerActive = true;
+        let _interval = CMTimeMake(1, 3);
+        let _times = NSMutableArray.alloc().initWithCapacity(1);
+        _times.addObject(NSValue.valueWithCMTime(_interval));
+        this._playbackStartEventListener = this._player.addBoundaryTimeObserverForTimesQueueUsingBlock(_times, null, (isFinished) => {
+            this._emit(common.Video.playbackStartEvent);
+
+        });
+    }
+
+    private _removePlaybackStartEventListener() {
+        this._playbackStartEventListenerActive = false;
+        this._player.removeTimeObserver(this._playbackStartEventListener);
+    }
+
     private _addStatusObserver(currentItem) {
-        currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
         this._observerActive = true;
+        currentItem.addObserverForKeyPathOptionsContext(this._observer, "status", 0, null);
     }
 
     private _removeStatusObserver(currentItem) {
-        currentItem.removeObserverForKeyPath(this._observer, "status");
         this._observerActive = false;
+        currentItem.removeObserverForKeyPath(this._observer, "status");
+    }
+
+    private _addPlaybackTimeObserver() {
+        this._playbackTimeObserverActive = true;
+        let _interval = CMTimeMakeWithSeconds(1, this._player.currentTime().timescale);
+        this._playbackTimeObserver = this._player.addPeriodicTimeObserverForIntervalQueueUsingBlock(_interval, null, (currentTime) => {
+            let _seconds = CMTimeGetSeconds(currentTime);
+            let _milliseconds = _seconds * 1000.0;
+            this._setValue(Video.currentTimeProperty, _milliseconds);
+        })
+    }
+
+    private _removePlaybackTimeObserver() {
+        this._playbackTimeObserverActive = false;
+        this._player.removeTimeObserver(this._playbackTimeObserver);
+    }
+
+    private _autoplayCheck() {
+        if (this.autoplay) {
+            this.play();
+        }
     }
 
 }
@@ -181,9 +244,6 @@ class PlayerObserverClass extends NSObject {
         if (path === "status") {
             if (this["_owner"]._player.currentItem.status === AVPlayerItemStatusReadyToPlay && !this["_owner"]._videoLoaded) {
                 this["_owner"]._loadingComplete();
-                if (this["_owner"].autoplay === true) {
-                    this["_owner"].play();
-                }
             }
         }
     }

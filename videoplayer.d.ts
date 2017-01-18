@@ -32,6 +32,20 @@ export declare class Video extends View {
 
 
     /**
+     * Boolean to determine if observable for current time is registered.
+     * @param {boolean} observeCurrentTime - True to set observable on current time.
+    */
+    observeCurrentTime(observeCurrentTime: boolean): void;
+
+
+    /**
+     * Observable for current time of the video duration in milliseconds.
+     * @returns {number} Current time of the video duration.
+    */
+    currentTime(): number;
+
+
+    /**
      * Destroy the video player and free up resources.
      */
     destroy(): void;
@@ -49,7 +63,7 @@ export declare class Video extends View {
      * @returns {number} Video duration in milliseconds.
      */
     getDuration(): number;
-    
+
 
     /**
      * *** ANDROID ONLY ***
@@ -59,7 +73,12 @@ export declare class Video extends View {
 
 
     /**
-     * *** ANDROID ONLY ***
+     * *** IOS ONLY ***
+     * Update the video player with an AVAsset file.
+     */
+    updateAsset(asset): void;
+
+    /**
      * Callback to execute when the video has finished loading.
      * @param {function} callback - The callback function to execute.
      */
@@ -67,6 +86,12 @@ export declare class Video extends View {
 
     /**
      * *** IOS ONLY ***
+     * Callback to execute when the video is playing.
+     * @param {function} callback - The callback function to execute.
+    */
+    playbackStart(callback: Function): void;
+
+    /**
      * Callback to execute when the video has finished seekToTime.
      * @param {function} callback - The callback function to execute.
     */

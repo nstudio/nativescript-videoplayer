@@ -12,6 +12,8 @@ var SRC = "src";
 var VIDEO_SOURCE = "videoSource";
 var VIDEO = "Video";
 var ISLOADING = "isLoading";
+var OBSERVECURRENTTIME = "observeCurrentTime";
+var CURRENTTIME = "currentTime";
 var AUTOPLAY = "autoplay";
 var CONTROLS = "controls";
 var LOOP = "loop";
@@ -52,7 +54,9 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
 export class Video extends view.View {
     public static finishedEvent = "finished";
     public static loadingCompleteEvent = "loadingComplete";
+    public static playbackStartEvent = "playbackStart";
     public static seekToTimeCompleteEvent = "seekToTimeComplete";
+    // public static currentTime = "currentTime";
     _emit: any;
 
     public static srcProperty = new dependencyObservable.Property(
@@ -69,6 +73,18 @@ export class Video extends view.View {
 
     public static isLoadingProperty = new dependencyObservable.Property(
         ISLOADING,
+        VIDEO,
+        new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
+    );
+
+    public static observeCurrentTimeProperty = new dependencyObservable.Property(
+        OBSERVECURRENTTIME,
+        VIDEO,
+        new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
+    );
+
+    public static currentTimeProperty = new dependencyObservable.Property(
+        CURRENTTIME,
         VIDEO,
         new proxy.PropertyMetadata(false, dependencyObservable.PropertyMetadataSettings.None)
     );
@@ -124,6 +140,18 @@ export class Video extends view.View {
         return this._getValue(Video.isLoadingProperty);
     }
 
+    get observeCurrentTime(): number {
+        return this._getValue(Video.observeCurrentTimeProperty);
+    }
+
+    set observeCurrentTime(value: number) {
+        this._setValue(Video.observeCurrentTimeProperty, value);
+    }
+
+    get currentTime(): number {
+        return this._getValue(Video.currentTimeProperty);
+    }
+
     get autoplay(): any {
         return this._getValue(Video.autoplayProperty);
     }
@@ -166,6 +194,8 @@ export class Video extends view.View {
     public finishedCallback() { } //TODO
 
     public loadingCompleteEventCallback() { } //TODO
+
+    public playbackStartEventCallback() { } //TODO
 
     public seekToTimeCompleteEventCallback() { } //TODO
 }

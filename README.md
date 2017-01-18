@@ -93,20 +93,32 @@ Attribute to specify an event callback to execute when the video has loaded.
 
 Attribute to specify an event callback to execute when the video has finished seekToTime.
 
+- **observeCurrentTime - (boolean)** - *optional*
+
+Sets if observables on currentTime are created.
+
+- **playbackStarted - (function)** - *optional* **IOS ONLY**
+
+Attribute to specify an event callback to execute when the video has started playing
 
 ## API
 
-- **play()** - start playing the video
-- **pause()** - pause the video
-- **seekToTime(time: number)** - seek the video to a time (milliseconds)
-- **getCurrentTime()** - returns the current time in the video duration (milliseconds)
-- **getDuration()** - returns the duration of the video (milliseconds)
-- **destroy()** - destroy the video player and free resources
-- **mute(boolean)** - mute the current video
+- **play()** - Start playing the video
+- **pause()** - Pause the video
+- **seekToTime(time: number)** - Seek the video to a time (milliseconds)
+- **getCurrentTime()** - Returns the current time in the video duration (milliseconds)
+- **getDuration()** - Returns the duration of the video (milliseconds)
+- **destroy()** - Destroy the video player and free resources
+- **mute(boolean)** - Mute the current video
 
 ### Android only
 
-- **stop()** - stop the playback - this resets the player and remove the video src
+- **stop()** - Stop the playback - this resets the player and remove the video src
+
+
+## Observable Properties
+
+- **currentTime()** - Current time of video.
 
 
 ### Contributors
