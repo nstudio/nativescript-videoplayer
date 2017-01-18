@@ -192,7 +192,7 @@ export class Video extends common.Video {
 
     private _addPlaybackStartEventListener() {
         this._playbackStartEventListenerActive = true;
-        let _interval = CMTimeMake(1, 3);
+        let _interval = CMTimeMake(1, 30);
         let _times = NSMutableArray.alloc().initWithCapacity(1);
         _times.addObject(NSValue.valueWithCMTime(_interval));
         this._playbackStartEventListener = this._player.addBoundaryTimeObserverForTimesQueueUsingBlock(_times, null, (isFinished) => {
