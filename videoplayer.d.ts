@@ -44,6 +44,11 @@ export declare class Video extends View {
     */
     currentTime(): number;
 
+    /**
+     * Set the volume of the video
+     * @param {number} volume - Volume to set the video between 0 and 1
+     */
+    setVolume(volume: number): void;
 
     /**
      * Destroy the video player and free up resources.

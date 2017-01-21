@@ -162,6 +162,10 @@ export class Video extends common.Video {
         return (this._player.currentTime().value / this._player.currentTime().timescale) * 1000;
     }
 
+    public setVolume(volume: number) {
+        this._player.volume = volume;
+    }
+
     public destroy() {
         if (this._didPlayToEndTimeActive) {
             application.ios.removeNotificationObserver(this._didPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);

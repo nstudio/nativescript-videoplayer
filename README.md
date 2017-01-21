@@ -115,6 +115,9 @@ Attribute to specify an event callback to execute when the video has started pla
 
 - **stop()** - Stop the playback - this resets the player and remove the video src
 
+### iOS only
+
+- **setVolume()** - Set's the volume - Must be between 0 and 1.
 
 ## Observable Properties
 
