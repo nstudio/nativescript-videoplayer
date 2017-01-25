@@ -431,6 +431,10 @@ export class Video extends videoCommon.Video {
         return this.mediaPlayer.getCurrentPosition();
     }
 
+    public setVolume(volume: number) {
+        this.mediaPlayer.setVolume(volume, volume);
+    }
+
     public destroy() {
         this.release();
         this.src = null;
