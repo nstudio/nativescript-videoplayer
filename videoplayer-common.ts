@@ -53,7 +53,7 @@ function onSrcPropertyChanged(data: dependencyObservable.PropertyChangeData) {
 
 export class Video extends view.View {
     public static finishedEvent = "finished";
-    public static loadingCompleteEvent = "loadingComplete";
+    public static playbackReadyEvent = "playbackReady";
     public static playbackStartEvent = "playbackStart";
     public static seekToTimeCompleteEvent = "seekToTimeComplete";
     // public static currentTime = "currentTime";
@@ -193,7 +193,7 @@ export class Video extends view.View {
 
     public finishedCallback() { } //TODO
 
-    public loadingCompleteEventCallback() { } //TODO
+    public playbackReadyEventCallback() { } //TODO
 
     public playbackStartEventCallback() { } //TODO
 

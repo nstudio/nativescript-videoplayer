@@ -84,10 +84,10 @@ export declare class Video extends View {
     updateAsset(asset): void;
 
     /**
-     * Callback to execute when the video has finished loading.
+     * Callback to execute when the video is ready to play
      * @param {function} callback - The callback function to execute.
      */
-    loadingComplete(callback: Function): void;
+    playbackReady(callback: Function): void;
 
     /**
      * *** IOS ONLY ***

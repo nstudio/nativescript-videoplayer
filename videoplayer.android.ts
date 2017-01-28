@@ -176,7 +176,7 @@ export class Video extends videoCommon.Video {
                     }
 
 
-                    this.owner._emit(videoCommon.Video.loadingCompleteEvent);
+                    this.owner._emit(videoCommon.Video.playbackReadyEvent);
                     if (this.owner.loop === true) {
                         mp.setLooping(true);
                     }

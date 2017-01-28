@@ -85,9 +85,9 @@ Sets the native video player to loop once playback has finished.
 
 If set to true, the aspect ratio of the video will not be honored and it will fill the entire space available.
 
-- **loadingComplete - (function)** - *optional*
+- **playbackReady - (function)** - *optional*
 
-Attribute to specify an event callback to execute when the video has loaded.
+Attribute to specify an event callback to execute when the video is ready to play.
 
 - **seekToTimeComplete - (function)** - *optional*
 
@@ -99,7 +99,7 @@ Sets if observables on currentTime are created.
 
 - **playbackStarted - (function)** - *optional* **IOS ONLY**
 
-Attribute to specify an event callback to execute when the video has started playing
+Attribute to specify an event callback to execute when the video has started playing.
 
 ## API
 

@@ -35,6 +35,7 @@ export class Video extends common.Video {
     private _playbackTimeObserverActive: boolean;
     private _playbackStartEventListener: any;
     private _playbackStartEventListenerActive: boolean;
+    private _videoPlaying: boolean;
 
     constructor() {
         super();
@@ -59,6 +60,7 @@ export class Video extends common.Video {
             this._autoplayCheck();
             if (currentItem !== null) {
                 this._videoLoaded = false;
+                this._videoPlaying = false;
                 // Need to set to null so the previous video is not shown while its loading
                 this._player.replaceCurrentItemWithPlayerItem(null);
                 this._removeStatusObserver(currentItem);
@@ -189,19 +191,24 @@ export class Video extends common.Video {
         this._playerController = null;
     }
 
-    private _loadingComplete() {
-        this._videoLoaded = true;
-        this._emit(common.Video.loadingCompleteEvent);
-    }
-
     private _addPlaybackStartEventListener() {
         this._playbackStartEventListenerActive = true;
-        let _interval = CMTimeMake(1, 30);
-        let _times = NSMutableArray.alloc().initWithCapacity(1);
-        _times.addObject(NSValue.valueWithCMTime(_interval));
+        let _intervalOne = CMTimeMake(1, 32);
+        let _intervalTwo = CMTimeMake(1, 16);
+        let _intervalThree = CMTimeMake(1, 8);
+        let _intervalFour = CMTimeMake(1, 4);
+        let _intervalFive = CMTimeMake(1, 2);
+        let _intervalSix = CMTimeMake(1, 1);
+        let _times = NSMutableArray.alloc().initWithCapacity(5);
+        _times.addObject(NSValue.valueWithCMTime(_intervalOne));
+        _times.addObject(NSValue.valueWithCMTime(_intervalTwo));
+        _times.addObject(NSValue.valueWithCMTime(_intervalThree));
+        _times.addObject(NSValue.valueWithCMTime(_intervalFour));
+        _times.addObject(NSValue.valueWithCMTime(_intervalSix));
         this._playbackStartEventListener = this._player.addBoundaryTimeObserverForTimesQueueUsingBlock(_times, null, (isFinished) => {
-            this._emit(common.Video.playbackStartEvent);
-
+            if (!this._videoPlaying) {
+                this.playbackStart();
+            }
         });
     }
 
@@ -241,13 +248,23 @@ export class Video extends common.Video {
         }
     }
 
+    playbackReady() {
+        this._videoLoaded = true;
+        this._emit(common.Video.playbackReadyEvent);
+    }
+
+    playbackStart() {
+        this._videoPlaying = true;
+        this._emit(common.Video.playbackStartEvent);
+    }
+
 }
 
 class PlayerObserverClass extends NSObject {
     observeValueForKeyPathOfObjectChangeContext(path: string, obj: Object, change: NSDictionary<any, any>, context: any) {
         if (path === "status") {
             if (this["_owner"]._player.currentItem.status === AVPlayerItemStatusReadyToPlay && !this["_owner"]._videoLoaded) {
-                this["_owner"]._loadingComplete();
+                this["_owner"].playbackReady();
             }
         }
     }
