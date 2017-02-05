@@ -3,6 +3,10 @@ export declare class Video extends View {
 
     android: any;
     ios: any;
+    src: string; /// video source file
+    loop: boolean; /// whether the video loops the playback after extends
+    autoplay: boolean; /// set true for the video to start playing when ready
+    controls: boolean; /// set true to enable the media player's playback controls
     _emit: any;
 
     /**

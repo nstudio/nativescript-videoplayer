@@ -1,9 +1,7 @@
 ﻿import videoCommon = require("./videoplayer-common");
 import videoSource = require("./video-source/video-source");
 import dependencyObservable = require("ui/core/dependency-observable");
-import fs = require("file-system");
 import proxy = require("ui/core/proxy");
-import view = require("ui/core/view");
 import utils = require("utils/utils");
 import timer = require("timer");
 
@@ -23,12 +21,11 @@ function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 
 declare const android: any, java: any;
 
-const STATE_IDLE = 0;
-const STATE_PLAYING = 1;
-const STATE_PAUSED = 2;
-
-const SURFACE_WAITING = 0;
-const SURFACE_READY = 1;
+const STATE_IDLE: number = 0;
+const STATE_PLAYING: number = 1;
+const STATE_PAUSED: number = 2;
+const SURFACE_WAITING: number = 0;
+const SURFACE_READY: number = 1;
 
 
 
@@ -298,10 +295,11 @@ export class Video extends videoCommon.Video {
         let viewWidth = this._android.getWidth();
         let viewHeight = this._android.getHeight();
         let aspectRatio = this.videoHeight / this.videoWidth;
-        //console.log("W/H", viewHeight, "x", viewWidth, "x", aspectRatio);
+        // console.log("W/H", viewHeight, "x", viewWidth, "x", aspectRatio);
 
 
-        let newWidth, newHeight;
+        let newWidth;
+        let newHeight;
         if (viewHeight > (viewWidth * aspectRatio)) {
             // limited by narrow width; restrict height
             newWidth = viewWidth;
@@ -325,13 +323,13 @@ export class Video extends videoCommon.Video {
 
     private _openVideo(): void {
         if (this._src === null || this.textureSurface === null) {
-            // We have to protect In case something else calls this before we are ready
-            // The Surface event will then call this when we are ready...
+            // we have to protect In case something else calls this before we are ready
+            // the Surface event will then call this when we are ready...
             return;
         }
         console.log("Openvideo", this._src);
 
-        // Clear any old stuff
+        // clear any old stuff
         this.release();
 
         let am = utils.ad.getApplicationContext().getSystemService(android.content.Context.AUDIO_SERVICE);
@@ -389,8 +387,7 @@ export class Video extends videoCommon.Video {
         if (this.mediaPlayer) {
             if (mute === true) {
                 this.mediaPlayer.setVolume(0, 0);
-            }
-            else if (mute === false) {
+            } else if (mute === false) {
                 this.mediaPlayer.setVolume(1, 1);
             }
         }
