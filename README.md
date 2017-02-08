@@ -56,7 +56,7 @@ registerElement("VideoPlayer", () => require("nativescript-videoplayer").Video);
       height="300"></VideoPlayer>
 ```
 
-## Attributes
+## Properties
 - **src** - *required*
 
 Set the video file to play, for best performance use local video files if possible. The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.
