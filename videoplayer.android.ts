@@ -477,9 +477,11 @@ export class Video extends videoCommon.Video {
     private _removePlaybackTimeObserver() {
         if (this._playbackTimeObserverActive) {
             // one last emit of the most up-to-date time index
-            let _milliseconds = this.mediaPlayer.getCurrentPosition();
-            this._setValue(Video.currentTimeProperty, _milliseconds);
-            this._emit(videoCommon.Video.currentTimeUpdatedEvent);
+            if (this.mediaPlayer !== null) {
+                let _milliseconds = this.mediaPlayer.getCurrentPosition();
+                this._setValue(Video.currentTimeProperty, _milliseconds);
+                this._emit(videoCommon.Video.currentTimeUpdatedEvent);
+            }
 
             timer.clearInterval(this._playbackTimeObserver);
             this._playbackTimeObserverActive = false;
