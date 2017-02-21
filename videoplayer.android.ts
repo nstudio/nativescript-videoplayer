@@ -169,7 +169,7 @@ export class Video extends videoCommon.Video {
                     }
 
                     if (this.owner.observeCurrentTime && !this.owner._playbackTimeObserverActive) {
-                        this._addPlaybackTimeObserver();
+                        this.owner._addPlaybackTimeObserver();
                     }
 
 
