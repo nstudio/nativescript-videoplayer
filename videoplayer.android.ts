@@ -168,11 +168,6 @@ export class Video extends videoCommon.Video {
                         this.owner.play();
                     }
 
-                    if (this.owner.observeCurrentTime && !this.owner._playbackTimeObserverActive) {
-                        this.owner._addPlaybackTimeObserver();
-                    }
-
-
                     this.owner._emit(videoCommon.Video.playbackReadyEvent);
                     if (this.owner.loop === true) {
                         mp.setLooping(true);
@@ -216,6 +211,7 @@ export class Video extends videoCommon.Video {
             },
             onCompletion: function (/* mp */) {
                 if (this.owner) {
+                    this.owner._removePlaybackTimeObserver();
                     this.owner._emit(videoCommon.Video.finishedEvent);
                 }
             }
@@ -374,6 +370,9 @@ export class Video extends videoCommon.Video {
         if (this.mediaState === SURFACE_WAITING) {
             this._openVideo();
         } else {
+            if (this.observeCurrentTime && !this._playbackTimeObserverActive) {
+                this._addPlaybackTimeObserver();
+            }
             this.mediaPlayer.start();
         }
     }
@@ -381,6 +380,7 @@ export class Video extends videoCommon.Video {
     public pause(): void {
         this.playState = STATE_PAUSED;
         this.mediaPlayer.pause();
+        this._removePlaybackTimeObserver();
     }
 
     public mute(mute: boolean): void {
@@ -395,6 +395,7 @@ export class Video extends videoCommon.Video {
 
     public stop(): void {
         this.mediaPlayer.stop();
+        this._removePlaybackTimeObserver();
         this.playState = STATE_IDLE;
         this.release();
     }
@@ -474,8 +475,15 @@ export class Video extends videoCommon.Video {
     }
 
     private _removePlaybackTimeObserver() {
-        timer.clearInterval(this._playbackTimeObserver);
-        this._playbackTimeObserverActive = false;
+        if (this._playbackTimeObserverActive) {
+            // one last emit of the most up-to-date time index
+            let _milliseconds = this.mediaPlayer.getCurrentPosition();
+            this._setValue(Video.currentTimeProperty, _milliseconds);
+            this._emit(videoCommon.Video.currentTimeUpdatedEvent);
+
+            timer.clearInterval(this._playbackTimeObserver);
+            this._playbackTimeObserverActive = false;
+        }
     }
 
 }
