@@ -234,6 +234,7 @@ export class Video extends common.Video {
             let _seconds = CMTimeGetSeconds(currentTime);
             let _milliseconds = _seconds * 1000.0;
             this._setValue(Video.currentTimeProperty, _milliseconds);
+            this._emit(Video.currentTimeUpdatedEvent);
         })
     }
 

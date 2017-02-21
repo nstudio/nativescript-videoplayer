@@ -468,6 +468,7 @@ export class Video extends videoCommon.Video {
             if (this.mediaPlayer.isPlaying) {
                 let _milliseconds = this.mediaPlayer.getCurrentPosition();
                 this._setValue(Video.currentTimeProperty, _milliseconds);
+                this._emit(videoCommon.Video.currentTimeUpdatedEvent);
             }
         }, 500);
     }
