@@ -25,10 +25,10 @@ export class VideoSource implements definition.VideoSource {
         var fileName = types.isString(path) ? path.trim() : "";
 
         if (fileName.indexOf("~/") === 0) {
-            fileName = 'file://' + fs.path.join(fs.knownFolders.currentApp().path, fileName.replace("~/", ""));
+            fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace("~/", ""));
         }
 
-        let videoURL = NSURL.URLWithString(fileName);
+        let videoURL = NSURL.fileURLWithPath(fileName);
         let player = new AVPlayerItem(videoURL);
         this.ios = player;
         return this.ios != null;
