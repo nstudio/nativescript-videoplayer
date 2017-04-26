@@ -112,10 +112,6 @@ export class Video extends common.Video {
             this._didPlayToEndTimeActive = true;
         }
 
-        if (this.observeCurrentTime && !this._playbackTimeObserverActive) {
-            this._addPlaybackTimeObserver();
-        }
-
     }
 
     private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
@@ -132,11 +128,17 @@ export class Video extends common.Video {
     }
 
     public play() {
+        if (this.observeCurrentTime && !this._playbackTimeObserverActive) {
+            this._addPlaybackTimeObserver();
+        }
         this._player.play();
     }
 
     public pause() {
         this._player.pause();
+        if (this._playbackTimeObserverActive) {
+            this._removePlaybackTimeObserver();
+        }
     }
 
     public mute(mute: boolean) {
@@ -234,6 +236,7 @@ export class Video extends common.Video {
             let _seconds = CMTimeGetSeconds(currentTime);
             let _milliseconds = _seconds * 1000.0;
             this._setValue(Video.currentTimeProperty, _milliseconds);
+            this._emit(Video.currentTimeUpdatedEvent);
         })
     }
 
