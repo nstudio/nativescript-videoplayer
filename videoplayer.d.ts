@@ -106,4 +106,10 @@ export declare class Video extends View {
     */
     seekToTimeComplete(callback: Function): void;
 
+    /**
+    * Callback to execute when the time is updated.
+    * @param {function} callback - The callback function to execute.
+    */
+    currentTimeUpdated(callback: Function): void;
+
 }
