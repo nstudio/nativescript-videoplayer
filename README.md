@@ -97,10 +97,6 @@ Attribute to specify an event callback to execute when the video has finished se
 
 If set to true, currentTimeUpdated callback is possible.
 
-- **playbackStarted - (function)** - *optional* **IOS ONLY**
-
-Attribute to specify an event callback to execute when the video has started playing.
-
 - **currentTimeUpdated - (function)** - *optional*
 
 Attribute to specify an event callback to execute when the time is updated.

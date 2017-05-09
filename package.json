@@ -1,13 +1,19 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "2.6.1",
+  "version": "3.0.0",
   "main": "videoplayer",
-  "typings": "videoplayer.d.ts",
+  "typings": "index.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
   "nativescript": {
     "platforms": {
-      "android": "1.7.0",
-      "ios": "1.7.0"
+      "android": "3.0.0",
+      "ios": "3.0.0"
+    },
+    "plugin": {
+      "nan": "true",
+      "pan": "true",
+      "core3": "true",
+      "category": "Interface"
     }
   },
   "repository": {
@@ -69,5 +75,13 @@
   "_id": "nativescript-videoplayer@0.1.0",
   "_shasum": "7bdee571649168a79ded1bf63beb6d7b4b9cfa2a",
   "_from": "..",
-  "_resolved": "file:.."
+  "_resolved": "file:..",
+  "devDependencies": {
+    "tns-core-modules": "^3.0.0",
+    "tns-platform-declarations": "^3.0.0",
+    "typescript": "^2.2.2"
+  },
+  "peerDependencies": {
+    "tns-core-modules": "^3.0.0"
+  }
 }

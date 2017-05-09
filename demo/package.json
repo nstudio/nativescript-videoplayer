@@ -2,23 +2,23 @@
   "nativescript": {
     "id": "org.nativescript.demo",
     "tns-ios": {
-      "version": "2.3.0"
+      "version": "3.0.0"
     },
     "tns-android": {
-      "version": "2.5.0"
+      "version": "3.0.0"
     }
   },
   "dependencies": {
-    "nativescript-videoplayer": "file:..",
-    "tns-core-modules": "^2.3.0"
+    "nativescript-theme-core": "~1.0.2",
+    "nativescript-videoplayer": "file:///Users/blake/Documents/nativescript-videoplayer",
+    "tns-core-modules": "^3.0.0"
   },
   "devDependencies": {
-    "babel-traverse": "6.8.0",
-    "babel-types": "6.8.1",
-    "babylon": "6.8.0",
-    "filewalker": "0.1.2",
+    "babel-traverse": "6.24.1",
+    "babel-types": "6.24.1",
+    "babylon": "6.17.0",
     "lazy": "1.0.11",
-    "nativescript-dev-typescript": "^0.3.2",
-    "typescript": "^1.8.10"
+    "nativescript-dev-typescript": "~0.4.0",
+    "typescript": "~2.2.1"
   }
 }

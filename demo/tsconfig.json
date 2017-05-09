@@ -3,11 +3,25 @@
         "module": "commonjs",
         "target": "es5",
         "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
-        "noEmitOnError": false
+        "noEmitOnError": true,
+        "allowJs": false,
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "./node_modules/tns-core-modules/*",
+                "./node_modules/*"
+            ]
+        }
     },
     "exclude": [
         "node_modules",
-        "platforms"
+        "platforms",
+        "**/*.aot.ts"
     ]
 }

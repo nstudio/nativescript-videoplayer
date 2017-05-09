@@ -1,23 +1,10 @@
 ﻿import videoCommon = require("./videoplayer-common");
+import { videoSourceProperty } from "./videoplayer-common";
 import videoSource = require("./video-source/video-source");
-import dependencyObservable = require("ui/core/dependency-observable");
-import proxy = require("ui/core/proxy");
 import utils = require("utils/utils");
 import timer = require("timer");
 
-global.moduleMerge(videoCommon, exports);
-
-function onVideoSourcePropertyChanged(data: dependencyObservable.PropertyChangeData) {
-    let video = <Video>data.object;
-    if (!video.android) {
-        return;
-    }
-
-    video._setNativeVideo(data.newValue ? data.newValue.android : null);
-}
-
-// register the setNativeValue callback
-(<proxy.PropertyMetadata>videoCommon.Video.videoSourceProperty.metadata).onSetNativeValue = onVideoSourcePropertyChanged;
+export * from "./videoplayer-common";
 
 declare const android: any, java: any;
 
@@ -27,10 +14,8 @@ const STATE_PAUSED: number = 2;
 const SURFACE_WAITING: number = 0;
 const SURFACE_READY: number = 1;
 
-
-
 export class Video extends videoCommon.Video {
-    private _android: any; /// android.widget.VideoView
+    public nativeView: any; /// android.widget.VideoView
     private videoWidth;
     private videoHeight;
     private _src;
@@ -47,7 +32,7 @@ export class Video extends videoCommon.Video {
 
     constructor() {
         super();
-        this._android = null;
+        this.nativeView = null;
         this.videoWidth = 0;
         this.videoHeight = 0;
 
@@ -64,17 +49,21 @@ export class Video extends videoCommon.Video {
     }
 
     get android(): any {
-        return this._android;
+        return this.nativeView;
     }
 
-    public _createUI(): void {
+    [videoSourceProperty.setNative](value) {
+        this._setNativeVideo(value ? value.android : null);
+    }
+
+    public initNativeView(): void {
         let that = new WeakRef(this);
 
-        this._android = new android.view.TextureView(this._context);
-        this._android.setFocusable(true);
-        this._android.setFocusableInTouchMode(true);
-        this._android.requestFocus();
-        this._android.setOnTouchListener(new android.view.View.OnTouchListener({
+        this.nativeView = new android.view.TextureView(this._context);
+        this.nativeView.setFocusable(true);
+        this.nativeView.setFocusableInTouchMode(true);
+        this.nativeView.requestFocus();
+        this.nativeView.setOnTouchListener(new android.view.View.OnTouchListener({
             get owner(): Video {
                 return that.get();
             },
@@ -84,7 +73,7 @@ export class Video extends videoCommon.Video {
             }
         }));
 
-        this._android.setSurfaceTextureListener(new android.view.TextureView.SurfaceTextureListener(
+        this.nativeView.setSurfaceTextureListener(new android.view.TextureView.SurfaceTextureListener(
             {
                 get owner(): Video {
                     return that.get();
@@ -277,7 +266,7 @@ export class Video extends videoCommon.Video {
             });
 
             this.mediaController.setMediaPlayer(mediaPlayerControl);
-            this.mediaController.setAnchorView(this._android);
+            this.mediaController.setAnchorView(this.nativeView);
             this.mediaController.setEnabled(true);
         }
     }
@@ -288,8 +277,8 @@ export class Video extends videoCommon.Video {
          console.log("!!!!CSizes are", this.height, "x", this.width);
          console.dump(this._getCurrentLayoutBounds()); */
 
-        let viewWidth = this._android.getWidth();
-        let viewHeight = this._android.getHeight();
+        let viewWidth = this.nativeView.getWidth();
+        let viewHeight = this.nativeView.getHeight();
         let aspectRatio = this.videoHeight / this.videoWidth;
         // console.log("W/H", viewHeight, "x", viewWidth, "x", aspectRatio);
 
@@ -310,10 +299,10 @@ export class Video extends videoCommon.Video {
         let yoff = (viewHeight - newHeight) / 2;
 
         let txform = new android.graphics.Matrix();
-        this._android.getTransform(txform);
+        this.nativeView.getTransform(txform);
         txform.setScale(newWidth / viewWidth, newHeight / viewHeight);
         txform.postTranslate(xoff, yoff);
-        this._android.setTransform(txform);
+        this.nativeView.setTransform(txform);
 
     }
 
@@ -436,7 +425,7 @@ export class Video extends videoCommon.Video {
     public destroy() {
         this.release();
         this.src = null;
-        this._android = null;
+        this.nativeView = null;
         this.mediaPlayer = null;
         this.mediaController = null;
     }
@@ -468,7 +457,6 @@ export class Video extends videoCommon.Video {
         this._playbackTimeObserver = timer.setInterval(() => {
             if (this.mediaPlayer.isPlaying) {
                 let _milliseconds = this.mediaPlayer.getCurrentPosition();
-                this._setValue(Video.currentTimeProperty, _milliseconds);
                 this.notify({
                     eventName: videoCommon.Video.currentTimeUpdatedEvent,
                     object: this,
@@ -483,7 +471,6 @@ export class Video extends videoCommon.Video {
             // one last emit of the most up-to-date time index
             if (this.mediaPlayer !== null) {
                 let _milliseconds = this.mediaPlayer.getCurrentPosition();
-                this._setValue(Video.currentTimeProperty, _milliseconds);
                 this._emit(videoCommon.Video.currentTimeUpdatedEvent);
             }
 
