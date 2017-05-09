@@ -15,6 +15,7 @@ const SURFACE_WAITING: number = 0;
 const SURFACE_READY: number = 1;
 
 export class Video extends videoCommon.Video {
+    private _textureView: any; /// android.widget.VideoView
     public nativeView: any; /// android.widget.VideoView
     private videoWidth;
     private videoHeight;
@@ -150,7 +151,7 @@ export class Video extends videoCommon.Video {
                     }
 
                     if (this.owner.videoWidth !== 0 && this.owner.videoHeight !== 0) {
-                        this.owner.android.getSurfaceTexture().setDefaultBufferSize(this.owner.videoWidth, this.owner.videoHeight);
+                        this.owner.nativeView.getSurfaceTexture().setDefaultBufferSize(this.owner.videoWidth, this.owner.videoHeight);
                     }
 
                     if (this.owner.autoplay === true || this.owner.playState === STATE_PLAYING) {

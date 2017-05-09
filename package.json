@@ -1,6 +1,6 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "main": "videoplayer",
   "typings": "index.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
