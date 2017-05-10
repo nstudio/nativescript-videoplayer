@@ -186,7 +186,7 @@ export class Video extends videoCommon.Video {
                     this.owner.videoWidth = mediaPlayer.getVideoWidth();
                     this.owner.videoHeight = mediaPlayer.getVideoHeight();
                     if (this.owner.videoWidth !== 0 && this.owner.videoHeight !== 0) {
-                        this.owner._android.getSurfaceTexture().setDefaultBufferSize(this.owner.videoWidth, this.owner.videoHeight);
+                        this.owner.nativeView.getSurfaceTexture().setDefaultBufferSize(this.owner.videoWidth, this.owner.videoHeight);
                         if (this.owner.fill !== true) {
                             this.owner._setupAspectRatio();
                         }
