@@ -197,7 +197,7 @@ export class Video extends videoCommon.Video {
 
     private _addPlaybackTimeObserver() {
         this._playbackTimeObserverActive = true;
-        let _interval = CMTimeMakeWithSeconds(1, this._player.currentTime().timescale);
+        let _interval = CMTimeMake(1, 5);
         this._playbackTimeObserver = this._player.addPeriodicTimeObserverForIntervalQueueUsingBlock(_interval, null, (currentTime) => {
             let _seconds = CMTimeGetSeconds(currentTime);
             let _milliseconds = _seconds * 1000.0;
