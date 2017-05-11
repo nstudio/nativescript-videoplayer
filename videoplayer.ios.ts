@@ -167,6 +167,10 @@ export class Video extends videoCommon.Video {
     }
 
     public destroy() {
+        if (this._observerActive) {
+            this._removeStatusObserver(this._player.currentItem);
+        }
+
         if (this._didPlayToEndTimeActive) {
             ios.removeNotificationObserver(this._didPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);
             this._didPlayToEndTimeActive = false;
@@ -174,10 +178,6 @@ export class Video extends videoCommon.Video {
 
         if (this._playbackTimeObserverActive) {
             this._removePlaybackTimeObserver();
-        }
-
-        if (this._observerActive) {
-            this._removeStatusObserver(this._player.currentItem);
         }
 
         this.pause();
