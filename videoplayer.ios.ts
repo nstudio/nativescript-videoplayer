@@ -53,9 +53,9 @@ export class Video extends videoCommon.Video {
             if (currentItem !== null) {
                 this._videoLoaded = false;
                 this._videoPlaying = false;
+                this._removeStatusObserver(currentItem);
                 // Need to set to null so the previous video is not shown while its loading
                 this._player.replaceCurrentItemWithPlayerItem(null);
-                this._removeStatusObserver(currentItem);
                 this._player.replaceCurrentItemWithPlayerItem(nativeVideoPlayer);
             }
             else {
@@ -167,9 +167,8 @@ export class Video extends videoCommon.Video {
     }
 
     public destroy() {
-        if (this._observerActive) {
-            this._removeStatusObserver(this._player.currentItem);
-        }
+        
+        this._removeStatusObserver(this._player.currentItem);
 
         if (this._didPlayToEndTimeActive) {
             ios.removeNotificationObserver(this._didPlayToEndTimeObserver, AVPlayerItemDidPlayToEndTimeNotification);
