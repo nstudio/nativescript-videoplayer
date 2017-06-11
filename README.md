@@ -120,6 +120,19 @@ Attribute to specify an event callback to execute when the time is updated.
 
 - **currentTime()** - Current time of video.
 
+## iOS Logging
+
+When running the iOS Simulator, after playing a video the iOS system may write
+log messages to the console every few seconds of the form
+```
+[aqme] 254: AQDefaultDevice (173): skipping input stream 0 0 0x0
+```
+They will continue being logged even after the video has been properly destroyed.
+These messages can be safely ignored. To turn them off completely, run the following
+command in your shell before running `tns run ios`:
+```
+export SIMCTL_CHILD_OS_ACTIVITY_MODE="disable"
+```
 
 ### Contributors
 
