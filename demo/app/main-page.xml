@@ -28,6 +28,8 @@
         <Button text="Go to 30 seconds" width="33%" tap="{{ goToTime }}" />
       </StackLayout>
       <Button text="Animate" width="33%" tap="{{ animate }}"/>
+      <Button text="Programmatic Video Player" tap="{{ createVideoPlayer }}" />
+      <StackLayout id="emptyStack"></StackLayout>
     </StackLayout>
   </ScrollView>
 </Page>

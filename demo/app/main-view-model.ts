@@ -1,7 +1,9 @@
-import { Observable } from "data/observable";
-import { Page } from "ui/page";
-import { isAndroid } from "platform";
-import { setInterval } from "timer";
+import { Observable } from "tns-core-modules/data/observable";
+import { Page } from "tns-core-modules/ui/page";
+import { topmost } from "tns-core-modules/ui/frame";
+import { isAndroid } from "tns-core-modules/platform";
+import { setInterval } from "tns-core-modules/timer";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
 import { Video } from "nativescript-videoplayer";
 
 export class HelloWorldModel extends Observable {
@@ -36,7 +38,6 @@ export class HelloWorldModel extends Observable {
     this._videoPlayer.pause();
   }
 
-
   /**
    * Play the video
    */
@@ -44,7 +45,6 @@ export class HelloWorldModel extends Observable {
     this._videoPlayer.play();
     this.completed = false;
   }
-
 
   /**
    * Stop the video player
@@ -55,7 +55,6 @@ export class HelloWorldModel extends Observable {
     }
   }
 
-
   /**
    * Get the video duration
    */
@@ -64,7 +63,6 @@ export class HelloWorldModel extends Observable {
     console.log("Video Duration: " + videoDuration);
     this.set("videoDuration", videoDuration);
   }
-
 
   /**
    * Go to 30 seconds
@@ -77,43 +75,55 @@ export class HelloWorldModel extends Observable {
     }
   }
 
-
   public animate() {
     console.log("Animation");
 
     const enums = require("ui/enums");
-    this._videoPlayer.animate({
-      rotate: 360,
-      duration: 3000,
-      curve: enums.AnimationCurve.spring
-    }).then(() => {
-      return this._videoPlayer.animate({
-        rotate: 0,
+    this._videoPlayer
+      .animate({
+        rotate: 360,
         duration: 3000,
         curve: enums.AnimationCurve.spring
+      })
+      .then(() => {
+        return this._videoPlayer.animate({
+          rotate: 0,
+          duration: 3000,
+          curve: enums.AnimationCurve.spring
+        });
+      })
+      .then(() => {
+        return this._videoPlayer.animate({
+          scale: { x: 0.5, y: 0.5 },
+          duration: 1000,
+          curve: enums.AnimationCurve.spring
+        });
+      })
+      .then(() => {
+        return this._videoPlayer.animate({
+          scale: { x: 1.5, y: 1.5 },
+          duration: 3000,
+          curve: enums.AnimationCurve.spring
+        });
+      })
+      .then(() => {
+        return this._videoPlayer.animate({
+          scale: { x: 1.0, y: 1.0 },
+          duration: 3000,
+          curve: enums.AnimationCurve.spring
+        });
       });
-    }).then(() => {
-      return this._videoPlayer.animate({
-        scale: { x: .5, y: .5 },
-        duration: 1000,
-        curve: enums.AnimationCurve.spring
-      });
+  }
 
-    }).then(() => {
-      return this._videoPlayer.animate({
-        scale: { x: 1.5, y: 1.5 },
-        duration: 3000,
-        curve: enums.AnimationCurve.spring
-      });
-    }).then(() => {
-      return this._videoPlayer.animate({
-        scale: { x: 1.0, y: 1.0 },
-        duration: 3000,
-        curve: enums.AnimationCurve.spring
-      });
-
-    });
-
+  public createVideoPlayer() {
+    const video = new Video();
+    video.height = 200;
+    video.width = 175;
+    video.src = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    video.controls = false;
+    video.autoplay = true;
+    const stack = topmost().getViewById("emptyStack") as StackLayout;
+    stack.addChild(video);
   }
 
   public muteVideo() {
@@ -123,7 +133,6 @@ export class HelloWorldModel extends Observable {
   public unmuteVideo() {
     this._videoPlayer.mute(false);
   }
-
 
   /**
    * Get the video current time
@@ -137,20 +146,17 @@ export class HelloWorldModel extends Observable {
     }
   }
 
-
-
   /**
    * Change the video src property
    */
   public changeVideoSource() {
     if (this.videoSrc === "~/videos/small.mp4") {
-      this._videoPlayer.src = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+      this._videoPlayer.src =
+        "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     } else {
       this._videoPlayer.src = "~/videos/small.mp4";
     }
   }
-
-
 
   private trackVideoCurrentPosition(): number {
     let trackInterval = setInterval(() => {
@@ -166,8 +172,5 @@ export class HelloWorldModel extends Observable {
       this.set("videoDuration", y);
     }, 200);
     return trackInterval;
-
   }
-
-
 }

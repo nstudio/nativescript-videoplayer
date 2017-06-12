@@ -2,15 +2,15 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
+        "sourceMap": false,
         "noImplicitAny": false,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": false,
         "declaration": false,
         "noLib": false,
         "noEmitHelpers": true,
         "experimentalDecorators": true,
-	    "noEmitOnError": false,
+        "noEmitOnError": false,
         "lib": [
             "es6",
             "dom"
@@ -18,8 +18,8 @@
         "baseUrl": ".",
         "paths": {
             "*": [
-                "./demo/node_modules/tns-core-modules/*",
-                "./demo/node_modules/*"
+                "./node_modules/tns-core-modules/*",
+                "./node_modules/*"
             ]
         }
     },

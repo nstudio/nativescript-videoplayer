@@ -5,12 +5,14 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
-        "noEmitOnError": true,
+        "noEmitOnError": false,
         "allowJs": false,
+        "types": [],
         "lib": [
             "es6",
             "dom"
         ],
+        "rootDir": ".",
         "baseUrl": ".",
         "paths": {
             "*": [

@@ -1,8 +1,8 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "main": "videoplayer",
-  "typings": "index.d.ts",
+  "typings": "videoplayer.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
   "nativescript": {
     "platforms": {
@@ -60,7 +60,7 @@
   ],
   "author": {
     "name": "Brad Martin",
-    "email": "bradmartin0905@gmail.com",
+    "email": "bradwaynemartin@gmail.com",
     "url": "https://github.com/bradmartin"
   },
   "license": "Apache-2.0",
@@ -76,12 +76,12 @@
   "_shasum": "7bdee571649168a79ded1bf63beb6d7b4b9cfa2a",
   "_from": "..",
   "_resolved": "file:..",
-  "devDependencies": {
-    "tns-core-modules": "^3.0.0",
-    "tns-platform-declarations": "^3.0.0",
-    "typescript": "^2.2.2"
-  },
   "peerDependencies": {
     "tns-core-modules": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.2.2",
+    "tns-core-modules": "^3.0.0",
+    "tns-platform-declarations": "3.0.1"
   }
 }
