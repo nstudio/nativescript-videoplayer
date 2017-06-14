@@ -1,7 +1,7 @@
-﻿import common = require("./videoplayer-common");
+import common = require("./videoplayer-common");
 import videoSource = require("./video-source/video-source");
-import * as utils from "utils/utils";
-import * as timer from "timer";
+import * as utils from "tns-core-modules/utils/utils";
+import * as timer from "tns-core-modules/timer";
 
 export * from "./videoplayer-common";
 

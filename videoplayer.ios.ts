@@ -1,4 +1,4 @@
-﻿import * as application from "application";
+import * as application from "tns-core-modules/application";
 import * as common from "./videoplayer-common";
 
 export * from "./videoplayer-common";

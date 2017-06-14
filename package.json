@@ -16,6 +16,15 @@
       "category": "Interface"
     }
   },
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bradmartin/nativescript-videoplayer.git"
@@ -67,7 +76,6 @@
   "bugs": {
     "url": "https://github.com/bradmartin/nativescript-videoplayer/issues"
   },
-  "scripts": {},
   "homepage": "https://github.com/bradmartin/nativescript-videoplayer",
   "readme": "# NativeScript Video Player :clapper:\nA NativeScript plugin to provide an XML widget for playing local and remote video files.\n\n#### [Android VideoView](http://developer.android.com/intl/zh-tw/reference/android/widget/VideoView.html)\n#### [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html)\n\n## Installation\n`npm install nativescript-videoplayer`\n\n## Usage\n\n###\n```XML\n<Page xmlns=\"http://schemas.nativescript.org/tns.xsd\"\n      xmlns:VideoPlayer=\"videoplayer\">\n        <StackLayout>\n            <VideoPlayer:Video\n            loaded=\"videoplayerLoaded\" \n            finished=\"videoFinished\" \n            autoplay=\"true\" \n            height=\"300\" \n            src=\"~/videos/small.mp4\" />\n\n            <!-- Here is a remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->\n            \n        </StackLayout>\n</Page>\n```\n\n## Attributes\n**src** - *required*\n\nAttribute to specify the video file to play, can either be a remote file or local video file. \n\n<sub>The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.</sub>\n\n**autoplay** - *optional*\n\nAttribute to set if the video should start playing as soon as possible or to wait for user interaction.\n\n**finished** - *optional*\n\nAttribute to specify an event callback to execute when the video reaches the end of its duration.\n\n",
   "readmeFilename": "README.md",
@@ -80,8 +88,11 @@
     "tns-core-modules": "^3.0.0"
   },
   "devDependencies": {
-    "typescript": "^2.2.2",
+    "husky": "^0.13.4",
+    "lint-staged": "^3.6.1",
+    "prettier": "^1.4.4",
     "tns-core-modules": "^3.0.0",
-    "tns-platform-declarations": "3.0.1"
+    "tns-platform-declarations": "3.0.1",
+    "typescript": "^2.2.2"
   }
 }

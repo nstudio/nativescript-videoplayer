@@ -1,8 +1,12 @@
-﻿import videoSource = require("./video-source/video-source");
+import videoSource = require("./video-source/video-source");
 import * as definitions from "./videoplayer";
-import { isFileOrResourcePath } from "utils/utils";
-import { isString } from "utils/types";
-import { View, Property, booleanConverter } from "ui/core/view";
+import { isFileOrResourcePath } from "tns-core-modules/utils/utils";
+import { isString } from "tns-core-modules/utils/types";
+import {
+  View,
+  Property,
+  booleanConverter
+} from "tns-core-modules/ui/core/view";
 
 // on Android we explicitly set propertySettings to None because android will invalidate its layout (skip unnecessary native call).
 // var AffectsLayout = platform.device.os === platform.platformNames.android ? dependencyObservable.PropertyMetadataSettings.None : dependencyObservable.PropertyMetadataSettings.AffectsLayout;
