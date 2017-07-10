@@ -1,6 +1,6 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "main": "videoplayer",
   "typings": "videoplayer.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
@@ -20,10 +20,7 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.ts": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.ts": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
@@ -38,7 +35,7 @@
     "video player",
     "movie",
     "bradmartin",
-    "Thorum"
+    "nStudio"
   ],
   "contributors": [
     {

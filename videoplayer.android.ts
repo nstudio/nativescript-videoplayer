@@ -1,5 +1,5 @@
-import common = require("./videoplayer-common");
-import videoSource = require("./video-source/video-source");
+import * as common from "./videoplayer-common";
+import * as videoSource from "./video-source/video-source";
 import * as utils from "tns-core-modules/utils/utils";
 import * as timer from "tns-core-modules/timer";
 
@@ -56,7 +56,7 @@ export class Video extends common.Video {
     this._setNativeVideo(value ? value.android : null);
   }
 
-  public initNativeView(): void {
+  public createNativeView(): any {
     let that = new WeakRef(this);
 
     this.nativeView = new android.view.TextureView(this._context);
@@ -110,6 +110,8 @@ export class Video extends common.Video {
         }
       })
     );
+
+    return this.nativeView;
   }
 
   public toggleMediaControllerVisibility(): void {
