@@ -25,6 +25,7 @@ export class Video extends common.Video {
   private _player: any; /// AVPlayer
   private _playerController: any; /// AVPlayerViewController
   private _src: string;
+  private _headers: NSMutableDictionary<string, string>;
   private _didPlayToEndTimeObserver: any;
   private _didPlayToEndTimeActive: boolean;
   private _observer: NSObject;
@@ -53,11 +54,43 @@ export class Video extends common.Video {
     return this.nativeView;
   }
 
+  [common.headersProperty.setNative](value) {
+    this._setHeader(value ? value : null);
+  }
+
   [common.videoSourceProperty.setNative](value: AVPlayerItem) {
     this._setNativeVideo(value ? value.ios : null);
   }
 
+  public _setHeader(headers: Map<string, string>): void {
+    if (headers && headers.size > 0) {
+      this._headers = new NSMutableDictionary();
+      headers.forEach((value: string, key: string) => {
+        this._headers.setValueForKey(value, key);
+      });
+    }
+    if (this._src) {
+      this._setNativePlayerSource(this._src);
+    }
+  }
+
   public _setNativeVideo(nativeVideoPlayer: any) {
+    console.log("set native player source!");
+    if (this["_url"] && this._headers && this._headers.count > 0) {
+      // adding headers if exist when loading video from URL
+      console.log("need to add headers!");
+      let url: any = NSURL.URLWithString(this["_url"]);
+      let options = NSDictionary.dictionaryWithDictionary({
+        AVURLAssetHTTPHeaderFieldsKey: this._headers
+      });
+      let asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(
+        url,
+        options
+      );
+      let item: AVPlayerItem = AVPlayerItem.playerItemWithAsset(asset);
+      nativeVideoPlayer = item;
+    }
+
     if (nativeVideoPlayer != null) {
       let currentItem = this._player.currentItem;
       this._addStatusObserver(nativeVideoPlayer);
