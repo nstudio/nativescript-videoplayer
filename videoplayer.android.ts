@@ -342,7 +342,11 @@ export class Video extends common.Video {
   }
 
   private _openVideo(): void {
-    if (this._src === null || this.textureSurface === null) {
+    if (
+      this._src === null ||
+      this.textureSurface === null ||
+      (typeof this._src === "string" && this._src.length === 0)
+    ) {
       // we have to protect In case something else calls this before we are ready
       // the Surface event will then call this when we are ready...
       return;
