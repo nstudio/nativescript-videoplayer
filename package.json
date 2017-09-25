@@ -17,7 +17,8 @@
     }
   },
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "build": "npm i && tsc"
   },
   "lint-staged": {
     "*.ts": ["prettier --write", "git add"]
