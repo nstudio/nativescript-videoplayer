@@ -1,6 +1,6 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "main": "videoplayer",
   "typings": "videoplayer.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
@@ -17,7 +17,8 @@
     }
   },
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepare": "tsc"
   },
   "lint-staged": {
     "*.ts": ["prettier --write", "git add"]
@@ -62,6 +63,11 @@
       "name": "Ivo Georgiev",
       "email": "ivo@strem.io",
       "url": "https://github.com/Ivshti"
+    },
+    {
+      "name": "Ophir Stern",
+      "email": "souly01@gmail.com",
+      "url": "https://github.com/souly1"
     }
   ],
   "author": {

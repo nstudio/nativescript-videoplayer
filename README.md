@@ -101,6 +101,11 @@ If set to true, currentTimeUpdated callback is possible.
 
 Attribute to specify an event callback to execute when the time is updated.
 
+- **headers - (Map<string, string>)** - *optional*
+
+Set headers to add when loading a video from URL.
+
+
 ## API
 
 - **play()** - Start playing the video

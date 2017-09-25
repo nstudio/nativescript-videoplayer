@@ -19,6 +19,7 @@ export class Video extends common.Video {
   private videoWidth;
   private videoHeight;
   private _src;
+  private _headers: java.util.Map<string, string>;
   private playState;
   private mediaState;
   private textureSurface;
@@ -37,6 +38,7 @@ export class Video extends common.Video {
     this.videoHeight = 0;
 
     this._src = null;
+    this._headers = null;
 
     this.playState = STATE_IDLE;
     this.mediaState = SURFACE_WAITING;
@@ -50,6 +52,10 @@ export class Video extends common.Video {
 
   get android(): any {
     return this.nativeView;
+  }
+
+  [common.headersProperty.setNative](value) {
+    this._setHeader(value ? value : null);
   }
 
   [common.videoSourceProperty.setNative](value) {
@@ -336,7 +342,13 @@ export class Video extends common.Video {
   }
 
   private _openVideo(): void {
-    if (this._src === null || this.textureSurface === null) {
+    if (
+      this._src === null ||
+      this.textureSurface === null ||
+      (this._src !== null &&
+        typeof this._src === "string" &&
+        this._src.length === 0)
+    ) {
       // we have to protect In case something else calls this before we are ready
       // the Surface event will then call this when we are ready...
       return;
@@ -366,9 +378,18 @@ export class Video extends common.Video {
 
       this._setupMediaPlayerListeners();
 
-      this.mediaPlayer.setDataSource(
-        /* utils.ad.getApplicationContext(),*/ this._src
-      );
+      if (!this._headers || this._headers.size() === 0) {
+        this.mediaPlayer.setDataSource(
+          /* utils.ad.getApplicationContext(),*/ this._src
+        );
+      } else {
+        let videoUri = android.net.Uri.parse(this._src);
+        this.mediaPlayer.setDataSource(
+          utils.ad.getApplicationContext(),
+          videoUri,
+          this._headers
+        );
+      }
       this.mediaPlayer.setSurface(this.textureSurface);
       this.mediaPlayer.setAudioStreamType(
         android.media.AudioManager.STREAM_MUSIC
@@ -385,6 +406,18 @@ export class Video extends common.Video {
   public _setNativeVideo(nativeVideo: any): void {
     this._src = nativeVideo;
     this._openVideo();
+  }
+
+  public _setHeader(headers: Map<string, string>): void {
+    if (headers && headers.size > 0) {
+      this._headers = new java.util.HashMap();
+      headers.forEach((value: string, key: string) => {
+        this._headers.put(key, value);
+      });
+    }
+    if (this._src) {
+      this._openVideo();
+    }
   }
 
   public setNativeSource(nativePlayerSrc: string): void {

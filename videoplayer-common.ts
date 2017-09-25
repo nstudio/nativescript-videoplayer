@@ -36,6 +36,18 @@ function onSrcPropertyChanged(view, oldValue, newValue) {
   }
 }
 
+function onHeadersPropertyChanged(view, oldValue, newValue) {
+  const video = view;
+
+  if (oldValue !== newValue) {
+    if (video.src) {
+      let src = video.src;
+      onSrcPropertyChanged(view, null, null);
+      onSrcPropertyChanged(view, null, src);
+    }
+  }
+}
+
 export class Video extends View {
   public static finishedEvent: string = "finished";
   public static playbackReadyEvent: string = "playbackReady";
@@ -47,6 +59,7 @@ export class Video extends View {
   public android: any;
   public ios: any;
   public src: string; /// video source file
+  public headers: Map<string, string>; /// headers to use
   public observeCurrentTime: boolean; // set to true if want to observe current time.
   public autoplay: boolean = false; /// set true for the video to start playing when ready
   public controls: boolean = true; /// set true to enable the media player's playback controls
@@ -60,6 +73,12 @@ export const srcProperty = new Property<Video, any>({
   valueChanged: onSrcPropertyChanged
 });
 srcProperty.register(Video);
+
+export const headersProperty = new Property<Video, any>({
+  name: "headers",
+  valueChanged: onHeadersPropertyChanged
+});
+headersProperty.register(Video);
 
 export const videoSourceProperty = new Property<Video, any>({
   name: "videoSource"
