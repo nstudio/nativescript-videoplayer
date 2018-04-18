@@ -10,3 +10,6 @@ app/
 !video-source/video-source.d.ts
 tsconfig.json
 README.md
+scripts/
+typings/
+node_modules/

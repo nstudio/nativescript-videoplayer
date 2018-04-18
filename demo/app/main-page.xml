@@ -4,34 +4,35 @@
   <ActionBar title="Native Video" />
   <ScrollView>
     <StackLayout>
-      <Button text="Change Video" tap="{{ changeVideoSource }}" />
-      <GridLayout rows="auto" columns="auto,*,auto,auto" margin="10">
-        <Label text="Current Time: " textWrap="true" />
-        <Label col="1" text="{{ currentTime }}" class="message" textWrap="true" />
-        <Label col="2" text="Video Duration: " textWrap="true" />
-        <Label col="3" text="{{ videoDuration }}" class="message" textWrap="true" />
+      <!--      Copy/Paste the url below to view a remote video file       -->
+      <!--      https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4    -->
+      <Button text="Change Video" class="btn btn-rounded-sm btn-primary" tap="{{ changeVideoSource }}" />
+      <GridLayout rows="auto, auto" columns="auto, *" margin="10">
+        <Label row="0" col="0" text="Current Time: " textWrap="true" />
+        <Label row="0" col="1" text="{{ currentTime }}" class="message" textWrap="true" />
+        <Label row="1" col="0" text="Video Duration: " textWrap="true" />
+        <Label row="1" col="1" text="{{ videoDuration }}" class="message" textWrap="true" />
       </GridLayout>
       <GridLayout rows="*" columns="*, *" backgroundColor="#000000">
-        <Video:Video id="nativeVideoPlayer" controls="true" loadingComplete="{{ videoCompleted }}" finished="{{ videoFinished }}" loop="false" autoplay="true" height="280" src="{{ videoSrc }}" row="0" colSpan="2"/>
-        <Label text="Label On Top of Video View" row="0" colSpan="2" color="#fff" horizontalAlignment="center"/>
+        <Video:Video id="nativeVideoPlayer" controls="true" loadingComplete="{{ videoCompleted }}" finished="{{ videoFinished }}" loop="false" autoplay="true" height="280" src="{{ videoSrc }}" row="0" colSpan="2" />
+        <Label text="Label On Top of Video View" row="0" colSpan="2" color="#fff" horizontalAlignment="center" />
       </GridLayout>
-      <StackLayout orientation="horizontal">
-        <Button text="Pause" width="33%" tap="{{ pauseVideo }}" />
-        <Button text="Play" width="33%" tap="{{ playVideo }}" />
-        <android>
-          <Button text="Stop" width="33%" tap="{{ stopVideo }}" />
-        </android>
-      </StackLayout>
-      <StackLayout orientation="horizontal">
-        <Button text="Mute" width="33%" tap="{{ muteVideo }}" />
-        <Button text="UnMute" width="33%" tap="{{ unmuteVideo }}" />
-        <Button text="Go to 30 seconds" width="33%" tap="{{ goToTime }}" />
-      </StackLayout>
-      <Button text="Animate" width="33%" tap="{{ animate }}"/>
-      <Button text="Programmatic Video Player" tap="{{ createVideoPlayer }}" />
+      <GridLayout rows="*" columns="*, *" orientation="horizontal">
+        <Button col="0" text="Pause" class="btn btn-rounded-sm btn-primary" width="35%" tap="{{ pauseVideo }}" />
+        <Button col="1" text="Play" class="btn btn-rounded-sm btn-primary" width="35%" tap="{{ playVideo }}" />
+      </GridLayout>
+      <android>
+        <Button text="Stop" class="btn btn-rounded-sm btn-primary" tap="{{ stopVideo }}" />
+      </android>
+      <GridLayout rows="*" columns="*, *" orientation="horizontal">
+        <Button col="0" text="Mute" class="btn btn-rounded-sm btn-primary" width="33%" tap="{{ muteVideo }}" />
+        <Button col="1" text="UnMute" class="btn btn-rounded-sm btn-primary" width="33%" tap="{{ unmuteVideo }}" />
+      </GridLayout>
+      <Button text="Go to 30 seconds" class="btn btn-rounded-sm btn-primary" tap="{{ goToTime }}" />
+      <Button text="Animate" class="btn btn-rounded-sm btn-primary" tap="{{ animate }}"/>
+      <Button text="Programmatic Video Player" class="btn btn-rounded-sm btn-primary" tap="{{ createVideoPlayer }}" />
+      <Label text="This button ^^^ will create a new videoplayer through code, scroll down to see it." textWrap="true" />
       <StackLayout id="emptyStack"></StackLayout>
     </StackLayout>
   </ScrollView>
 </Page>
-<!--      Copy/Paste the url below to view a remote video file       -->
-<!--      https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4    -->

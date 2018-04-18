@@ -1,22 +1,23 @@
-﻿.title {
-    font-size: 16;
-    horizontal-align: center;
-    margin: 20;
+﻿@import '~nativescript-theme-core/css/core.light.css';
+
+.title {
+  font-size: 16;
+  horizontal-align: center;
+  margin: 20;
 }
 
-
 button {
-    horizontal-align: center;
+  horizontal-align: center;
 }
 
 .message {
-    font-size: 20;
-    color: #284848;
-    horizontal-align: center;
-    margin-right: 5;
+  font-size: 20;
+  color: #284848;
+  horizontal-align: center;
+  margin-right: 5;
 }
 
 ActionBar {
-    background-color: #f44336;
-    color: #fff;
+  background-color: #f44336;
+  color: #fff;
 }

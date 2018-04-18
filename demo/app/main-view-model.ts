@@ -1,15 +1,16 @@
-import { Observable } from "tns-core-modules/data/observable";
-import { Page } from "tns-core-modules/ui/page";
-import { topmost } from "tns-core-modules/ui/frame";
-import { isAndroid } from "tns-core-modules/platform";
-import { setInterval } from "tns-core-modules/timer";
-import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout";
-import { Video } from "nativescript-videoplayer";
+import { Observable } from 'tns-core-modules/data/observable';
+import { Page } from 'tns-core-modules/ui/page';
+import { topmost } from 'tns-core-modules/ui/frame';
+import { isAndroid } from 'tns-core-modules/platform';
+import { setInterval } from 'tns-core-modules/timer';
+import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout';
+import { Prop } from './prop';
+import { Video } from 'nativescript-videoplayer';
 
 export class HelloWorldModel extends Observable {
-  public videoSrc: string;
-  public currentTime: any;
-  public videoDuration: any;
+  @Prop() videoSrc: string;
+  @Prop() currentTime: any;
+  @Prop() videoDuration: any;
   private _videoPlayer: Video;
   private completed: boolean;
 
@@ -17,10 +18,41 @@ export class HelloWorldModel extends Observable {
     super();
 
     this.completed = false;
-    this._videoPlayer = <Video>mainpage.getViewById("nativeVideoPlayer");
-    this.currentTime = "";
-    this.videoDuration = "";
-    this.videoSrc = "~/videos/small.mp4";
+    this._videoPlayer = <Video>mainpage.getViewById('nativeVideoPlayer');
+    this._videoPlayer.debug = true;
+
+    // event listener setup for Video
+    this._videoPlayer.on(Video.finishedEvent, args => {
+      console.log('Video.finishedEvent executed');
+    });
+    this._videoPlayer.on(Video.errorEvent, args => {
+      console.log('Video.errorEvent executed');
+    });
+    this._videoPlayer.on(Video.playbackReadyEvent, args => {
+      console.log('Video.playbackReadyEvent executed');
+    });
+    this._videoPlayer.on(Video.playbackStartEvent, args => {
+      console.log('Video.playbackStartEvent executed');
+    });
+    this._videoPlayer.on(Video.seekToTimeCompleteEvent, args => {
+      console.log('Video.seekToTimeCompleteEvent executed');
+    });
+
+    this._videoPlayer.on(Video.pausedEvent, args => {
+      console.log('Video.pausedEvent');
+    });
+
+    this._videoPlayer.on(Video.mutedEvent, args => {
+      console.log('Video.mutedEvent');
+    });
+
+    this._videoPlayer.on(Video.unmutedEvent, args => {
+      console.log('Video.unmutedEvent');
+    });
+
+    this.currentTime = '';
+    this.videoDuration = '';
+    this.videoSrc = '~/videos/small.mp4';
     this.trackVideoCurrentPosition();
   }
 
@@ -60,8 +92,8 @@ export class HelloWorldModel extends Observable {
    */
   public getVideoDuration() {
     let videoDuration = this._videoPlayer.getDuration();
-    console.log("Video Duration: " + videoDuration);
-    this.set("videoDuration", videoDuration);
+    console.log('Video Duration: ' + videoDuration);
+    this.set('videoDuration', videoDuration);
   }
 
   /**
@@ -76,9 +108,9 @@ export class HelloWorldModel extends Observable {
   }
 
   public animate() {
-    console.log("Animation");
+    console.log('Animation');
 
-    const enums = require("ui/enums");
+    const enums = require('tns-core-modules/ui/enums');
     this._videoPlayer
       .animate({
         rotate: 360,
@@ -119,10 +151,10 @@ export class HelloWorldModel extends Observable {
     const video = new Video();
     video.height = 200;
     video.width = 175;
-    video.src = "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    video.src = 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
     video.controls = false;
     video.autoplay = true;
-    const stack = topmost().getViewById("emptyStack") as StackLayout;
+    const stack = topmost().getViewById('emptyStack') as StackLayout;
     stack.addChild(video);
   }
 
@@ -140,7 +172,7 @@ export class HelloWorldModel extends Observable {
   public getVideoCurrentTime() {
     try {
       let currentTime = this._videoPlayer.getCurrentTime();
-      console.log("Current Time: " + currentTime);
+      console.log('Current Time: ' + currentTime);
     } catch (err) {
       console.log(err);
     }
@@ -150,11 +182,10 @@ export class HelloWorldModel extends Observable {
    * Change the video src property
    */
   public changeVideoSource() {
-    if (this.videoSrc === "~/videos/small.mp4") {
-      this._videoPlayer.src =
-        "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    if (this.videoSrc === '~/videos/small.mp4') {
+      this._videoPlayer.src = 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
     } else {
-      this._videoPlayer.src = "~/videos/small.mp4";
+      this._videoPlayer.src = '~/videos/small.mp4';
     }
   }
 
@@ -162,14 +193,14 @@ export class HelloWorldModel extends Observable {
     let trackInterval = setInterval(() => {
       let x, y;
       if (this.completed) {
-        x = "";
-        y = "";
+        x = '';
+        y = '';
       } else {
         x = this._videoPlayer.getCurrentTime();
         y = this._videoPlayer.getDuration();
       }
-      this.set("currentTime", x);
-      this.set("videoDuration", y);
+      this.currentTime = x;
+      this.videoDuration = y;
     }, 200);
     return trackInterval;
   }

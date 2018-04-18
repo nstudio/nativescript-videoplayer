@@ -8,7 +8,7 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "org.nativescript.demo"  
+    applicationId = "org.nativescript.videoplayer"  
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
