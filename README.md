@@ -57,8 +57,7 @@ From your command prompt/terminal go to your app's root folder and execute:
         <StackLayout>
 
             <VideoPlayer:Video id="nativeVideoPlayer"
-            controls="true" finished="{{ videoFinished }}"
-            loop="true" autoplay="false" height="280"
+            controls="true" loop="true" autoplay="false" height="280"
             src="~/videos/big_buck_bunny.mp4" />
 
             <!-- Remote file to test with https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4 -->
@@ -67,7 +66,27 @@ From your command prompt/terminal go to your app's root folder and execute:
 </Page>
 ```
 
-## Angular Native (NativeScript Angular) Usage
+```typescript
+import { Video } from 'nativescript-videoplayer';
+
+const video = topmost().currentPage.getViewById('nativeVideoPlayer') as Video;
+// Setting event listeners on the Video
+video.on(Video.pausedEvent, () => {
+  console.log('Video has been paused.');
+});
+
+video.on(Video.mutedEvent, () => {
+  console.log('Video has been muted.');
+});
+
+// changing the src
+video.src = 'some video file or url';
+
+// set loop
+video.loop = false;
+```
+
+## Angular NativeScript Usage
 
 ```TS
 // somewhere at top of your component or bootstrap file
@@ -88,72 +107,49 @@ _With AngularNative you have to explicitly close all components so the correct t
 
 ## Properties
 
-* **src** - _required_
-
-Set the video file to play, for best performance use local video files if possible. The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos.
-
-* **autoplay - (boolean)** - _optional_
-
-Set if the video should start playing as soon as possible or to wait for user interaction.
-
-* **finished - (function)** - _optional_
-
-Attribute to specify an event callback to execute when the video reaches the end of its duration.
-
-* **controls - (boolean)** - _optional_
-
-Set to use the native video player's media playback controls.
-
-* **muted - (boolean)** - _optional_
-
-Mutes the native video player.
-
-* **loop - (boolean)** - _optional_
-
-Sets the native video player to loop once playback has finished.
-
-* **fill - (boolean)** - _optional_ **ANDROID ONLY**
-
-If set to true, the aspect ratio of the video will not be honored and it will fill the entire space available.
-
-* **playbackReady - (function)** - _optional_
-
-Attribute to specify an event callback to execute when the video is ready to play.
-
-* **seekToTimeComplete - (function)** - _optional_
-
-Attribute to specify an event callback to execute when the video has finished seekToTime.
-
-* **observeCurrentTime - (boolean)** - _optional_
-
-If set to true, currentTimeUpdated callback is possible.
-
-* **currentTimeUpdated - (function)** - _optional_
-
-Attribute to specify an event callback to execute when the time is updated.
-
-* **headers - (Map<string, string>)** - _optional_
-
-Set headers to add when loading a video from URL.
+| Property                            | Description                                                                                                                                                                                                                             |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **src**                             | The src file for the video. Set the video file to play, for best performance use local video files if possible. The file must adhere to the platforms accepted video formats. For reference check the platform specs on playing videos. |
+| **autoplay - (boolean)**            | Set if the video should start playing as soon as possible or to wait for user interaction.                                                                                                                                              |
+| **controls - (boolean)**            | Set to use the native video player's media playback controls.                                                                                                                                                                           |
+| **muted - (boolean)**               | Mutes the native video player.                                                                                                                                                                                                          |
+| **loop - (boolean)**                | Sets the native video player to loop once playback has finished.                                                                                                                                                                        |
+| **fill - (boolean)**                | If true, the aspect ratio of the video will not be honored and it will fill the entire space available.                                                                                                                                 |
+| **observeCurrentTime - (boolean)**  | If true, currentTimeUpdated callback is possible.                                                                                                                                                                                       |
+| **headers - (Map<string, string>)** | Set headers to add when loading a video from URL.                                                                                                                                                                                       |
 
 ## API
 
-* **play()** - Start playing the video
-* **pause()** - Pause the video
-* **seekToTime(time: number)** - Seek the video to a time (milliseconds)
-* **getCurrentTime()** - Returns the current time in the video duration (milliseconds)
-* **getDuration()** - Returns the duration of the video (milliseconds)
-* **destroy()** - Destroy the video player and free resources
-* **mute(boolean)** - Mute the current video
-* **setVolume()** - Set the volume - Must be between 0 and 1.
-
-### Android only
-
-* **stop()** - Stop the playback - this resets the player and remove the video src
+| Method                        | Description                                                         |
+| ----------------------------- | ------------------------------------------------------------------- |
+| **play**                      | Start playing the video.                                            |
+| **pause**                     | Pause the video                                                     |
+| **seekToTime(time: number)**  | Seek the video to a time (milliseconds)                             |
+| **getCurrentTime**            | Returns the current time in the video duration (milliseconds)       |
+| **getDuration**               | Returns the current time in the video duration (milliseconds)       |
+| **destroy**                   | Destroy the video player and free resources                         |
+| **mute(boolean)**             | If true, mutes the video. If false, unmute the video.               |
+| **setVolume(volume: number)** | Set the volume - Must be between 0 and 1.                           |
+| **ANDROID ONLY** - **stop**   | Stop the playback - this resets the player and remove the video src |
 
 ## Observable Properties
 
 * **currentTime()** - Current time of video.
+
+## Events
+
+| Event                   | Description                                                         |
+| ----------------------- | ------------------------------------------------------------------- |
+| errorEvent              | This event fires when an error in the source code is thrown.        |
+| playbackReadyEvent      | This event fires when the video is ready.                           |
+| playbackStartEvent      | This event fires when video starts playback.                        |
+| seekToTimeCompleteEvent | This event fires when seeking is complete.                          |
+| currentTimeUpdatedEvent | This event fires when the current time of playing video is changed. |
+| finishedEvent           | This event fires when the video is complete.                        |
+| mutedEvent              | This event fires when video is muted.                               |
+| unmutedEvent            | This event fires when video is unmutedEvent.                        |
+| pausedEvent             | This event fires when video is paused.                              |
+| volumeSetEvent          | This event fires when the volume is set.                            |
 
 ## iOS Logging
 
@@ -171,9 +167,3 @@ command in your shell before running `tns run ios`:
 ```
 export SIMCTL_CHILD_OS_ACTIVITY_MODE="disable"
 ```
-
-### Contributors
-
-* Alex Ziskind [@digitalix](https://twitter.com/digitalix)
-* Nathanael Anderson [@CongoCart](https://twitter.com/CongoCart)
-* Blake Nussey
