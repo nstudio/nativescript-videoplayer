@@ -1,7 +1,13 @@
 import { isFileOrResourcePath } from 'tns-core-modules/utils/utils';
 import { isString } from 'tns-core-modules/utils/types';
 import { View, Property, booleanConverter } from 'tns-core-modules/ui/core/view';
-import { VideoSource, fromFile, fromUrl, fromNativeSource, fromFileOrResource } from './video-source/video-source';
+import {
+  VideoSource,
+  fromFile,
+  fromUrl,
+  fromNativeSource,
+  fromFileOrResource
+} from './video-source/video-source.android';
 
 export class VideoPlayerUtil {
   public static debug: boolean = false;
