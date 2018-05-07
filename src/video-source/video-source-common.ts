@@ -1,5 +1,5 @@
 import { RESOURCE_PREFIX, isFileOrResourcePath as isFileOrResourcePathCore } from 'tns-core-modules/utils/utils';
-import { VideoSource } from './video-source';
+import { VideoSource } from './video-source.android';
 
 export function fromResource(name: string): VideoSource {
   const video = new VideoSource();
