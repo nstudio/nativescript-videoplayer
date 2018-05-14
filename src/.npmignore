@@ -4,6 +4,7 @@ app/
 .vscode/
 *.png
 *.log
+*.yml
 *.ts
 !index.d.ts
 !videoplayer.d.ts

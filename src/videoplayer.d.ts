@@ -55,9 +55,15 @@ export declare class Video extends View {
    * String value for hooking into the volumeSetEvent. This event fires when the volume is set.
    */
   public static volumeSetEvent: string;
+  /**
+   * android.view.TextureView
+   */
+  android: any;
 
-  android: android.view.TextureView;
-  ios: UIView;
+  /**
+   * UIView
+   */
+  ios: any;
 
   /**
    * The video player's src file.
