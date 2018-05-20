@@ -13,7 +13,7 @@ export class VideoSource {
   public loadFromResource(name: string): boolean {
     CLog(CLogTypes.info, `VideoSource.loadFromResource --- name ${name}`);
     const videoURL = NSBundle.mainBundle.URLForResourceWithExtension(name, null);
-    const player = new AVPlayerItem(videoURL);
+    const player = AVPlayerItem.playerItemWithURL(videoURL);
     this.ios = player;
     return this.ios != null;
   }
@@ -28,7 +28,7 @@ export class VideoSource {
     }
 
     const videoURL = NSURL.fileURLWithPath(fileName);
-    const player = new AVPlayerItem(videoURL);
+    const player = AVPlayerItem.playerItemWithURL(videoURL);
     this.ios = player;
     return this.ios != null;
   }
@@ -36,7 +36,7 @@ export class VideoSource {
   public loadFromUrl(url: string): boolean {
     CLog(CLogTypes.info, `VideoSource.loadFromUrl --- url ${url}`);
     const videoURL = NSURL.URLWithString(url);
-    const player = new AVPlayerItem(videoURL);
+    const player = AVPlayerItem.playerItemWithURL(videoURL);
     this.ios = player;
     return this.ios != null;
   }
