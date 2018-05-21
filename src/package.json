@@ -1,6 +1,6 @@
 {
   "name": "nativescript-videoplayer",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "main": "videoplayer",
   "typings": "videoplayer.d.ts",
   "description": "A NativeScript plugin that uses the native video players to play local and remote videos.",
@@ -86,6 +86,20 @@
       "name": "Ophir Stern",
       "email": "souly01@gmail.com",
       "url": "https://github.com/souly1"
+    },
+    {
+      "name": "markhatchell",
+      "url": "https://github.com/markhatchell"
+    },
+    {
+      "name": "Eddy Verbruggen",
+      "email": "eddyverbruggen@gmail.com",
+      "url": "https://github.com/EddyVerbruggen"
+    },
+    {
+      "name": "https://github.com/RobertGardner",
+      "email": "robert@rdgardnerfamily.com",
+      "url": "https://github.com/RobertGardner"
     }
   ],
   "author": {

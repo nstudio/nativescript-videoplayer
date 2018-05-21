@@ -23,7 +23,7 @@
         <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" alt="donate">
     </a>
     <a href="http://nstudio.io">
-      <img src="./images/nstudio-banner.png" alt="nStudio banner">
+      <img src="./screenshots/nstudio-banner.png" alt="nStudio banner">
     </a>
     <h5 align="center">Do you need assistance on your project or plugin? Contact the nStudio team anytime at <a href="mailto:team@nstudio.io">team@nstudio.io</a> to get up to speed with the best practices in mobile and web app development.
     </h5>
@@ -45,7 +45,7 @@ From your command prompt/terminal go to your app's root folder and execute:
 
 | Sample 1                            | Sample 2                              |
 | ----------------------------------- | ------------------------------------- |
-| ![Sample Usage](./images/video.gif) | ![Sample 2](./images/videoplayer.gif) |
+| ![Sample Usage](./screenshots/video.gif) | ![Sample 2](./screenshots/videoplayer.gif) |
 
 ## Usage
 

@@ -4,6 +4,7 @@
 *.zip
 *.js
 !src/scripts/*.js
+!seed-tests/*.js
 *.js.map
 *.log
 *.d.ts
