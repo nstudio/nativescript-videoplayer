@@ -118,9 +118,6 @@
   "_shasum": "7bdee571649168a79ded1bf63beb6d7b4b9cfa2a",
   "_from": "..",
   "_resolved": "file:..",
-  "peerDependencies": {
-    "tns-core-modules": "^3.0.0"
-  },
   "devDependencies": {
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",

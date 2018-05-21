@@ -1,11 +1,11 @@
+import { Video } from 'nativescript-videoplayer';
 import { Observable } from 'tns-core-modules/data/observable';
-import { Page } from 'tns-core-modules/ui/page';
-import { topmost } from 'tns-core-modules/ui/frame';
 import { isAndroid } from 'tns-core-modules/platform';
 import { setInterval } from 'tns-core-modules/timer';
+import { topmost } from 'tns-core-modules/ui/frame';
 import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout';
+import { Page } from 'tns-core-modules/ui/page';
 import { Prop } from './prop';
-import { Video } from 'nativescript-videoplayer';
 
 export class HelloWorldModel extends Observable {
   @Prop() videoSrc: string;
