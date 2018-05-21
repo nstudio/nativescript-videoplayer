@@ -8,6 +8,7 @@
 *.log
 *.d.ts
 !videoplayer.d.ts
+!video-source.d.ts
 demo/lib
 demo/app/**/*.js
 demo/app/app.js

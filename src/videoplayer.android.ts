@@ -355,41 +355,49 @@ export class Video extends VideoCommon {
         // Already setup
         return;
       }
-      const mediaPlayerControl = new android.widget.MediaController.MediaPlayerControl({
-        canPause: () => {
-          return true;
-        },
-        canSeekBackward: () => {
-          return true;
-        },
-        canSeekForward: () => {
-          return true;
-        },
-        getAudioSessionId: () => {
-          return this._owner.get().audioSession;
-        },
-        getBufferPercentage: () => {
-          return this._owner.get().currentBufferPercentage;
-        },
-        getCurrentPosition: () => {
-          return this._owner.get().getCurrentTime();
-        },
-        getDuration: () => {
-          return this._owner.get().getDuration();
-        },
-        isPlaying: () => {
-          return this._owner.get().isPlaying();
-        },
-        pause: () => {
-          this._owner.get().pause();
-        },
-        seekTo: v => {
-          this._owner.get().seekToTime(v);
-        },
-        start: () => {
-          this._owner.get().play();
+
+      // 'getAudioSessionId' was added in API level 18, the current generated TNS typings are level 17
+      interface TNSMediaPlayerControlApiLevel18 extends android.widget.MediaController.MediaPlayerControl {
+        getAudioSessionId(): number;
+      }
+
+      const mediaPlayerControl = new android.widget.MediaController.MediaPlayerControl(
+        <TNSMediaPlayerControlApiLevel18>{
+          canPause: () => {
+            return true;
+          },
+          canSeekBackward: () => {
+            return true;
+          },
+          canSeekForward: () => {
+            return true;
+          },
+          getAudioSessionId: () => {
+            return this._owner.get().audioSession;
+          },
+          getBufferPercentage: () => {
+            return this._owner.get().currentBufferPercentage;
+          },
+          getCurrentPosition: () => {
+            return this._owner.get().getCurrentTime();
+          },
+          getDuration: () => {
+            return this._owner.get().getDuration();
+          },
+          isPlaying: () => {
+            return this._owner.get().isPlaying();
+          },
+          pause: () => {
+            this._owner.get().pause();
+          },
+          seekTo: v => {
+            this._owner.get().seekToTime(v);
+          },
+          start: () => {
+            this._owner.get().play();
+          }
         }
-      });
+      );
 
       CLog(CLogTypes.info, `Video._setupMediaController ---`, `mediaController.setMediaPlayer(${mediaPlayerControl})`);
       this.mediaController.setMediaPlayer(mediaPlayerControl);

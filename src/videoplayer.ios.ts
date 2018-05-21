@@ -25,9 +25,9 @@ export class Video extends VideoCommon {
 
   constructor() {
     super();
-    this._playerController = new AVPlayerViewController();
+    this._playerController = AVPlayerViewController.new();
     CLog(CLogTypes.info, 'this._playerController', this._playerController);
-    this.player = new AVPlayer();
+    this.player = AVPlayer.new();
     CLog(CLogTypes.info, 'this.player', this.player);
     this._playerController.player = this.player;
     // showsPlaybackControls must be set to false on init to avoid any potential 'Unable to simultaneously satisfy constraints' errors
@@ -75,7 +75,7 @@ export class Video extends VideoCommon {
       // const url = NSURL.URLWithString(this['_url']);
       const url = NSURL.URLWithString(this._url);
       CLog(CLogTypes.info, 'Video._setNativeVideo ---', `url: ${url}`);
-      const options = NSDictionary.dictionaryWithDictionary({
+      const options: any = NSDictionary.dictionaryWithDictionary(<any>{
         AVURLAssetHTTPHeaderFieldsKey: this._headers
       });
       const asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(url, options);
@@ -112,7 +112,7 @@ export class Video extends VideoCommon {
     CLog(CLogTypes.info, 'Video._setNativePlayerSource ---', `nativePlayerSrc: ${nativePlayerSrc}`);
     this._src = nativePlayerSrc;
     const url = NSURL.URLWithString(this._src);
-    this.player = new AVPlayer();
+    this.player = AVPlayer.new();
     this._init();
   }
 
