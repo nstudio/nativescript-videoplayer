@@ -490,6 +490,10 @@ export class Video extends VideoCommon {
       this.player.setScreenOnWhilePlaying(true);
       this.player.prepareAsync();
 
+      this.player.setOnErrorListener(function() {
+        this._owner.get().sendEvent(VideoCommon.errorEvent);
+      });
+
       this._setupMediaController();
     } catch (ex) {
       CLog(CLogTypes.error, `Video._openVideo --- error: ${ex}, stack: ${ex.stack}`);

@@ -171,7 +171,7 @@ export class Video extends VideoCommon {
     if (this.player === null) {
       return false;
     }
-    const result = (this.player.currentTime().value / this.player.currentTime().timescale) * 1000;
+    const result = this.player.currentTime().value / this.player.currentTime().timescale * 1000;
     return result;
   }
 
