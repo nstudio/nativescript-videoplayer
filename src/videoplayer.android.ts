@@ -361,43 +361,43 @@ export class Video extends VideoCommon {
         getAudioSessionId(): number;
       }
 
-      const mediaPlayerControl = new android.widget.MediaController.MediaPlayerControl(
-        <TNSMediaPlayerControlApiLevel18>{
-          canPause: () => {
-            return true;
-          },
-          canSeekBackward: () => {
-            return true;
-          },
-          canSeekForward: () => {
-            return true;
-          },
-          getAudioSessionId: () => {
-            return this._owner.get().audioSession;
-          },
-          getBufferPercentage: () => {
-            return this._owner.get().currentBufferPercentage;
-          },
-          getCurrentPosition: () => {
-            return this._owner.get().getCurrentTime();
-          },
-          getDuration: () => {
-            return this._owner.get().getDuration();
-          },
-          isPlaying: () => {
-            return this._owner.get().isPlaying();
-          },
-          pause: () => {
-            this._owner.get().pause();
-          },
-          seekTo: v => {
-            this._owner.get().seekToTime(v);
-          },
-          start: () => {
-            this._owner.get().play();
-          }
+      const mediaPlayerControl = new android.widget.MediaController.MediaPlayerControl(<
+        TNSMediaPlayerControlApiLevel18
+      >{
+        canPause: () => {
+          return true;
+        },
+        canSeekBackward: () => {
+          return true;
+        },
+        canSeekForward: () => {
+          return true;
+        },
+        getAudioSessionId: () => {
+          return this._owner.get().audioSession;
+        },
+        getBufferPercentage: () => {
+          return this._owner.get().currentBufferPercentage;
+        },
+        getCurrentPosition: () => {
+          return this._owner.get().getCurrentTime();
+        },
+        getDuration: () => {
+          return this._owner.get().getDuration();
+        },
+        isPlaying: () => {
+          return this._owner.get().isPlaying();
+        },
+        pause: () => {
+          this._owner.get().pause();
+        },
+        seekTo: v => {
+          this._owner.get().seekToTime(v);
+        },
+        start: () => {
+          this._owner.get().play();
         }
-      );
+      });
 
       CLog(CLogTypes.info, `Video._setupMediaController ---`, `mediaController.setMediaPlayer(${mediaPlayerControl})`);
       this.mediaController.setMediaPlayer(mediaPlayerControl);
@@ -490,9 +490,14 @@ export class Video extends VideoCommon {
       this.player.setScreenOnWhilePlaying(true);
       this.player.prepareAsync();
 
-      this.player.setOnErrorListener(function() {
-        this._owner.get().sendEvent(VideoCommon.errorEvent);
-      });
+      this.player.setOnErrorListener(
+        new android.media.MediaPlayer.OnErrorListener({
+          onError: (mp, what, extra) => {
+            this._owner.get().sendEvent(VideoCommon.errorEvent, { error: { what: what, extra: extra } });
+            return true;
+          }
+        })
+      );
 
       this._setupMediaController();
     } catch (ex) {
