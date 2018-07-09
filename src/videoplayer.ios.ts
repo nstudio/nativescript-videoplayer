@@ -171,7 +171,7 @@ export class Video extends VideoCommon {
     if (this.player === null) {
       return false;
     }
-    const result = this.player.currentTime().value / this.player.currentTime().timescale * 1000;
+    const result = (this.player.currentTime().value / this.player.currentTime().timescale) * 1000;
     return result;
   }
 
@@ -312,7 +312,8 @@ class PlayerObserverClass extends NSObject {
       const owner = (this as any).owner as Video;
 
       if (owner.player.currentItem.status === AVPlayerItemStatus.Failed) {
-        owner.sendEvent(VideoCommon.errorEvent);
+        const error = new Error();
+        owner.sendEvent(VideoCommon.errorEvent, { error: error, stack: error.stack });
       }
 
       if (owner.player && owner.player.currentItem.status === AVPlayerItemStatus.ReadyToPlay && !owner.videoLoaded) {
