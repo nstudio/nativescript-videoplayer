@@ -1,17 +1,14 @@
 {
   "nativescript": {
     "id": "org.nativescript.videoplayer",
-    "tns-ios": {
-      "version": "4.0.1"
-    },
     "tns-android": {
-      "version": "4.0.1"
+      "version": "4.1.3"
     }
   },
   "dependencies": {
     "nativescript-theme-core": "~1.0.4",
-    "nativescript-videoplayer": "../src",
     "nativescript-unit-test-runner": "^0.3.4",
+    "nativescript-videoplayer": "file:../src",
     "tns-core-modules": "^4.0.0"
   },
   "devDependencies": {
@@ -39,7 +36,9 @@
     "typescript": "~2.3.0",
     "webpack": "~3.8.1",
     "webpack-bundle-analyzer": "^2.8.2",
-    "webpack-sources": "~1.0.1"
+    "webpack-sources": "~1.0.1",
+    "clean-webpack-plugin": "~0.1.19",
+    "uglifyjs-webpack-plugin": "~1.1.6"
   },
   "scripts": {
     "nuke": "rm -rf hooks node_modules platforms",
