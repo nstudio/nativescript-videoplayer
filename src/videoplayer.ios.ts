@@ -310,6 +310,11 @@ class PlayerObserverClass extends NSObject {
     );
     if (path === 'status') {
       const owner = (this as any).owner as Video;
+
+      if (owner.player.currentItem.status === AVPlayerItemStatus.Failed) {
+        owner.sendEvent(VideoCommon.errorEvent);
+      }
+
       if (owner.player && owner.player.currentItem.status === AVPlayerItemStatus.ReadyToPlay && !owner.videoLoaded) {
         owner.playbackReady();
       }
