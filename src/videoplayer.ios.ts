@@ -312,8 +312,16 @@ class PlayerObserverClass extends NSObject {
       const owner = (this as any).owner as Video;
 
       if (owner.player.currentItem.status === AVPlayerItemStatus.Failed) {
+        const baseError = owner.player.currentItem.error.userInfo.objectForKey(NSUnderlyingErrorKey);
         const error = new Error();
-        owner.sendEvent(VideoCommon.errorEvent, { error: error, stack: error.stack });
+
+        owner.sendEvent(VideoCommon.errorEvent, {
+          error: {
+            code: baseError.code,
+            domain: baseError.domain
+          },
+          stack: error.stack
+        });
       }
 
       if (owner.player && owner.player.currentItem.status === AVPlayerItemStatus.ReadyToPlay && !owner.videoLoaded) {
