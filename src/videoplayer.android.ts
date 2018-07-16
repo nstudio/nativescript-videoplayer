@@ -202,6 +202,13 @@ export class Video extends VideoCommon {
     this.mediaController = null;
   }
 
+  public getVideoSize(): { width: number; height: number } {
+    return {
+      width: this.videoWidth,
+      height: this.videoHeight
+    };
+  }
+
   private release(): void {
     if (this.player !== null) {
       this.mediaState = SURFACE_WAITING;
@@ -446,6 +453,31 @@ export class Video extends VideoCommon {
     this.nativeView.setTransform(txform);
   }
 
+  private _resetAspectRatio() {
+    const viewWidth = this.nativeView.getWidth();
+    const viewHeight = this.nativeView.getHeight();
+    const aspectRatio = this.videoHeight / this.videoWidth;
+
+    let newWidth;
+    let newHeight;
+
+    if (viewHeight > viewWidth * aspectRatio) {
+      newHeight = viewHeight;
+      newWidth = viewHeight * aspectRatio;
+    } else {
+      newHeight = viewWidth / aspectRatio;
+      newWidth = viewWidth;
+    }
+
+    let xoff = (viewWidth - newWidth) / 2;
+    let yoff = (viewHeight - newHeight) / 2;
+
+    let txform = new android.graphics.Matrix();
+    txform.setScale(newWidth / viewWidth, newHeight / viewHeight);
+    txform.postTranslate(xoff, yoff);
+    this.nativeView.setTransform(txform);
+  }
+
   private _openVideo(): void {
     if (
       this._src === null ||
@@ -552,6 +584,16 @@ export class Video extends VideoCommon {
 
       clearInterval(this._playbackTimeObserver);
       this._playbackTimeObserverActive = false;
+    }
+  }
+
+  public setFill(fill: boolean): void {
+    this.fill = fill;
+
+    if (fill) {
+      this._resetAspectRatio();
+    } else {
+      this._setupAspectRatio();
     }
   }
 }

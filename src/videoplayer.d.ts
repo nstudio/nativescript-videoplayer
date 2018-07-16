@@ -155,6 +155,10 @@ export declare class Video extends View {
    */
   stop(): void;
 
+  getVideoSize(): { width: number; height: number };
+
+  setFill(fill: boolean): void;
+
   /**
    * *** IOS ONLY ***
    * Update the video player with an AVAsset file.

@@ -202,6 +202,14 @@ export class Video extends VideoCommon {
     this.player = null;
   }
 
+  public getVideoSize(): { width: number; height: number } {
+    let r = this._playerController.videoBounds;
+    return {
+      width: r.size.width,
+      height: r.size.height
+    };
+  }
+
   private _init() {
     CLog(CLogTypes.info, 'Video._init');
     if (this.controls !== false) {
@@ -302,6 +310,16 @@ export class Video extends VideoCommon {
     this._videoPlaying = true;
     CLog(CLogTypes.info, `Video.playbackStart ---`, 'emitting playbackStartEvent');
     this.sendEvent(VideoCommon.playbackStartEvent);
+  }
+
+  public setFill(fill: boolean): void {
+    this.fill = fill;
+
+    if (fill) {
+      this._playerController.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    } else {
+      this._playerController.videoGravity = AVLayerVideoGravityResizeAspect;
+    }
   }
 }
 
