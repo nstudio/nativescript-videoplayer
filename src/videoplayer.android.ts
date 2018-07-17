@@ -261,7 +261,9 @@ export class Video extends VideoCommon {
 
             this._owner.get().mediaState = SURFACE_READY;
 
-            if (this._owner.get().fill !== true) {
+            if (this._owner.get().fill === true) {
+              this._owner.get()._resetAspectRatio();
+            } else {
               this._owner.get()._setupAspectRatio();
             }
 
@@ -315,7 +317,9 @@ export class Video extends VideoCommon {
                 .get()
                 .nativeView.getSurfaceTexture()
                 .setDefaultBufferSize(this._owner.get().videoWidth, this._owner.get().videoHeight);
-              if (this._owner.get().fill !== true) {
+              if (this._owner.get().fill === true) {
+                this._owner.get()._resetAspectRatio();
+              } else {
                 this._owner.get()._setupAspectRatio();
               }
             }
@@ -456,12 +460,12 @@ export class Video extends VideoCommon {
   private _resetAspectRatio() {
     const viewWidth = this.nativeView.getWidth();
     const viewHeight = this.nativeView.getHeight();
-    const aspectRatio = this.videoHeight / this.videoWidth;
+    const aspectRatio = this.videoWidth / this.videoHeight;
 
     let newWidth;
     let newHeight;
 
-    if (viewHeight > viewWidth * aspectRatio) {
+    if (viewHeight < viewWidth * aspectRatio) {
       newHeight = viewHeight;
       newWidth = viewHeight * aspectRatio;
     } else {
