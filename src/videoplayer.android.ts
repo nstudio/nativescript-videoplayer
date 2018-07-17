@@ -465,13 +465,13 @@ export class Video extends VideoCommon {
     let newWidth;
     let newHeight;
 
-    if (viewHeight < viewWidth * aspectRatio) {
-      newHeight = viewHeight;
-      newWidth = viewHeight * aspectRatio;
-    } else {
-      newHeight = viewWidth / aspectRatio;
-      newWidth = viewWidth;
-    }
+    // if (viewHeight < viewWidth * aspectRatio) {
+    newHeight = viewHeight;
+    newWidth = viewHeight * aspectRatio;
+    // } else {
+    //   newHeight = viewWidth / aspectRatio;
+    //   newWidth = viewWidth;
+    // }
 
     let xoff = (viewWidth - newWidth) / 2;
     let yoff = (viewHeight - newHeight) / 2;
