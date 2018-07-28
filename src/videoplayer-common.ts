@@ -133,6 +133,8 @@ export class VideoCommon extends View {
 
   public fill = false;
 
+  public mode = 'PORTRAIT';
+
   /**
    * Notify events by name and optionally pass data
    */

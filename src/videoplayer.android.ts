@@ -591,13 +591,98 @@ export class Video extends VideoCommon {
     }
   }
 
-  public setFill(fill: boolean): void {
-    this.fill = fill;
+  // public setFill(fill: boolean): void {
+  //   this.fill = fill;
 
-    if (fill) {
-      this._resetAspectRatio();
-    } else {
-      this._setupAspectRatio();
+  //   if (fill) {
+  //     this._resetAspectRatio();
+  //   } else {
+  //     this._setupAspectRatio();
+  //   }
+  // }
+
+  setMode(mode: string, fill: boolean) {
+    let viewWidth = this.nativeView.getWidth();
+    let viewHeight = this.nativeView.getHeight();
+
+    if (mode === 'LANDSCAPE') {
+      this.configureTransform(viewWidth, viewHeight, true, fill);
+    } else if (mode === 'PORTRAIT') {
+      this.configureTransform(viewWidth, viewHeight, false, fill);
     }
+
+    this.mode = mode;
+    this.fill = fill;
+  }
+
+  configureTransform(viewWidth, viewHeight, isLandscape, fill) {
+    let matrix = new android.graphics.Matrix();
+    let viewRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
+    let bufferRect;
+
+    if (isLandscape) {
+      bufferRect = new android.graphics.RectF(0, 0, viewHeight, viewWidth);
+    } else {
+      bufferRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
+    }
+
+    let centerX = viewRect.centerX();
+    let centerY = viewRect.centerY();
+
+    let scaleX, scaleY;
+
+    let currentHeight = (viewWidth * this.videoHeight) / this.videoWidth;
+    let currentWidth = viewWidth;
+
+    if (isLandscape) {
+      if (fill) {
+        scaleX = viewHeight / currentHeight;
+        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / currentWidth;
+
+        if (scaleY * currentWidth < viewWidth) {
+          scaleY = viewWidth / currentWidth;
+          scaleX = (scaleY * currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
+        } else if (scaleX * currentHeight < viewHeight) {
+          scaleX = viewHeight / currentHeight;
+          scaleY = (scaleX * currentHeight * this.videoHeight) / this.videoWidth / currentWidth;
+        }
+      } else {
+        scaleX = viewHeight / currentHeight;
+        scaleY = (scaleX * currentHeight * this.videoHeight) / this.videoWidth / currentWidth;
+
+        if (scaleY * currentWidth > viewWidth) {
+          scaleY = viewWidth / currentWidth;
+          scaleX = (currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
+        }
+      }
+    } else {
+      if (fill) {
+        scaleX = viewWidth / currentWidth;
+        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / viewHeight;
+
+        if (scaleY * currentHeight < viewHeight) {
+          scaleY = viewHeight / currentHeight;
+          scaleX = (scaleY * currentHeight * this.videoWidth) / this.videoHeight / currentWidth;
+        } else if (scaleX * currentWidth < viewWidth) {
+          scaleX = viewWidth / currentWidth;
+          scaleY = (scaleX * currentWidth * this.videoHeight) / this.videoWidth / currentHeight;
+        }
+      } else {
+        scaleX = viewWidth / currentWidth;
+        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / viewHeight;
+      }
+    }
+
+    bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+    matrix.setRectToRect(viewRect, bufferRect, android.graphics.Matrix.ScaleToFit.CENTER);
+    matrix.postScale(scaleX, scaleY, centerX, centerY);
+
+    if (isLandscape) {
+      matrix.postRotate(90, centerX, centerY);
+    } else {
+      matrix.postRotate(0, centerX, centerY);
+    }
+
+    this.nativeView.setTransform(matrix);
   }
 }

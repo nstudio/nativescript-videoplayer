@@ -157,7 +157,9 @@ export declare class Video extends View {
 
   getVideoSize(): { width: number; height: number };
 
-  setFill(fill: boolean): void;
+  // setFill(fill: boolean): void;
+
+  setMode(mode: string, fill: boolean): void;
 
   /**
    * *** IOS ONLY ***
