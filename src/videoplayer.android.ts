@@ -493,7 +493,10 @@ export class Video extends VideoCommon {
       this.player.setOnErrorListener(
         new android.media.MediaPlayer.OnErrorListener({
           onError: (mp, what, extra) => {
-            this._owner.get().sendEvent(VideoCommon.errorEvent, { error: { what: what, extra: extra } });
+            const error = new Error();
+            this._owner
+              .get()
+              .sendEvent(VideoCommon.errorEvent, { error: { what: what, extra: extra }, stack: error.stack });
             return true;
           }
         })
