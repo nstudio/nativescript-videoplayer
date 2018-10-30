@@ -202,6 +202,13 @@ export class Video extends VideoCommon {
     this.mediaController = null;
   }
 
+  public getVideoSize(): { width: number; height: number } {
+    return {
+      width: this.videoWidth,
+      height: this.videoHeight
+    };
+  }
+
   private release(): void {
     if (this.player !== null) {
       this.mediaState = SURFACE_WAITING;
@@ -254,7 +261,9 @@ export class Video extends VideoCommon {
 
             this._owner.get().mediaState = SURFACE_READY;
 
-            if (this._owner.get().fill !== true) {
+            if (this._owner.get().fill === true) {
+              this._owner.get()._resetAspectRatio();
+            } else {
               this._owner.get()._setupAspectRatio();
             }
 
@@ -308,7 +317,9 @@ export class Video extends VideoCommon {
                 .get()
                 .nativeView.getSurfaceTexture()
                 .setDefaultBufferSize(this._owner.get().videoWidth, this._owner.get().videoHeight);
-              if (this._owner.get().fill !== true) {
+              if (this._owner.get().fill === true) {
+                this._owner.get()._resetAspectRatio();
+              } else {
                 this._owner.get()._setupAspectRatio();
               }
             }
@@ -446,6 +457,31 @@ export class Video extends VideoCommon {
     this.nativeView.setTransform(txform);
   }
 
+  private _resetAspectRatio() {
+    const viewWidth = this.nativeView.getWidth();
+    const viewHeight = this.nativeView.getHeight();
+    const aspectRatio = this.videoWidth / this.videoHeight;
+
+    let newWidth;
+    let newHeight;
+
+    // if (viewHeight < viewWidth * aspectRatio) {
+    newHeight = viewHeight;
+    newWidth = viewHeight * aspectRatio;
+    // } else {
+    //   newHeight = viewWidth / aspectRatio;
+    //   newWidth = viewWidth;
+    // }
+
+    let xoff = (viewWidth - newWidth) / 2;
+    let yoff = (viewHeight - newHeight) / 2;
+
+    let txform = new android.graphics.Matrix();
+    txform.setScale(newWidth / viewWidth, newHeight / viewHeight);
+    txform.postTranslate(xoff, yoff);
+    this.nativeView.setTransform(txform);
+  }
+
   private _openVideo(): void {
     if (
       this._src === null ||
@@ -556,5 +592,100 @@ export class Video extends VideoCommon {
       clearInterval(this._playbackTimeObserver);
       this._playbackTimeObserverActive = false;
     }
+  }
+
+  // public setFill(fill: boolean): void {
+  //   this.fill = fill;
+
+  //   if (fill) {
+  //     this._resetAspectRatio();
+  //   } else {
+  //     this._setupAspectRatio();
+  //   }
+  // }
+
+  setMode(mode: string, fill: boolean) {
+    let viewWidth = this.nativeView.getWidth();
+    let viewHeight = this.nativeView.getHeight();
+
+    if (mode === 'LANDSCAPE') {
+      this.configureTransform(viewWidth, viewHeight, true, fill);
+    } else if (mode === 'PORTRAIT') {
+      this.configureTransform(viewWidth, viewHeight, false, fill);
+    }
+
+    this.mode = mode;
+    this.fill = fill;
+  }
+
+  configureTransform(viewWidth, viewHeight, isLandscape, fill) {
+    let matrix = new android.graphics.Matrix();
+    let viewRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
+    let bufferRect;
+
+    if (isLandscape) {
+      bufferRect = new android.graphics.RectF(0, 0, viewHeight, viewWidth);
+    } else {
+      bufferRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
+    }
+
+    let centerX = viewRect.centerX();
+    let centerY = viewRect.centerY();
+
+    let scaleX, scaleY;
+
+    let currentHeight = (viewWidth * this.videoHeight) / this.videoWidth;
+    let currentWidth = viewWidth;
+
+    if (isLandscape) {
+      if (fill) {
+        scaleX = viewHeight / currentHeight;
+        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / currentWidth;
+
+        if (scaleY * currentWidth < viewWidth) {
+          scaleY = viewWidth / currentWidth;
+          scaleX = (scaleY * currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
+        } else if (scaleX * currentHeight < viewHeight) {
+          scaleX = viewHeight / currentHeight;
+          scaleY = (scaleX * currentHeight * this.videoHeight) / this.videoWidth / currentWidth;
+        }
+      } else {
+        scaleX = viewHeight / currentHeight;
+        scaleY = (scaleX * currentHeight * this.videoHeight) / this.videoWidth / currentWidth;
+
+        if (scaleY * currentWidth > viewWidth) {
+          scaleY = viewWidth / currentWidth;
+          scaleX = (currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
+        }
+      }
+    } else {
+      if (fill) {
+        scaleY = 1;
+        scaleX = (viewHeight * this.videoWidth) / this.videoHeight / currentWidth;
+        // if (scaleY * currentHeight < viewHeight) {
+        //     scaleY = viewHeight / currentHeight;
+        //     scaleX = (scaleY * currentHeight * this.videoWidth / this.videoHeight) / currentWidth;
+        // }
+        // else if (scaleX * currentWidth < viewWidth) {
+        //     scaleX = viewWidth / currentWidth;
+        //     scaleY = (scaleX * currentWidth * this.videoHeight / this.videoWidth) / currentHeight;
+        // }
+      } else {
+        scaleX = viewWidth / currentWidth;
+        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / viewHeight;
+      }
+    }
+
+    bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+    matrix.setRectToRect(viewRect, bufferRect, android.graphics.Matrix.ScaleToFit.CENTER);
+    matrix.postScale(scaleX, scaleY, centerX, centerY);
+
+    if (isLandscape) {
+      matrix.postRotate(90, centerX, centerY);
+    } else {
+      matrix.postRotate(0, centerX, centerY);
+    }
+
+    this.nativeView.setTransform(matrix);
   }
 }
