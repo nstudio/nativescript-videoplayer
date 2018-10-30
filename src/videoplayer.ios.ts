@@ -1,7 +1,7 @@
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
 
 import * as application from 'tns-core-modules/application';
-import { VideoCommon, headersProperty, videoSourceProperty, CLog, CLogTypes } from './videoplayer-common';
+import { CLog, CLogTypes, headersProperty, VideoCommon, videoSourceProperty } from './videoplayer-common';
 
 declare const NSMutableDictionary;
 
@@ -318,23 +318,23 @@ export class Video extends VideoCommon {
     if (this.mode !== mode) {
       let transform = CGAffineTransformIdentity;
 
-      if (mode == 'LANDSCAPE') {
+      if (mode === 'LANDSCAPE') {
         transform = CGAffineTransformRotate(transform, (90 * 3.14159265358979) / 180);
         this._playerController.view.transform = transform;
 
-        var newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.width, this.nativeView.bounds.size.height);
+        const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.width, this.nativeView.bounds.size.height);
         this.nativeView.frame = newFrame;
-      } else if (this.mode != mode && mode == 'PORTRAIT') {
+      } else if (this.mode !== mode && mode === 'PORTRAIT') {
         transform = CGAffineTransformRotate(transform, (0 * 3.14159265358979) / 180);
         this._playerController.view.transform = transform;
-        var newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.height, this.nativeView.bounds.size.width);
+        const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.height, this.nativeView.bounds.size.width);
         this.nativeView.frame = newFrame;
       }
 
       this.mode = mode;
     }
 
-    if (this.fill != fill) {
+    if (this.fill !== fill) {
       if (fill) {
         this._playerController.videoGravity = AVLayerVideoGravityResizeAspectFill;
       } else {
