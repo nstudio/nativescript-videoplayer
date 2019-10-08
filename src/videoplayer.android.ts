@@ -592,7 +592,11 @@ export class Video extends VideoCommon {
       if (this.player !== null) {
         const _milliseconds = this.player.getCurrentPosition();
         CLog(CLogTypes.info, 'Video._removePlaybackTimeObserver', 'emitting currentTimeUpdatedEvent');
-        this.sendEvent(VideoCommon.currentTimeUpdatedEvent, { currentPosition: _milliseconds });
+        this.notify({
+          eventName: VideoCommon.currentTimeUpdatedEvent,
+          object: this,
+          position: _milliseconds
+        });
       }
 
       clearInterval(this._playbackTimeObserver);
