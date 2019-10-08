@@ -105,8 +105,9 @@ export declare class Video extends View {
   /**
    * Seek the video to a time.
    * @param {number} time - Time of the video to seek to in milliseconds.
+   * @param {options} SeekToTimeOptions - Additional time seeking options
    */
-  seekToTime(time: number): void;
+  seekToTime(time: number, options?: SeekToTimeOptions): void;
 
   /**
    * Returns the current time of the video duration in milliseconds.
@@ -200,4 +201,13 @@ export interface IVideoPlayerEvents {
   playbackStartEvent: any;
   seekToTimeCompleteEvent: any;
   currentTimeUpdatedEvent: any;
+}
+
+export interface SeekToTimeOptions {
+  /**
+   * Android MediaPlayer time seek mode
+   * Changing this only affects API Version >= 26
+   * @default android.media.MediaPlayer.SEEK_PREVIOUS_SYNC
+   */
+  androidSeekMode?: number;
 }

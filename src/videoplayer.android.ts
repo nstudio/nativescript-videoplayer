@@ -2,7 +2,7 @@
 
 import * as utils from 'tns-core-modules/utils/utils';
 import { setInterval, clearInterval } from 'tns-core-modules/timer';
-import { VideoCommon, headersProperty, videoSourceProperty, CLog, CLogTypes } from './videoplayer-common';
+import { VideoCommon, headersProperty, videoSourceProperty, CLog, CLogTypes, SeekToTimeOptions } from './videoplayer-common';
 
 const STATE_IDLE = 0;
 const STATE_PLAYING = 1;
@@ -156,14 +156,20 @@ export class Video extends VideoCommon {
     this.release();
   }
 
-  public seekToTime(ms: number): void {
+  public seekToTime(ms: number, options?: SeekToTimeOptions): void {
     if (!this.player) {
       this.preSeekTime = ms;
       return;
     } else {
       this.preSeekTime = -1;
     }
-    this.player.seekTo(ms);
+    if (android.os.Build.VERSION.SDK_INT >= 26) {
+      // SEEK_PREVIOUS_SYNC is the default
+      const seekMode = options && options.androidSeekMode != null ? options.androidSeekMode : (android.media.MediaPlayer as any).SEEK_PREVIOUS_SYNC;
+      (this.player as any).seekTo(ms, seekMode);
+    } else {
+      this.player.seekTo(ms);
+    }
     CLog(CLogTypes.info, 'Video.play ---  emitting seekToTimeCompleteEvent');
     this.sendEvent(VideoCommon.seekToTimeCompleteEvent, { time: ms });
   }

@@ -1,7 +1,7 @@
 /// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
 
 import * as application from 'tns-core-modules/application';
-import { CLog, CLogTypes, headersProperty, VideoCommon, videoSourceProperty } from './videoplayer-common';
+import { CLog, CLogTypes, headersProperty, VideoCommon, videoSourceProperty, SeekToTimeOptions } from './videoplayer-common';
 
 declare const NSMutableDictionary;
 
@@ -151,7 +151,7 @@ export class Video extends VideoCommon {
     }
   }
 
-  public seekToTime(ms: number) {
+  public seekToTime(ms: number, options?: SeekToTimeOptions) {
     CLog(CLogTypes.info, 'Video.seekToTime ---', `ms: ${ms}`);
     const seconds = ms / 1000.0;
     const time = CMTimeMakeWithSeconds(seconds, this.player.currentTime().timescale);
