@@ -7,6 +7,10 @@ export class VideoPlayerUtil {
   public static debug: boolean = false;
 }
 
+export interface SeekToTimeOptions {
+  androidSeekMode?: number;
+}
+
 export enum CLogTypes {
   info,
   warning,
