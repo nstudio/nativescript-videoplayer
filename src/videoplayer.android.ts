@@ -69,7 +69,13 @@ export class Video extends VideoCommon {
             'SurfaceTextureListener.onSurfaceTextureSizeChanged ---',
             `surface: ${surface}, width: ${width}, height: ${height}`
           );
-          // do nothing
+
+          // resize video according to texture size changes
+          if (this._owner.get().fill === true) {
+            this._owner.get()._resetAspectRatio();
+          } else {
+            this._owner.get()._setupAspectRatio();
+          }
         },
 
         onSurfaceTextureAvailable: (surface, width, height) => {
