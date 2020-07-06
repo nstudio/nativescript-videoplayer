@@ -1,7 +1,14 @@
-import { Property, View, booleanConverter } from 'tns-core-modules/ui/core/view';
-import { isString } from 'tns-core-modules/utils/types';
-import { isFileOrResourcePath } from 'tns-core-modules/utils/utils';
-import { VideoSource, fromFileOrResource, fromNativeSource, fromUrl } from './video-source/video-source';
+import {
+  booleanConverter, Property,
+  View
+} from '@nativescript/core/ui/core/view';
+import { isString } from '@nativescript/core/utils/types';
+import { isFileOrResourcePath } from '@nativescript/core/utils/utils';
+import {
+  fromFileOrResource,
+  fromNativeSource,
+  fromUrl, VideoSource
+} from './video-source/video-source';
 
 export class VideoPlayerUtil {
   public static debug: boolean = false;
@@ -250,9 +257,8 @@ function onHeadersPropertyChanged(view, oldValue, newValue) {
 
   if (oldValue !== newValue) {
     if (video.src) {
-      let src = video.src;
       onSrcPropertyChanged(view, null, null);
-      onSrcPropertyChanged(view, null, src);
+      onSrcPropertyChanged(view, null, video.src);
     }
   }
 }
