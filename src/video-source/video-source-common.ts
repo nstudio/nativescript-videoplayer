@@ -1,4 +1,7 @@
-import { RESOURCE_PREFIX, isFileOrResourcePath as isFileOrResourcePathCore } from 'tns-core-modules/utils/utils';
+import {
+  isFileOrResourcePath as isFileOrResourcePathCore,
+  RESOURCE_PREFIX
+} from '@nativescript/core/utils/utils';
 import { VideoSource } from './video-source';
 
 export function fromResource(name: string): VideoSource {

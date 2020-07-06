@@ -1,5 +1,5 @@
-import * as fs from 'tns-core-modules/file-system';
-import { isString } from 'tns-core-modules/utils/types';
+import * as fs from '@nativescript/core/file-system';
+import { isString } from '@nativescript/core/utils/types';
 import { CLog, CLogTypes } from '../videoplayer-common';
 
 // leave the export so the functions in common are exported
@@ -12,7 +12,10 @@ export class VideoSource {
 
   public loadFromResource(name: string): boolean {
     CLog(CLogTypes.info, `VideoSource.loadFromResource --- name ${name}`);
-    const videoURL = NSBundle.mainBundle.URLForResourceWithExtension(name, null);
+    const videoURL = NSBundle.mainBundle.URLForResourceWithExtension(
+      name,
+      null
+    );
     const player = AVPlayerItem.playerItemWithURL(videoURL);
     this.ios = player;
     return this.ios != null;
@@ -23,7 +26,10 @@ export class VideoSource {
     let fileName = isString(path) ? path.trim() : '';
 
     if (fileName.indexOf('~/') === 0) {
-      fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace('~/', ''));
+      fileName = fs.path.join(
+        fs.knownFolders.currentApp().path,
+        fileName.replace('~/', '')
+      );
       CLog(CLogTypes.info, `VideoSource.loadFromFile --- fileName ${fileName}`);
     }
 

@@ -4,8 +4,8 @@
 <h4 align="center">A NativeScript plugin to provide the ability to play local and remote videos.</h4>
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/nativescript-videoplayer">
-        <img src="https://img.shields.io/npm/v/nativescript-videoplayer.svg" alt="npm">
+    <a href="https://www.npmjs.com/package/@nstudio/nativescript-videoplayer">
+        <img src="https://github.com/nstudio/nativescript-videoplayer/workflows/Build%20CI/badge.svg" alt="Action Build">
     </a>
     <a href="https://www.npmjs.com/package/nativescript-videoplayer">
         <img src="https://img.shields.io/npm/dt/nativescript-videoplayer.svg?label=npm%20downloads" alt="npm">
@@ -13,15 +13,7 @@
     <a href="https://github.com/bradmartin/nativescript-videoplayer/stargazers">
         <img src="https://img.shields.io/github/stars/bradmartin/nativescript-videoplayer.svg" alt="stars">
     </a>
-     <a href="https://github.com/bradmartin/nativescript-videoplayer/network">
-        <img src="https://img.shields.io/github/forks/bradmartin/nativescript-videoplayer.svg" alt="forks">
-    </a>
-    <a href="https://github.com/bradmartin/nativescript-videoplayer/blob/master/src/LICENSE.md">
-        <img src="https://img.shields.io/github/license/bradmartin/nativescript-videoplayer.svg" alt="license">
-    </a>
-    <a href="https://paypal.me/bradwayne88">
-        <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" alt="donate">
-    </a>
+    <br />
     <a href="http://nstudio.io">
       <img src="./screenshots/nstudio-banner.png" alt="nStudio banner">
     </a>
@@ -43,8 +35,8 @@ From your command prompt/terminal go to your app's root folder and execute:
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | [Android MediaPlayer](https://developer.android.com/reference/android/media/MediaPlayer.html) | [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html) |
 
-| Sample 1                            | Sample 2                              |
-| ----------------------------------- | ------------------------------------- |
+| Sample 1                                 | Sample 2                                   |
+| ---------------------------------------- | ------------------------------------------ |
 | ![Sample Usage](./screenshots/video.gif) | ![Sample 2](./screenshots/videoplayer.gif) |
 
 ## Usage
@@ -134,7 +126,7 @@ _With AngularNative you have to explicitly close all components so the correct t
 
 ## Observable Properties
 
-* **currentTime()** - Current time of video.
+- **currentTime()** - Current time of video.
 
 ## Events
 

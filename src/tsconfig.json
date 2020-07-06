@@ -2,26 +2,23 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "removeComments": true,
     "declaration": false,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "skipLibCheck": true,
+    "removeComments": true,
     "noLib": false,
-    "noEmitHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "pretty": false,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
+    "noEmitHelpers": true,
     "noEmitOnError": false,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
-    "noFallthroughCasesInSwitch": true,
-    "lib": ["es6", "dom"],
-    "baseUrl": ".",
-    "paths": {
-      "*": ["./node_modules/tns-core-modules/*", "./node_modules/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "files": [
     "videoplayer-common.ts",
@@ -31,6 +28,6 @@
     "video-source/video-source.ios.ts",
     "video-source/video-source.android.ts"
   ],
-  "exclude": ["node_modules", "platforms"],
+  "exclude": ["node_modules"],
   "compileOnSave": false
 }
