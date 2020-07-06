@@ -4,8 +4,8 @@
 <h4 align="center">A NativeScript plugin to provide the ability to play local and remote videos.</h4>
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/nativescript-videoplayer">
-        <img src="https://img.shields.io/npm/v/nativescript-videoplayer.svg" alt="npm">
+    <a href="https://www.npmjs.com/package/@nstudio/nativescript-videoplayer">
+        <img src="https://github.com/nstudio/nativescript-videoplayer/workflows/Build%20CI/badge.svg" alt="Action Build">
     </a>
     <a href="https://www.npmjs.com/package/nativescript-videoplayer">
         <img src="https://img.shields.io/npm/dt/nativescript-videoplayer.svg?label=npm%20downloads" alt="npm">
