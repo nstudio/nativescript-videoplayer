@@ -1,9 +1,11 @@
-import { Observable } from '@nativescript/core/data/observable';
-import { isAndroid } from '@nativescript/core/platform';
+import {
+  Frame,
+  isAndroid,
+  Observable,
+  Page,
+  StackLayout
+} from '@nativescript/core';
 import { setInterval } from '@nativescript/core/timer';
-import { topmost } from '@nativescript/core/ui/frame';
-import { StackLayout } from '@nativescript/core/ui/layouts/stack-layout';
-import { Page } from '@nativescript/core/ui/page';
 import { Video } from 'nativescript-videoplayer';
 import { Prop } from './prop';
 
@@ -22,31 +24,31 @@ export class HelloWorldModel extends Observable {
     this._videoPlayer.debug = true;
 
     // event listener setup for Video
-    this._videoPlayer.on(Video.finishedEvent, (args) => {
+    this._videoPlayer.on(Video.finishedEvent, args => {
       console.log('Video.finishedEvent executed');
     });
-    this._videoPlayer.on(Video.errorEvent, (args) => {
+    this._videoPlayer.on(Video.errorEvent, args => {
       console.log('Video.errorEvent executed');
     });
-    this._videoPlayer.on(Video.playbackReadyEvent, (args) => {
+    this._videoPlayer.on(Video.playbackReadyEvent, args => {
       console.log('Video.playbackReadyEvent executed');
     });
-    this._videoPlayer.on(Video.playbackStartEvent, (args) => {
+    this._videoPlayer.on(Video.playbackStartEvent, args => {
       console.log('Video.playbackStartEvent executed');
     });
-    this._videoPlayer.on(Video.seekToTimeCompleteEvent, (args) => {
+    this._videoPlayer.on(Video.seekToTimeCompleteEvent, args => {
       console.log('Video.seekToTimeCompleteEvent executed');
     });
 
-    this._videoPlayer.on(Video.pausedEvent, (args) => {
+    this._videoPlayer.on(Video.pausedEvent, args => {
       console.log('Video.pausedEvent');
     });
 
-    this._videoPlayer.on(Video.mutedEvent, (args) => {
+    this._videoPlayer.on(Video.mutedEvent, args => {
       console.log('Video.mutedEvent');
     });
 
-    this._videoPlayer.on(Video.unmutedEvent, (args) => {
+    this._videoPlayer.on(Video.unmutedEvent, args => {
       console.log('Video.unmutedEvent');
     });
 
@@ -115,34 +117,34 @@ export class HelloWorldModel extends Observable {
       .animate({
         rotate: 360,
         duration: 3000,
-        curve: enums.AnimationCurve.spring,
+        curve: enums.AnimationCurve.spring
       })
       .then(() => {
         return this._videoPlayer.animate({
           rotate: 0,
           duration: 3000,
-          curve: enums.AnimationCurve.spring,
+          curve: enums.AnimationCurve.spring
         });
       })
       .then(() => {
         return this._videoPlayer.animate({
           scale: { x: 0.5, y: 0.5 },
           duration: 1000,
-          curve: enums.AnimationCurve.spring,
+          curve: enums.AnimationCurve.spring
         });
       })
       .then(() => {
         return this._videoPlayer.animate({
           scale: { x: 1.5, y: 1.5 },
           duration: 3000,
-          curve: enums.AnimationCurve.spring,
+          curve: enums.AnimationCurve.spring
         });
       })
       .then(() => {
         return this._videoPlayer.animate({
           scale: { x: 1.0, y: 1.0 },
           duration: 3000,
-          curve: enums.AnimationCurve.spring,
+          curve: enums.AnimationCurve.spring
         });
       });
   }
@@ -154,7 +156,7 @@ export class HelloWorldModel extends Observable {
     video.src = '~/videos/small.mp4';
     video.controls = false;
     video.autoplay = true;
-    const stack = topmost().getViewById('emptyStack') as StackLayout;
+    const stack = Frame.topmost().getViewById('emptyStack') as StackLayout;
     stack.addChild(video);
   }
 

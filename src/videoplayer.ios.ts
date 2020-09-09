@@ -1,6 +1,4 @@
-/// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
-
-import * as application from '@nativescript/core/application';
+import { Application } from '@nativescript/core';
 import {
   CLog,
   CLogTypes,
@@ -224,7 +222,7 @@ export class Video extends VideoCommon {
     CLog(CLogTypes.info, 'Video.destroy');
     this._removeStatusObserver(this.player.currentItem);
     if (this._didPlayToEndTimeActive) {
-      application.ios.removeNotificationObserver(
+      Application.ios.removeNotificationObserver(
         this._didPlayToEndTimeObserver,
         AVPlayerItemDidPlayToEndTimeNotification
       );
@@ -273,7 +271,7 @@ export class Video extends VideoCommon {
     }
 
     if (!this._didPlayToEndTimeActive) {
-      this._didPlayToEndTimeObserver = application.ios.addNotificationObserver(
+      this._didPlayToEndTimeObserver = Application.ios.addNotificationObserver(
         AVPlayerItemDidPlayToEndTimeNotification,
         this.AVPlayerItemDidPlayToEndTimeNotification.bind(this)
       );

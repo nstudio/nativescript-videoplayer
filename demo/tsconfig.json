@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "esnext",
     "declaration": false,
-    "removeComments": true,
+    "removeComments": false,
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
+    "lib": ["es6", "dom", "es2017"],
     "pretty": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -21,7 +21,8 @@
     "paths": {
       "*": ["./node_modules/*"],
       "~/*": ["app/*"]
-    }
+    },
+    "moduleResolution": "node"
   },
   "exclude": ["node_modules", "platforms"],
   "compileOnSave": false

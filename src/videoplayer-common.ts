@@ -1,13 +1,9 @@
-import {
-  booleanConverter, Property,
-  View
-} from '@nativescript/core/ui/core/view';
-import { isString } from '@nativescript/core/utils/types';
-import { isFileOrResourcePath } from '@nativescript/core/utils/utils';
+import { booleanConverter, Property, Utils, View } from '@nativescript/core';
 import {
   fromFileOrResource,
   fromNativeSource,
-  fromUrl, VideoSource
+  fromUrl,
+  VideoSource
 } from './video-source/video-source';
 
 export class VideoPlayerUtil {
@@ -17,7 +13,7 @@ export class VideoPlayerUtil {
 export enum CLogTypes {
   info,
   warning,
-  error
+  error,
 }
 
 export const CLog = (type: CLogTypes = 0, ...args) => {
@@ -150,67 +146,67 @@ export class VideoCommon extends View {
       eventName,
       object: this,
       data,
-      message: msg
+      message: msg,
     });
   }
 }
 
 export const srcProperty = new Property<VideoCommon, any>({
   name: 'src',
-  valueChanged: onSrcPropertyChanged
+  valueChanged: onSrcPropertyChanged,
 });
 srcProperty.register(VideoCommon);
 
 export const headersProperty = new Property<VideoCommon, any>({
   name: 'headers',
-  valueChanged: onHeadersPropertyChanged
+  valueChanged: onHeadersPropertyChanged,
 });
 headersProperty.register(VideoCommon);
 
 export const videoSourceProperty = new Property<VideoCommon, any>({
-  name: 'videoSource'
+  name: 'videoSource',
 });
 videoSourceProperty.register(VideoCommon);
 
 export const isLoadingProperty = new Property<VideoCommon, boolean>({
   name: 'isLoading',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 isLoadingProperty.register(VideoCommon);
 
 export const observeCurrentTimeProperty = new Property<VideoCommon, boolean>({
   name: 'observeCurrentTime',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 observeCurrentTimeProperty.register(VideoCommon);
 
 export const autoplayProperty = new Property<VideoCommon, boolean>({
   name: 'autoplay',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 autoplayProperty.register(VideoCommon);
 
 export const controlsProperty = new Property<VideoCommon, boolean>({
   name: 'controls',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 controlsProperty.register(VideoCommon);
 
 export const loopProperty = new Property<VideoCommon, boolean>({
   name: 'loop',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 loopProperty.register(VideoCommon);
 
 export const mutedProperty = new Property<VideoCommon, boolean>({
   name: 'muted',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 mutedProperty.register(VideoCommon);
 
 export const fillProperty = new Property<VideoCommon, boolean>({
   name: 'fill',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 fillProperty.register(VideoCommon);
 
@@ -226,12 +222,12 @@ function onSrcPropertyChanged(view, oldValue, newValue) {
   const video = view;
   let value = newValue;
 
-  if (isString(value)) {
+  if (Utils.isString(value)) {
     value = value.trim();
     video.videoSource = null;
     video['_url'] = value;
     video.isLoadingProperty = true;
-    if (isFileOrResourcePath(value)) {
+    if (Utils.isFileOrResourcePath(value)) {
       video.videoSource = fromFileOrResource(value);
       video.isLoadingProperty = false;
     } else {

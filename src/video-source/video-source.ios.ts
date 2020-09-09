@@ -1,5 +1,4 @@
-import * as fs from '@nativescript/core/file-system';
-import { isString } from '@nativescript/core/utils/types';
+import { knownFolders, path as nsFilePath, Utils } from '@nativescript/core';
 import { CLog, CLogTypes } from '../videoplayer-common';
 
 // leave the export so the functions in common are exported
@@ -23,11 +22,11 @@ export class VideoSource {
 
   public loadFromFile(path: string): boolean {
     CLog(CLogTypes.info, `VideoSource.loadFromFile --- path ${path}`);
-    let fileName = isString(path) ? path.trim() : '';
+    let fileName = Utils.isString(path) ? path.trim() : '';
 
     if (fileName.indexOf('~/') === 0) {
-      fileName = fs.path.join(
-        fs.knownFolders.currentApp().path,
+      fileName = nsFilePath.join(
+        knownFolders.currentApp().path,
         fileName.replace('~/', '')
       );
       CLog(CLogTypes.info, `VideoSource.loadFromFile --- fileName ${fileName}`);

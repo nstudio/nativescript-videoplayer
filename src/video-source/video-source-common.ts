@@ -1,7 +1,4 @@
-import {
-  isFileOrResourcePath as isFileOrResourcePathCore,
-  RESOURCE_PREFIX
-} from '@nativescript/core/utils/utils';
+import { Utils } from '@nativescript/core';
 import { VideoSource } from './video-source';
 
 export function fromResource(name: string): VideoSource {
@@ -29,12 +26,12 @@ export function fromFileOrResource(path: string): VideoSource {
     throw new Error(`Path: ${path} is not a valid file or resource.`);
   }
 
-  if (path.indexOf(RESOURCE_PREFIX) === 0) {
-    return fromResource(path.substr(RESOURCE_PREFIX.length));
+  if (path.indexOf(Utils.RESOURCE_PREFIX) === 0) {
+    return fromResource(path.substr(Utils.RESOURCE_PREFIX.length));
   }
   return fromFile(path);
 }
 
 export function isFileOrResourcePath(path: string): boolean {
-  return isFileOrResourcePathCore(path);
+  return Utils.isFileOrResourcePath(path);
 }

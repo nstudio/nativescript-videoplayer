@@ -1,7 +1,9 @@
-﻿import * as app from '@nativescript/core/application';
-import * as fs from '@nativescript/core/file-system';
-import { isString } from '@nativescript/core/utils/types';
-import * as utils from '@nativescript/core/utils/utils';
+﻿import {
+  Application,
+  knownFolders,
+  path as nsFilePath,
+  Utils
+} from '@nativescript/core';
 import { CLog, CLogTypes } from '../videoplayer-common';
 
 // leave the export so the functions in common are exported
@@ -16,9 +18,9 @@ export class VideoSource {
 
     this.android = null;
 
-    const res = utils.ad.getApplicationContext().getResources();
+    const res = Utils.android.getApplicationContext().getResources();
     if (res) {
-      const packageName = app.android.context.getPackageName();
+      const packageName = Application.android.context.getPackageName();
       const UrlPath = `android.resource://${packageName}/R.raw.${name}`;
       CLog(
         CLogTypes.info,
@@ -40,10 +42,10 @@ export class VideoSource {
 
   public loadFromFile(path: string): boolean {
     CLog(CLogTypes.info, `VideoSource.loadFromFile ---`, `path: ${path}`);
-    let fileName = isString(path) ? path.trim() : '';
+    let fileName = Utils.isString(path) ? path.trim() : '';
     if (fileName.indexOf('~/') === 0) {
-      fileName = fs.path.join(
-        fs.knownFolders.currentApp().path,
+      fileName = nsFilePath.join(
+        knownFolders.currentApp().path,
         fileName.replace('~/', '')
       );
       CLog(

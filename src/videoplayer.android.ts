@@ -1,7 +1,5 @@
-/// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
-
+import { Utils } from '@nativescript/core';
 import { clearInterval, setInterval } from '@nativescript/core/timer';
-import * as utils from '@nativescript/core/utils/utils';
 import {
   CLog,
   CLogTypes,
@@ -240,7 +238,7 @@ export class Video extends VideoCommon {
       if (this._playbackTimeObserverActive) {
         this._removePlaybackTimeObserver();
       }
-      const am = utils.ad
+      const am = Utils.android
         .getApplicationContext()
         .getSystemService(android.content.Context.AUDIO_SERVICE);
       am.abandonAudioFocus(null);
@@ -584,7 +582,7 @@ export class Video extends VideoCommon {
     // clear any old stuff
     this.release();
 
-    const am = utils.ad
+    const am = Utils.android
       .getApplicationContext()
       .getSystemService(android.content.Context.AUDIO_SERVICE);
     am.requestAudioFocus(
@@ -624,7 +622,7 @@ export class Video extends VideoCommon {
       } else {
         const videoUri = android.net.Uri.parse(this._src);
         this.player.setDataSource(
-          utils.ad.getApplicationContext(),
+          Utils.android.getApplicationContext(),
           videoUri,
           this._headers
         );
