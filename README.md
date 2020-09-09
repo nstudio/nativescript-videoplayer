@@ -4,21 +4,12 @@
 <h4 align="center">A NativeScript plugin to provide the ability to play local and remote videos.</h4>
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/@nstudio/nativescript-videoplayer">
-        <img src="https://github.com/nstudio/nativescript-videoplayer/workflows/Build%20CI/badge.svg" alt="Action Build">
+    <a href="https://www.npmjs.com/package/bradmartin/nativescript-videoplayer">
+        <img src="https://github.com/@nstudio/nativescript-videoplayer/workflows/Build%20CI/badge.svg" alt="Action Build">
     </a>
     <a href="https://www.npmjs.com/package/nativescript-videoplayer">
         <img src="https://img.shields.io/npm/dt/nativescript-videoplayer.svg?label=npm%20downloads" alt="npm">
     </a>
-    <a href="https://github.com/bradmartin/nativescript-videoplayer/stargazers">
-        <img src="https://img.shields.io/github/stars/bradmartin/nativescript-videoplayer.svg" alt="stars">
-    </a>
-    <br />
-    <a href="http://nstudio.io">
-      <img src="./screenshots/nstudio-banner.png" alt="nStudio banner">
-    </a>
-    <h5 align="center">Do you need assistance on your project or plugin? Contact the nStudio team anytime at <a href="mailto:team@nstudio.io">team@nstudio.io</a> to get up to speed with the best practices in mobile and web app development.
-    </h5>
 </p>
 
 ---
@@ -27,7 +18,11 @@
 
 From your command prompt/terminal go to your app's root folder and execute:
 
+NativeScript Version 7+:
 `tns plugin add nativescript-videoplayer`
+
+NativeScript version prior to 7:
+`tns plugin add nativescript-videoplayer@4.2.1`
 
 #### Platform controls used:
 
