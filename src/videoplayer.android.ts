@@ -1,5 +1,4 @@
 import { Utils } from '@nativescript/core';
-import { clearInterval, setInterval } from '@nativescript/core/timer';
 import {
   CLog,
   CLogTypes,
@@ -37,9 +36,9 @@ export class Video extends VideoCommon {
     super();
   }
 
-  get android(): any {
-    return this.nativeView;
-  }
+  // get android(): any {
+  //   return this.nativeView;
+  // }
 
   [headersProperty.setNative](value) {
     this._setHeader(value ? value : null);
@@ -65,7 +64,7 @@ export class Video extends VideoCommon {
           );
           this._owner.get().toggleMediaControllerVisibility();
           return false;
-        },
+        }
       })
     );
 
@@ -91,7 +90,7 @@ export class Video extends VideoCommon {
           this._owner.get()._openVideo();
         },
 
-        onSurfaceTextureDestroyed: (surface) => {
+        onSurfaceTextureDestroyed: surface => {
           CLog(
             CLogTypes.info,
             'SurfaceTextureListener.onSurfaceTextureDestroyed ---',
@@ -112,7 +111,7 @@ export class Video extends VideoCommon {
 
         onSurfaceTextureUpdated: (/* surface */) => {
           // do nothing - this gets called a crap ton - so don't add logs
-        },
+        }
       })
     );
 
@@ -225,7 +224,7 @@ export class Video extends VideoCommon {
   public getVideoSize(): { width: number; height: number } {
     return {
       width: this.videoWidth,
-      height: this.videoHeight,
+      height: this.videoHeight
     };
   }
 
@@ -262,7 +261,7 @@ export class Video extends VideoCommon {
     CLog(CLogTypes.info, 'Video._setupMediaPlayerListeners');
     this.player.setOnPreparedListener(
       new android.media.MediaPlayer.OnPreparedListener({
-        onPrepared: (mp) => {
+        onPrepared: mp => {
           CLog(
             CLogTypes.info,
             'MediaPlayer.OnPreparedListener.onPrepared ---',
@@ -319,13 +318,13 @@ export class Video extends VideoCommon {
               mp.setLooping(true);
             }
           }
-        },
+        }
       })
     );
 
     this.player.setOnSeekCompleteListener(
       new android.media.MediaPlayer.OnSeekCompleteListener({
-        onSeekComplete: (mp) => {
+        onSeekComplete: mp => {
           CLog(
             CLogTypes.info,
             'MediaPlayer.OnSeekCompleteListener.onSeekComplete ---',
@@ -338,7 +337,7 @@ export class Video extends VideoCommon {
             );
             this._owner.get().sendEvent(VideoCommon.seekToTimeCompleteEvent);
           }
-        },
+        }
       })
     );
 
@@ -372,13 +371,13 @@ export class Video extends VideoCommon {
               }
             }
           }
-        },
+        }
       })
     );
 
     this.player.setOnCompletionListener(
       new android.media.MediaPlayer.OnCompletionListener({
-        onCompletion: (mp) => {
+        onCompletion: mp => {
           CLog(
             CLogTypes.info,
             'MediaPlayer.OnCompletionListener.onCompletion ---',
@@ -389,7 +388,7 @@ export class Video extends VideoCommon {
             CLog(CLogTypes.info, 'Video.play ---  emitting finishedEvent');
             this._owner.get().sendEvent(VideoCommon.finishedEvent);
           }
-        },
+        }
       })
     );
 
@@ -402,7 +401,7 @@ export class Video extends VideoCommon {
             `mp: ${mp}, percent: ${percent}`
           );
           this._owner.get().currentBufferPercentage = percent;
-        },
+        }
       })
     );
     this.currentBufferPercentage = 0;
@@ -460,12 +459,12 @@ export class Video extends VideoCommon {
           pause: () => {
             this._owner.get().pause();
           },
-          seekTo: (v) => {
+          seekTo: v => {
             this._owner.get().seekToTime(v);
           },
           start: () => {
             this._owner.get().play();
-          },
+          }
         }
       );
 
@@ -639,10 +638,10 @@ export class Video extends VideoCommon {
             const error = new Error();
             this._owner.get().sendEvent(VideoCommon.errorEvent, {
               error: { what: what, extra: extra },
-              stack: error.stack,
+              stack: error.stack
             });
             return true;
-          },
+          }
         })
       );
 
@@ -680,13 +679,13 @@ export class Video extends VideoCommon {
   private _addPlaybackTimeObserver() {
     CLog(CLogTypes.error, `Video._addPlaybackTimeObserver`);
     this._playbackTimeObserverActive = true;
-    this._playbackTimeObserver = setInterval(() => {
+    this._playbackTimeObserver = Utils.setInterval(() => {
       if (this.player.isPlaying) {
         const _milliseconds = this.player.getCurrentPosition();
         this.notify({
           eventName: VideoCommon.currentTimeUpdatedEvent,
           object: this,
-          position: _milliseconds,
+          position: _milliseconds
         });
       }
     }, 500);
@@ -704,11 +703,11 @@ export class Video extends VideoCommon {
           'emitting currentTimeUpdatedEvent'
         );
         this.sendEvent(VideoCommon.currentTimeUpdatedEvent, {
-          currentPosition: _milliseconds,
+          currentPosition: _milliseconds
         });
       }
 
-      clearInterval(this._playbackTimeObserver);
+      Utils.clearInterval(this._playbackTimeObserver);
       this._playbackTimeObserverActive = false;
     }
   }

@@ -88,7 +88,7 @@ export class Video extends VideoCommon {
       const url = NSURL.URLWithString(this._url);
       CLog(CLogTypes.info, 'Video._setNativeVideo ---', `url: ${url}`);
       const options: any = NSDictionary.dictionaryWithDictionary(<any>{
-        AVURLAssetHTTPHeaderFieldsKey: this._headers,
+        AVURLAssetHTTPHeaderFieldsKey: this._headers
       });
       const asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(
         url,
@@ -185,7 +185,7 @@ export class Video extends VideoCommon {
       time,
       kCMTimeZero,
       kCMTimeZero,
-      (isFinished) => {
+      isFinished => {
         CLog(
           CLogTypes.info,
           `Video.seekToTime ---`,
@@ -243,7 +243,7 @@ export class Video extends VideoCommon {
     const r = this._playerController.videoBounds;
     return {
       width: r.size.width,
-      height: r.size.height,
+      height: r.size.height
     };
   }
 
@@ -338,7 +338,7 @@ export class Video extends VideoCommon {
     this._playbackTimeObserver = this.player.addPeriodicTimeObserverForIntervalQueueUsingBlock(
       _interval,
       null,
-      (currentTime) => {
+      currentTime => {
         const _seconds = CMTimeGetSeconds(currentTime);
         const _milliseconds = _seconds * 1000.0;
         CLog(
@@ -349,7 +349,7 @@ export class Video extends VideoCommon {
         this.notify({
           eventName: VideoCommon.currentTimeUpdatedEvent,
           object: this,
-          position: _milliseconds,
+          position: _milliseconds
         });
       }
     );
@@ -440,6 +440,7 @@ export class Video extends VideoCommon {
   }
 }
 
+@NativeClass()
 class PlayerObserverClass extends NSObject {
   observeValueForKeyPathOfObjectChangeContext(
     path: string,
@@ -464,9 +465,9 @@ class PlayerObserverClass extends NSObject {
         owner.sendEvent(VideoCommon.errorEvent, {
           error: {
             code: baseError.code,
-            domain: baseError.domain,
+            domain: baseError.domain
           },
-          stack: error.stack,
+          stack: error.stack
         });
       }
 
