@@ -3,9 +3,9 @@ import {
   isAndroid,
   Observable,
   Page,
-  StackLayout
+  StackLayout,
+  Utils
 } from '@nativescript/core';
-import { setInterval } from '@nativescript/core/timer';
 import { Video } from 'nativescript-videoplayer';
 import { Prop } from './prop';
 
@@ -191,8 +191,8 @@ export class HelloWorldModel extends Observable {
     }
   }
 
-  private trackVideoCurrentPosition(): number {
-    const trackInterval = setInterval(() => {
+  private trackVideoCurrentPosition() {
+    const trackInterval = Utils.setInterval(() => {
       let x, y;
       if (this.completed) {
         x = '';
