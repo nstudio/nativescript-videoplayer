@@ -43,9 +43,9 @@ export class Video extends VideoCommon {
     (this._observer as any).owner = this;
   }
 
-  get ios(): any {
-    return this.nativeView;
-  }
+  // get ios(): any {
+  //   return this.nativeView;
+  // }
 
   [headersProperty.setNative](value) {
     this._setHeader(value ? value : null);
