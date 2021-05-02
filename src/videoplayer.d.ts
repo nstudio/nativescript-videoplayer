@@ -133,6 +133,14 @@ export declare class Video extends View {
   setVolume(volume: number): void;
 
   /**
+   * 
+   * *** ANDROID ONLY ***
+   * Set the playback speed rate.
+   * @param {number} 
+   */
+  changePlayerSpeed(number): void;
+
+  /**
    * Destroy the video player and free up resources.
    */
   destroy(): void;
