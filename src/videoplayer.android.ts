@@ -213,6 +213,12 @@ export class Video extends VideoCommon {
     this.sendEvent(VideoCommon.volumeSetEvent);
   }
 
+  public changePlayerSpeed(speed: number) {
+    this.player.setPlaybackParams(
+      this.player.getPlaybackParams().setSpeed(speed)
+    );
+  }
+
   public destroy() {
     this.release();
     this.src = null;
