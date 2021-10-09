@@ -72,9 +72,9 @@ video.loop = false;
 
 ```TS
 // somewhere at top of your component or bootstrap file
-import { registerElement } from "nativescript-angular/element-registry";
-import { Video } from 'nativescript-videoplayer';
-registerElement("VideoPlayer", () => Video);
+import { registerElement } from '@nativescript/angular';
+import { Video } from '@nstudio/nativescript-exoplayer';
+registerElement('VideoPlayer', () => Video);
 // documentation: https://docs.nativescript.org/angular/plugins/angular-third-party.html#simple-elements
 ```
 
@@ -82,7 +82,7 @@ _With AngularNative you have to explicitly close all components so the correct t
 
 ```XML
   <VideoPlayer
-      src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+      src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
       autoplay="true"
       height="300"></VideoPlayer>
 ```
