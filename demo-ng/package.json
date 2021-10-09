@@ -15,11 +15,13 @@
     "@nativescript/angular": "^12.2.0",
     "@nativescript/core": "~8.1.1",
     "@nativescript/theme": "~3.0.1",
+    "nativescript-videoplayer": "file:../src",
     "rxjs": "~7.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular/compiler-cli": "^12.2.0",
+    "@nativescript/ios": "8.1.0",
     "@nativescript/types": "~8.1.1",
     "@nativescript/webpack": "~5.0.0",
     "@ngtools/webpack": "^12.2.0",

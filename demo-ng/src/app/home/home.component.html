@@ -1,0 +1,33 @@
+<ActionBar title="demo-ng"></ActionBar>
+
+<StackLayout>
+  <VideoPlayer
+    verticalAlignment="top"
+    src="~/assets/Golden_Gate_Bridge.mp4"
+    controls="true"
+    muted="true"
+    backgroundAudio="true"
+    autoplay="true"
+    loop="true"
+    fill="aspectFill"
+    height="30%"
+    width="auto"
+    (loaded)="onVideoLoaded($event)"
+  ></VideoPlayer>
+
+  <GridLayout rows="auto,auto,auto" columns="*,*">
+    <Button row="0" col="0" text="play" (tap)="playVideo()"></Button>
+
+    <Button row="0" col="1" text="pause" (tap)="pauseVideo()"></Button>
+
+    <Button row="1" col="0" text="mute" (tap)="muteVideo()"></Button>
+
+    <Button row="1" col="1" text="unmute" (tap)="unmuteVideo()"></Button>
+
+    <Button row="2" col="0" text="get current time" (tap)="getVideoCurrentTime()"></Button>
+
+    <Button row="2" col="1" text="get duration" (tap)="getVideoDuration()"></Button>
+  </GridLayout>
+
+  <Button text="Go to website" (tap)="openURL('https://www.goldengate.org')"></Button>
+</StackLayout>
