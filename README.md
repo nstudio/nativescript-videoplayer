@@ -73,7 +73,7 @@ video.loop = false;
 ```TS
 // somewhere at top of your component or bootstrap file
 import { registerElement } from '@nativescript/angular';
-import { Video } from '@nstudio/nativescript-exoplayer';
+import { Video } from 'nativescript-videoplayer';
 registerElement('VideoPlayer', () => Video);
 // documentation: https://docs.nativescript.org/angular/plugins/angular-third-party.html#simple-elements
 ```
