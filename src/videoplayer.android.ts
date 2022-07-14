@@ -4,7 +4,8 @@ import {
   CLogTypes,
   headersProperty,
   VideoCommon,
-  videoSourceProperty
+  videoSourceProperty,
+  SeekToTimeOptions
 } from './videoplayer-common';
 
 const STATE_IDLE = 0;
@@ -171,14 +172,20 @@ export class Video extends VideoCommon {
     this.release();
   }
 
-  public seekToTime(ms: number): void {
+  public seekToTime(ms: number, options?: SeekToTimeOptions): void {
     if (!this.player) {
       this.preSeekTime = ms;
       return;
     } else {
       this.preSeekTime = -1;
     }
-    this.player.seekTo(ms);
+    if (android.os.Build.VERSION.SDK_INT >= 26) {
+      // SEEK_PREVIOUS_SYNC is the default
+      const seekMode = options && options.androidSeekMode != null ? options.androidSeekMode : (android.media.MediaPlayer as any).SEEK_PREVIOUS_SYNC;
+      (this.player as any).seekTo(ms, seekMode);
+    } else {
+      this.player.seekTo(ms);
+    }
     CLog(CLogTypes.info, 'Video.play ---  emitting seekToTimeCompleteEvent');
     this.sendEvent(VideoCommon.seekToTimeCompleteEvent, { time: ms });
   }

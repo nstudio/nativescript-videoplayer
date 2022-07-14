@@ -4,7 +4,8 @@ import {
   CLogTypes,
   headersProperty,
   VideoCommon,
-  videoSourceProperty
+  videoSourceProperty,
+  SeekToTimeOptions
 } from './videoplayer-common';
 
 declare const NSMutableDictionary;
@@ -174,7 +175,7 @@ export class Video extends VideoCommon {
     }
   }
 
-  public seekToTime(ms: number) {
+  public seekToTime(ms: number, options?: SeekToTimeOptions) {
     CLog(CLogTypes.info, 'Video.seekToTime ---', `ms: ${ms}`);
     const seconds = ms / 1000.0;
     const time = CMTimeMakeWithSeconds(
