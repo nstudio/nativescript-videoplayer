@@ -41,7 +41,7 @@ export class VideoCommon extends View {
   /**
    * String value for hooking into the errorEvent. This event fires when an error/exception throws in the Video source.
    */
-  public static errorEvent = 'errorEvent';
+  public static errorEvent = 'error';
 
   /**
    * String value for hooking into the finishedEvent. This event fires when the video is ready.
@@ -65,27 +65,27 @@ export class VideoCommon extends View {
   /**
    * String value for hooking into the finishedEvent. This event fires when the video is complete.
    */
-  public static finishedEvent = 'finishedEvent';
+  public static finishedEvent = 'finished';
 
   /**
    * String value for hooking into the mutedEvent. This event fires when video is muted.
    */
-  public static mutedEvent = 'mutedEvent';
+  public static mutedEvent = 'muted';
 
   /**
    * String value for hooking into the unmutedEvent. This event fires when video is unmutedEvent.
    */
-  public static unmutedEvent = 'unmutedEvent';
+  public static unmutedEvent = 'unmuted';
 
   /**
    * String value for hooking into the pausedEvent. This event fires when video is paused.
    */
-  public static pausedEvent = 'pausedEvent';
+  public static pausedEvent = 'paused';
 
   /**
    * String value for hooking into the volumeSetEvent. This event fires when the volume is set.
    */
-  public static volumeSetEvent = 'volumeSetEvent';
+  public static volumeSetEvent = 'volumeSet';
 
   /**
    * The android nativeView for the VideoPlayer. android.view.TextureView.
