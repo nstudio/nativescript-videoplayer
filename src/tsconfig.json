@@ -1,36 +1,34 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "esnext",
     "moduleResolution": "node",
-    "removeComments": true,
     "declaration": false,
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "skipLibCheck": true,
+    "removeComments": true,
     "noLib": false,
-    "noEmitHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "pretty": false,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
+    "noEmitHelpers": true,
     "noEmitOnError": false,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noFallthroughCasesInSwitch": true,
-    "lib": ["es6", "dom"],
-    "baseUrl": ".",
-    "paths": {
-      "*": ["./node_modules/tns-core-modules/*", "./node_modules/*"]
-    }
+    "plugins": [
+      {
+        "transform": "@nativescript/webpack/transformers/ns-transform-native-classes",
+        "type": "raw"
+      }
+    ]
   },
-  "files": [
-    "videoplayer-common.ts",
-    "videoplayer.ios.ts",
-    "videoplayer.android.ts",
-    "video-source/video-source-common.ts",
-    "video-source/video-source.ios.ts",
-    "video-source/video-source.android.ts"
-  ],
-  "exclude": ["node_modules", "platforms"],
+  "exclude": ["node_modules", "demo"],
   "compileOnSave": false
 }

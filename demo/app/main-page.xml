@@ -1,7 +1,10 @@
-<Page 
-  xmlns="http://schemas.nativescript.org/tns.xsd" 
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" 
   xmlns:Video="nativescript-videoplayer" loaded="pageLoaded">
-  <ActionBar title="Native Video" />
+  <ActionBar title="Native Video" icon="">
+    <ActionBar.actionItems>
+      <ActionItem icon="res://nstudio" tap="nStudioIconTap" ios.position="right" />
+    </ActionBar.actionItems>
+  </ActionBar>
   <ScrollView>
     <StackLayout>
       <!--      Copy/Paste the url below to view a remote video file       -->

@@ -3,31 +3,9 @@
 </a>
 <h4 align="center">A NativeScript plugin to provide the ability to play local and remote videos.</h4>
 
-<p align="center">
-    <a href="https://www.npmjs.com/package/nativescript-videoplayer">
-        <img src="https://img.shields.io/npm/v/nativescript-videoplayer.svg" alt="npm">
-    </a>
-    <a href="https://www.npmjs.com/package/nativescript-videoplayer">
-        <img src="https://img.shields.io/npm/dt/nativescript-videoplayer.svg?label=npm%20downloads" alt="npm">
-    </a>
-    <a href="https://github.com/bradmartin/nativescript-videoplayer/stargazers">
-        <img src="https://img.shields.io/github/stars/bradmartin/nativescript-videoplayer.svg" alt="stars">
-    </a>
-     <a href="https://github.com/bradmartin/nativescript-videoplayer/network">
-        <img src="https://img.shields.io/github/forks/bradmartin/nativescript-videoplayer.svg" alt="forks">
-    </a>
-    <a href="https://github.com/bradmartin/nativescript-videoplayer/blob/master/src/LICENSE.md">
-        <img src="https://img.shields.io/github/license/bradmartin/nativescript-videoplayer.svg" alt="license">
-    </a>
-    <a href="https://paypal.me/bradwayne88">
-        <img src="https://img.shields.io/badge/Donate-PayPal-green.svg" alt="donate">
-    </a>
-    <a href="http://nstudio.io">
-      <img src="./screenshots/nstudio-banner.png" alt="nStudio banner">
-    </a>
-    <h5 align="center">Do you need assistance on your project or plugin? Contact the nStudio team anytime at <a href="mailto:team@nstudio.io">team@nstudio.io</a> to get up to speed with the best practices in mobile and web app development.
-    </h5>
-</p>
+![Build CI](https://github.com/nstudio/nativescript-videoplayer/workflows/Build%20CI/badge.svg)
+[![npm](https://img.shields.io/npm/v/nativescript-videoplayer.svg)](https://www.npmjs.com/package/nativescript-videoplayer)
+[![npm](https://img.shields.io/npm/dt/nativescript-videoplayer.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-videoplayer)
 
 ---
 
@@ -35,7 +13,11 @@
 
 From your command prompt/terminal go to your app's root folder and execute:
 
+NativeScript Version 7+:
 `tns plugin add nativescript-videoplayer`
+
+NativeScript version prior to 7:
+`tns plugin add nativescript-videoplayer@4.2.1`
 
 #### Platform controls used:
 
@@ -43,8 +25,8 @@ From your command prompt/terminal go to your app's root folder and execute:
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | [Android MediaPlayer](https://developer.android.com/reference/android/media/MediaPlayer.html) | [iOS AVPlayer](https://developer.apple.com/library/prerelease/ios/documentation/AVFoundation/Reference/AVPlayer_Class/index.html) |
 
-| Sample 1                            | Sample 2                              |
-| ----------------------------------- | ------------------------------------- |
+| Sample 1                                 | Sample 2                                   |
+| ---------------------------------------- | ------------------------------------------ |
 | ![Sample Usage](./screenshots/video.gif) | ![Sample 2](./screenshots/videoplayer.gif) |
 
 ## Usage
@@ -90,9 +72,9 @@ video.loop = false;
 
 ```TS
 // somewhere at top of your component or bootstrap file
-import { registerElement } from "nativescript-angular/element-registry";
-import { Video } from 'nativescript-videoplayer';
-registerElement("VideoPlayer", () => Video);
+import { registerElement } from '@nativescript/angular';
+import { Video } from '@nstudio/nativescript-exoplayer';
+registerElement('VideoPlayer', () => Video);
 // documentation: https://docs.nativescript.org/angular/plugins/angular-third-party.html#simple-elements
 ```
 
@@ -100,7 +82,7 @@ _With AngularNative you have to explicitly close all components so the correct t
 
 ```XML
   <VideoPlayer
-      src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+      src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
       autoplay="true"
       height="300"></VideoPlayer>
 ```
@@ -134,7 +116,7 @@ _With AngularNative you have to explicitly close all components so the correct t
 
 ## Observable Properties
 
-* **currentTime()** - Current time of video.
+- **currentTime()** - Current time of video.
 
 ## Events
 

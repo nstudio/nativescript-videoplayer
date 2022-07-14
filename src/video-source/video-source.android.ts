@@ -1,7 +1,9 @@
-﻿import * as utils from 'tns-core-modules/utils/utils';
-import * as fs from 'tns-core-modules/file-system';
-import * as app from 'tns-core-modules/application';
-import { isString } from 'tns-core-modules/utils/types';
+﻿import {
+  Application,
+  knownFolders,
+  path as nsFilePath,
+  Utils
+} from '@nativescript/core';
 import { CLog, CLogTypes } from '../videoplayer-common';
 
 // leave the export so the functions in common are exported
@@ -16,11 +18,15 @@ export class VideoSource {
 
     this.android = null;
 
-    const res = utils.ad.getApplicationContext().getResources();
+    const res = Utils.android.getApplicationContext().getResources();
     if (res) {
-      const packageName = app.android.context.getPackageName();
+      const packageName = Application.android.context.getPackageName();
       const UrlPath = `android.resource://${packageName}/R.raw.${name}`;
-      CLog(CLogTypes.info, `VideoSource.loadFromResource ---`, `UrlPath: ${UrlPath}`);
+      CLog(
+        CLogTypes.info,
+        `VideoSource.loadFromResource ---`,
+        `UrlPath: ${UrlPath}`
+      );
       this.android = UrlPath;
     }
 
@@ -36,10 +42,17 @@ export class VideoSource {
 
   public loadFromFile(path: string): boolean {
     CLog(CLogTypes.info, `VideoSource.loadFromFile ---`, `path: ${path}`);
-    let fileName = isString(path) ? path.trim() : '';
+    let fileName = Utils.isString(path) ? path.trim() : '';
     if (fileName.indexOf('~/') === 0) {
-      fileName = fs.path.join(fs.knownFolders.currentApp().path, fileName.replace('~/', ''));
-      CLog(CLogTypes.info, `VideoSource.loadFromFile ---`, `fileName: ${fileName}`);
+      fileName = nsFilePath.join(
+        knownFolders.currentApp().path,
+        fileName.replace('~/', '')
+      );
+      CLog(
+        CLogTypes.info,
+        `VideoSource.loadFromFile ---`,
+        `fileName: ${fileName}`
+      );
     }
 
     this.android = fileName;
@@ -47,7 +60,11 @@ export class VideoSource {
   }
 
   public setNativeSource(source: any): boolean {
-    CLog(CLogTypes.info, `VideoSource.setNativeSource ---`, `source: ${source}`);
+    CLog(
+      CLogTypes.info,
+      `VideoSource.setNativeSource ---`,
+      `source: ${source}`
+    );
     this.android = source;
     return source != null;
   }

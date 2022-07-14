@@ -1,7 +1,12 @@
-/// <reference path="./node_modules/tns-platform-declarations/ios.d.ts" />
-
-import * as application from 'tns-core-modules/application';
-import { CLog, CLogTypes, headersProperty, VideoCommon, videoSourceProperty, SeekToTimeOptions } from './videoplayer-common';
+import { Application } from '@nativescript/core';
+import {
+  CLog,
+  CLogTypes,
+  headersProperty,
+  VideoCommon,
+  videoSourceProperty,
+  SeekToTimeOptions
+} from './videoplayer-common';
 
 declare const NSMutableDictionary;
 
@@ -39,9 +44,9 @@ export class Video extends VideoCommon {
     (this._observer as any).owner = this;
   }
 
-  get ios(): any {
-    return this.nativeView;
-  }
+  // get ios(): any {
+  //   return this.nativeView;
+  // }
 
   [headersProperty.setNative](value) {
     this._setHeader(value ? value : null);
@@ -55,7 +60,11 @@ export class Video extends VideoCommon {
     CLog(CLogTypes.info, 'Video._setHeader ---', `headers: ${headers}`);
     if (headers && headers.size > 0) {
       this._headers = new NSMutableDictionary();
-      CLog(CLogTypes.info, `Video._setHeader ---`, `this._headers: ${this._headers}`);
+      CLog(
+        CLogTypes.info,
+        `Video._setHeader ---`,
+        `this._headers: ${this._headers}`
+      );
       headers.forEach((value: string, key: string) => {
         this._headers.setValueForKey(value, key);
       });
@@ -67,7 +76,11 @@ export class Video extends VideoCommon {
   }
 
   public _setNativeVideo(nativeVideoPlayer: any) {
-    CLog(CLogTypes.info, 'Video._setNativeVideo ---', `nativeVideoPlayer: ${nativeVideoPlayer}`);
+    CLog(
+      CLogTypes.info,
+      'Video._setNativeVideo ---',
+      `nativeVideoPlayer: ${nativeVideoPlayer}`
+    );
     // if (this['_url'] && this._headers && this._headers.count > 0) {
     if (this._url && this._headers && this._headers.count > 0) {
       // adding headers if exist when loading video from URL
@@ -78,7 +91,10 @@ export class Video extends VideoCommon {
       const options: any = NSDictionary.dictionaryWithDictionary(<any>{
         AVURLAssetHTTPHeaderFieldsKey: this._headers
       });
-      const asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(url, options);
+      const asset: AVURLAsset = AVURLAsset.alloc().initWithURLOptions(
+        url,
+        options
+      );
       const item: AVPlayerItem = AVPlayerItem.playerItemWithAsset(asset);
       nativeVideoPlayer = item;
     }
@@ -103,13 +119,21 @@ export class Video extends VideoCommon {
   }
 
   public updateAsset(nativeVideoAsset: AVAsset) {
-    CLog(CLogTypes.info, 'Video.updateAsset ---', `nativeVideoAsset: ${nativeVideoAsset}`);
+    CLog(
+      CLogTypes.info,
+      'Video.updateAsset ---',
+      `nativeVideoAsset: ${nativeVideoAsset}`
+    );
     const newPlayerItem = AVPlayerItem.playerItemWithAsset(nativeVideoAsset);
     this._setNativeVideo(newPlayerItem);
   }
 
   public _setNativePlayerSource(nativePlayerSrc: string) {
-    CLog(CLogTypes.info, 'Video._setNativePlayerSource ---', `nativePlayerSrc: ${nativePlayerSrc}`);
+    CLog(
+      CLogTypes.info,
+      'Video._setNativePlayerSource ---',
+      `nativePlayerSrc: ${nativePlayerSrc}`
+    );
     this._src = nativePlayerSrc;
     const url = NSURL.URLWithString(this._src);
     this.player = AVPlayer.new();
@@ -154,11 +178,23 @@ export class Video extends VideoCommon {
   public seekToTime(ms: number, options?: SeekToTimeOptions) {
     CLog(CLogTypes.info, 'Video.seekToTime ---', `ms: ${ms}`);
     const seconds = ms / 1000.0;
-    const time = CMTimeMakeWithSeconds(seconds, this.player.currentTime().timescale);
-    this.player.seekToTimeToleranceBeforeToleranceAfterCompletionHandler(time, kCMTimeZero, kCMTimeZero, isFinished => {
-      CLog(CLogTypes.info, `Video.seekToTime ---`, 'emitting seekToTimeCompleteEvent');
-      this.sendEvent(VideoCommon.seekToTimeCompleteEvent, { time: ms });
-    });
+    const time = CMTimeMakeWithSeconds(
+      seconds,
+      this.player.currentTime().timescale
+    );
+    this.player.seekToTimeToleranceBeforeToleranceAfterCompletionHandler(
+      time,
+      kCMTimeZero,
+      kCMTimeZero,
+      isFinished => {
+        CLog(
+          CLogTypes.info,
+          `Video.seekToTime ---`,
+          'emitting seekToTimeCompleteEvent'
+        );
+        this.sendEvent(VideoCommon.seekToTimeCompleteEvent, { time: ms });
+      }
+    );
   }
 
   public getDuration(): number {
@@ -171,7 +207,9 @@ export class Video extends VideoCommon {
     if (this.player === null) {
       return false;
     }
-    const result = (this.player.currentTime().value / this.player.currentTime().timescale) * 1000;
+    const result =
+      (this.player.currentTime().value / this.player.currentTime().timescale) *
+      1000;
     return result;
   }
 
@@ -185,7 +223,7 @@ export class Video extends VideoCommon {
     CLog(CLogTypes.info, 'Video.destroy');
     this._removeStatusObserver(this.player.currentItem);
     if (this._didPlayToEndTimeActive) {
-      application.ios.removeNotificationObserver(
+      Application.ios.removeNotificationObserver(
         this._didPlayToEndTimeObserver,
         AVPlayerItemDidPlayToEndTimeNotification
       );
@@ -203,7 +241,7 @@ export class Video extends VideoCommon {
   }
 
   public getVideoSize(): { width: number; height: number } {
-    let r = this._playerController.videoBounds;
+    const r = this._playerController.videoBounds;
     return {
       width: r.size.width,
       height: r.size.height
@@ -222,7 +260,10 @@ export class Video extends VideoCommon {
 
     this._playerController.player = this.player;
 
-    if (isNaN(parseInt(this.width.toString(), 10)) || isNaN(parseInt(this.height.toString(), 10))) {
+    if (
+      isNaN(parseInt(this.width.toString(), 10)) ||
+      isNaN(parseInt(this.height.toString(), 10))
+    ) {
       this.requestLayout();
     }
 
@@ -231,7 +272,7 @@ export class Video extends VideoCommon {
     }
 
     if (!this._didPlayToEndTimeActive) {
-      this._didPlayToEndTimeObserver = application.ios.addNotificationObserver(
+      this._didPlayToEndTimeObserver = Application.ios.addNotificationObserver(
         AVPlayerItemDidPlayToEndTimeNotification,
         this.AVPlayerItemDidPlayToEndTimeNotification.bind(this)
       );
@@ -240,11 +281,22 @@ export class Video extends VideoCommon {
   }
 
   private AVPlayerItemDidPlayToEndTimeNotification(notification: any) {
-    CLog(CLogTypes.info, 'Video.AVPlayerItemDidPlayToEndTimeNotification ---', `notification: ${notification}`);
-    if (this.player.currentItem && this.player.currentItem === notification.object) {
+    CLog(
+      CLogTypes.info,
+      'Video.AVPlayerItemDidPlayToEndTimeNotification ---',
+      `notification: ${notification}`
+    );
+    if (
+      this.player.currentItem &&
+      this.player.currentItem === notification.object
+    ) {
       // This will match exactly to the object from the notification so can ensure only looping and finished event for the video that has finished.
       // Notification is structured like so: NSConcreteNotification 0x61000024f690 {name = AVPlayerItemDidPlayToEndTimeNotification; object = <AVPlayerItem: 0x600000204190, asset = <AVURLAsset: 0x60000022b7a0, URL = https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4>>}
-      CLog(CLogTypes.info, 'Video.AVPlayerItemDidPlayToEndTimeNotification ---', 'emmitting finishedEvent');
+      CLog(
+        CLogTypes.info,
+        'Video.AVPlayerItemDidPlayToEndTimeNotification ---',
+        'emmitting finishedEvent'
+      );
       this.sendEvent(VideoCommon.finishedEvent);
       this._videoFinished = true;
       if (this.loop === true && this.player !== null) {
@@ -256,13 +308,26 @@ export class Video extends VideoCommon {
   }
 
   private _addStatusObserver(currentItem) {
-    CLog(CLogTypes.info, 'Video._addStatusObserver ---', `currentItem: ${currentItem}`);
+    CLog(
+      CLogTypes.info,
+      'Video._addStatusObserver ---',
+      `currentItem: ${currentItem}`
+    );
     this._observerActive = true;
-    currentItem.addObserverForKeyPathOptionsContext(this._observer, 'status', 0, null);
+    currentItem.addObserverForKeyPathOptionsContext(
+      this._observer,
+      'status',
+      0,
+      null
+    );
   }
 
   private _removeStatusObserver(currentItem) {
-    CLog(CLogTypes.info, 'Video._removeStatusObserver ---', `currentItem: ${currentItem}`);
+    CLog(
+      CLogTypes.info,
+      'Video._removeStatusObserver ---',
+      `currentItem: ${currentItem}`
+    );
     this._observerActive = false;
     currentItem.removeObserverForKeyPath(this._observer, 'status');
   }
@@ -277,7 +342,11 @@ export class Video extends VideoCommon {
       currentTime => {
         const _seconds = CMTimeGetSeconds(currentTime);
         const _milliseconds = _seconds * 1000.0;
-        CLog(CLogTypes.info, `Video._addPlaybackTimeObserver ---`, 'emitting currentTimeUpdatedEvent');
+        CLog(
+          CLogTypes.info,
+          `Video._addPlaybackTimeObserver ---`,
+          'emitting currentTimeUpdatedEvent'
+        );
         this.notify({
           eventName: VideoCommon.currentTimeUpdatedEvent,
           object: this,
@@ -294,7 +363,11 @@ export class Video extends VideoCommon {
   }
 
   private _autoplayCheck() {
-    CLog(CLogTypes.info, 'Video._autoplayCheck ---', `this.autoplay ${this.autoplay}`);
+    CLog(
+      CLogTypes.info,
+      'Video._autoplayCheck ---',
+      `this.autoplay ${this.autoplay}`
+    );
     if (this.autoplay) {
       this.play();
     }
@@ -302,32 +375,54 @@ export class Video extends VideoCommon {
 
   playbackReady() {
     this.videoLoaded = true;
-    CLog(CLogTypes.info, `Video.playbackReady ---`, 'emitting playbackReadyEvent');
+    CLog(
+      CLogTypes.info,
+      `Video.playbackReady ---`,
+      'emitting playbackReadyEvent'
+    );
     this.sendEvent(VideoCommon.playbackReadyEvent);
   }
 
   playbackStart() {
     this._videoPlaying = true;
-    CLog(CLogTypes.info, `Video.playbackStart ---`, 'emitting playbackStartEvent');
+    CLog(
+      CLogTypes.info,
+      `Video.playbackStart ---`,
+      'emitting playbackStartEvent'
+    );
     this.sendEvent(VideoCommon.playbackStartEvent);
   }
 
   public setMode(mode: string, fill: boolean) {
-    let r = this._playerController.videoBounds;
-
     if (this.mode !== mode) {
       let transform = CGAffineTransformIdentity;
 
       if (mode === 'LANDSCAPE') {
-        transform = CGAffineTransformRotate(transform, (90 * 3.14159265358979) / 180);
+        transform = CGAffineTransformRotate(
+          transform,
+          (90 * 3.14159265358979) / 180
+        );
         this._playerController.view.transform = transform;
 
-        const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.width, this.nativeView.bounds.size.height);
+        const newFrame = CGRectMake(
+          0,
+          0,
+          this.nativeView.bounds.size.width,
+          this.nativeView.bounds.size.height
+        );
         this.nativeView.frame = newFrame;
       } else if (this.mode !== mode && mode === 'PORTRAIT') {
-        transform = CGAffineTransformRotate(transform, (0 * 3.14159265358979) / 180);
+        transform = CGAffineTransformRotate(
+          transform,
+          (0 * 3.14159265358979) / 180
+        );
         this._playerController.view.transform = transform;
-        const newFrame = CGRectMake(0, 0, this.nativeView.bounds.size.height, this.nativeView.bounds.size.width);
+        const newFrame = CGRectMake(
+          0,
+          0,
+          this.nativeView.bounds.size.height,
+          this.nativeView.bounds.size.width
+        );
         this.nativeView.frame = newFrame;
       }
 
@@ -346,8 +441,14 @@ export class Video extends VideoCommon {
   }
 }
 
+@NativeClass()
 class PlayerObserverClass extends NSObject {
-  observeValueForKeyPathOfObjectChangeContext(path: string, obj: Object, change: NSDictionary<any, any>, context: any) {
+  observeValueForKeyPathOfObjectChangeContext(
+    path: string,
+    obj: Object,
+    change: NSDictionary<any, any>,
+    context: any
+  ) {
     CLog(
       CLogTypes.info,
       'PlayerObserverClass.observeValueForKeyPathOfObjectChangeContext ---',
@@ -357,7 +458,9 @@ class PlayerObserverClass extends NSObject {
       const owner = (this as any).owner as Video;
 
       if (owner.player.currentItem.status === AVPlayerItemStatus.Failed) {
-        const baseError = owner.player.currentItem.error.userInfo.objectForKey(NSUnderlyingErrorKey);
+        const baseError = owner.player.currentItem.error.userInfo.objectForKey(
+          NSUnderlyingErrorKey
+        );
         const error = new Error();
 
         owner.sendEvent(VideoCommon.errorEvent, {
@@ -369,7 +472,11 @@ class PlayerObserverClass extends NSObject {
         });
       }
 
-      if (owner.player && owner.player.currentItem.status === AVPlayerItemStatus.ReadyToPlay && !owner.videoLoaded) {
+      if (
+        owner.player &&
+        owner.player.currentItem.status === AVPlayerItemStatus.ReadyToPlay &&
+        !owner.videoLoaded
+      ) {
         owner.playbackReady();
       }
     }

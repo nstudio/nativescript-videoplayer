@@ -1,7 +1,10 @@
-import { Property, View, booleanConverter } from 'tns-core-modules/ui/core/view';
-import { isString } from 'tns-core-modules/utils/types';
-import { isFileOrResourcePath } from 'tns-core-modules/utils/utils';
-import { VideoSource, fromFileOrResource, fromNativeSource, fromUrl } from './video-source/video-source';
+import { booleanConverter, Property, Utils, View } from '@nativescript/core';
+import {
+  fromFileOrResource,
+  fromNativeSource,
+  fromUrl,
+  VideoSource
+} from './video-source/video-source';
 
 export class VideoPlayerUtil {
   public static debug: boolean = false;
@@ -14,7 +17,7 @@ export interface SeekToTimeOptions {
 export enum CLogTypes {
   info,
   warning,
-  error
+  error,
 }
 
 export const CLog = (type: CLogTypes = 0, ...args) => {
@@ -42,7 +45,7 @@ export class VideoCommon extends View {
   /**
    * String value for hooking into the errorEvent. This event fires when an error/exception throws in the Video source.
    */
-  public static errorEvent = 'errorEvent';
+  public static errorEvent = 'error';
 
   /**
    * String value for hooking into the finishedEvent. This event fires when the video is ready.
@@ -66,27 +69,27 @@ export class VideoCommon extends View {
   /**
    * String value for hooking into the finishedEvent. This event fires when the video is complete.
    */
-  public static finishedEvent = 'finishedEvent';
+  public static finishedEvent = 'finished';
 
   /**
    * String value for hooking into the mutedEvent. This event fires when video is muted.
    */
-  public static mutedEvent = 'mutedEvent';
+  public static mutedEvent = 'muted';
 
   /**
    * String value for hooking into the unmutedEvent. This event fires when video is unmutedEvent.
    */
-  public static unmutedEvent = 'unmutedEvent';
+  public static unmutedEvent = 'unmuted';
 
   /**
    * String value for hooking into the pausedEvent. This event fires when video is paused.
    */
-  public static pausedEvent = 'pausedEvent';
+  public static pausedEvent = 'paused';
 
   /**
    * String value for hooking into the volumeSetEvent. This event fires when the volume is set.
    */
-  public static volumeSetEvent = 'volumeSetEvent';
+  public static volumeSetEvent = 'volumeSet';
 
   /**
    * The android nativeView for the VideoPlayer. android.view.TextureView.
@@ -147,67 +150,67 @@ export class VideoCommon extends View {
       eventName,
       object: this,
       data,
-      message: msg
+      message: msg,
     });
   }
 }
 
 export const srcProperty = new Property<VideoCommon, any>({
   name: 'src',
-  valueChanged: onSrcPropertyChanged
+  valueChanged: onSrcPropertyChanged,
 });
 srcProperty.register(VideoCommon);
 
 export const headersProperty = new Property<VideoCommon, any>({
   name: 'headers',
-  valueChanged: onHeadersPropertyChanged
+  valueChanged: onHeadersPropertyChanged,
 });
 headersProperty.register(VideoCommon);
 
 export const videoSourceProperty = new Property<VideoCommon, any>({
-  name: 'videoSource'
+  name: 'videoSource',
 });
 videoSourceProperty.register(VideoCommon);
 
 export const isLoadingProperty = new Property<VideoCommon, boolean>({
   name: 'isLoading',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 isLoadingProperty.register(VideoCommon);
 
 export const observeCurrentTimeProperty = new Property<VideoCommon, boolean>({
   name: 'observeCurrentTime',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 observeCurrentTimeProperty.register(VideoCommon);
 
 export const autoplayProperty = new Property<VideoCommon, boolean>({
   name: 'autoplay',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 autoplayProperty.register(VideoCommon);
 
 export const controlsProperty = new Property<VideoCommon, boolean>({
   name: 'controls',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 controlsProperty.register(VideoCommon);
 
 export const loopProperty = new Property<VideoCommon, boolean>({
   name: 'loop',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 loopProperty.register(VideoCommon);
 
 export const mutedProperty = new Property<VideoCommon, boolean>({
   name: 'muted',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 mutedProperty.register(VideoCommon);
 
 export const fillProperty = new Property<VideoCommon, boolean>({
   name: 'fill',
-  valueConverter: booleanConverter
+  valueConverter: booleanConverter,
 });
 fillProperty.register(VideoCommon);
 
@@ -223,12 +226,12 @@ function onSrcPropertyChanged(view, oldValue, newValue) {
   const video = view;
   let value = newValue;
 
-  if (isString(value)) {
+  if (Utils.isString(value)) {
     value = value.trim();
     video.videoSource = null;
     video['_url'] = value;
     video.isLoadingProperty = true;
-    if (isFileOrResourcePath(value)) {
+    if (Utils.isFileOrResourcePath(value)) {
       video.videoSource = fromFileOrResource(value);
       video.isLoadingProperty = false;
     } else {
@@ -254,9 +257,8 @@ function onHeadersPropertyChanged(view, oldValue, newValue) {
 
   if (oldValue !== newValue) {
     if (video.src) {
-      let src = video.src;
       onSrcPropertyChanged(view, null, null);
-      onSrcPropertyChanged(view, null, src);
+      onSrcPropertyChanged(view, null, video.src);
     }
   }
 }

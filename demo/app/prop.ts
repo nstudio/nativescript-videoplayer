@@ -1,15 +1,12 @@
-import { Observable } from 'tns-core-modules/data/observable';
+import { Observable } from '@nativescript/core';
+
 export function Prop() {
   return (target: Observable, propertyKey: string) => {
     Object.defineProperty(target, propertyKey, {
-      // tslint:disable-next-line:only-arrow-functions
-      get: function() {
-        // tslint:disable-next-line:object-literal-shorthand
+      get: function () {
         return this['_' + propertyKey];
       },
-      // tslint:disable-next-line:only-arrow-functions
-      set: function(value) {
-        // tslint:disable-next-line:object-literal-shorthand
+      set: function (value) {
         if (this['_' + propertyKey] === value) {
           return;
         }
@@ -19,11 +16,11 @@ export function Prop() {
           eventName: Observable.propertyChangeEvent,
           propertyName: propertyKey,
           object: this,
-          value
+          value,
         });
       },
       enumerable: true,
-      configurable: true
+      configurable: true,
     });
   };
 }

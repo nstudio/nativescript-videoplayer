@@ -1,4 +1,4 @@
-import { View } from 'tns-core-modules/ui/core/view';
+import { View } from '@nativescript/core';
 
 export declare class Video extends View {
   /**
@@ -132,6 +132,14 @@ export declare class Video extends View {
    * @param {number} volume - Volume to set the video between 0 and 1
    */
   setVolume(volume: number): void;
+
+  /**
+   * 
+   * *** ANDROID ONLY ***
+   * Set the playback speed rate.
+   * @param {number} 
+   */
+  changePlayerSpeed(number): void;
 
   /**
    * Destroy the video player and free up resources.

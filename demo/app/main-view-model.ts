@@ -1,10 +1,12 @@
+import {
+  Frame,
+  isAndroid,
+  Observable,
+  Page,
+  StackLayout,
+  Utils
+} from '@nativescript/core';
 import { Video } from 'nativescript-videoplayer';
-import { Observable } from 'tns-core-modules/data/observable';
-import { isAndroid } from 'tns-core-modules/platform';
-import { setInterval } from 'tns-core-modules/timer';
-import { topmost } from 'tns-core-modules/ui/frame';
-import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout';
-import { Page } from 'tns-core-modules/ui/page';
 import { Prop } from './prop';
 
 export class HelloWorldModel extends Observable {
@@ -52,7 +54,7 @@ export class HelloWorldModel extends Observable {
 
     this.currentTime = '';
     this.videoDuration = '';
-    this.videoSrc = '~/videos/small.mp4';
+    this.videoSrc = '~/videos/big_buck_bunny.mp4';
     this.trackVideoCurrentPosition();
   }
 
@@ -67,7 +69,7 @@ export class HelloWorldModel extends Observable {
    * Pause the video
    */
   public pauseVideo() {
-    this._videoPlayer.pause();
+    this._videoPlayer?.pause();
   }
 
   /**
@@ -91,7 +93,7 @@ export class HelloWorldModel extends Observable {
    * Get the video duration
    */
   public getVideoDuration() {
-    let videoDuration = this._videoPlayer.getDuration();
+    const videoDuration = this._videoPlayer.getDuration();
     console.log('Video Duration: ' + videoDuration);
     this.set('videoDuration', videoDuration);
   }
@@ -110,7 +112,7 @@ export class HelloWorldModel extends Observable {
   public animate() {
     console.log('Animation');
 
-    const enums = require('tns-core-modules/ui/enums');
+    const enums = require('@nativescript/core/ui/enums');
     this._videoPlayer
       .animate({
         rotate: 360,
@@ -151,10 +153,10 @@ export class HelloWorldModel extends Observable {
     const video = new Video();
     video.height = 200;
     video.width = 175;
-    video.src = 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
+    video.src = '~/videos/small.mp4';
     video.controls = false;
     video.autoplay = true;
-    const stack = topmost().getViewById('emptyStack') as StackLayout;
+    const stack = Frame.topmost().getViewById('emptyStack') as StackLayout;
     stack.addChild(video);
   }
 
@@ -171,7 +173,7 @@ export class HelloWorldModel extends Observable {
    */
   public getVideoCurrentTime() {
     try {
-      let currentTime = this._videoPlayer.getCurrentTime();
+      const currentTime = this._videoPlayer.getCurrentTime();
       console.log('Current Time: ' + currentTime);
     } catch (err) {
       console.log(err);
@@ -183,14 +185,14 @@ export class HelloWorldModel extends Observable {
    */
   public changeVideoSource() {
     if (this.videoSrc === '~/videos/small.mp4') {
-      this._videoPlayer.src = 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
+      this._videoPlayer.src = '~/videos/big_buck_bunny.mp4';
     } else {
       this._videoPlayer.src = '~/videos/small.mp4';
     }
   }
 
-  private trackVideoCurrentPosition(): number {
-    let trackInterval = setInterval(() => {
+  private trackVideoCurrentPosition() {
+    const trackInterval = Utils.setInterval(() => {
       let x, y;
       if (this.completed) {
         x = '';

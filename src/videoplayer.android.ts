@@ -1,8 +1,12 @@
-/// <reference path="./node_modules/tns-platform-declarations/android.d.ts" />
-
-import * as utils from 'tns-core-modules/utils/utils';
-import { setInterval, clearInterval } from 'tns-core-modules/timer';
-import { VideoCommon, headersProperty, videoSourceProperty, CLog, CLogTypes, SeekToTimeOptions } from './videoplayer-common';
+import { Utils } from '@nativescript/core';
+import {
+  CLog,
+  CLogTypes,
+  headersProperty,
+  VideoCommon,
+  videoSourceProperty,
+  SeekToTimeOptions
+} from './videoplayer-common';
 
 const STATE_IDLE = 0;
 const STATE_PLAYING = 1;
@@ -33,9 +37,9 @@ export class Video extends VideoCommon {
     super();
   }
 
-  get android(): any {
-    return this.nativeView;
-  }
+  // get android(): any {
+  //   return this.nativeView;
+  // }
 
   [headersProperty.setNative](value) {
     this._setHeader(value ? value : null);
@@ -54,7 +58,11 @@ export class Video extends VideoCommon {
     this.nativeView.setOnTouchListener(
       new android.view.View.OnTouchListener({
         onTouch: (view, event) => {
-          CLog(CLogTypes.info, 'OnTouchListener --- onTouch', `view: ${view}, event: ${event}`);
+          CLog(
+            CLogTypes.info,
+            'OnTouchListener --- onTouch',
+            `view: ${view}, event: ${event}`
+          );
           this._owner.get().toggleMediaControllerVisibility();
           return false;
         }
@@ -73,14 +81,22 @@ export class Video extends VideoCommon {
         },
 
         onSurfaceTextureAvailable: (surface, width, height) => {
-          CLog(CLogTypes.info, 'SurfaceTextureListener.onSurfaceTextureAvailable ---', `surface: ${surface}`);
+          CLog(
+            CLogTypes.info,
+            'SurfaceTextureListener.onSurfaceTextureAvailable ---',
+            `surface: ${surface}`
+          );
           this._owner.get().textureSurface = new android.view.Surface(surface);
           this._owner.get().mediaState = SURFACE_WAITING;
           this._owner.get()._openVideo();
         },
 
         onSurfaceTextureDestroyed: surface => {
-          CLog(CLogTypes.info, 'SurfaceTextureListener.onSurfaceTextureDestroyed ---', `surface: ${surface}`);
+          CLog(
+            CLogTypes.info,
+            'SurfaceTextureListener.onSurfaceTextureDestroyed ---',
+            `surface: ${surface}`
+          );
           // after we return from this we can't use the surface any more
           if (this._owner.get().textureSurface !== null) {
             this._owner.get().textureSurface.release();
@@ -182,7 +198,11 @@ export class Video extends VideoCommon {
   }
 
   public getDuration(): number {
-    if (!this.player || this.mediaState === SURFACE_WAITING || this.playState === STATE_IDLE) {
+    if (
+      !this.player ||
+      this.mediaState === SURFACE_WAITING ||
+      this.playState === STATE_IDLE
+    ) {
       return 0;
     }
     return this.player.getDuration();
@@ -198,6 +218,12 @@ export class Video extends VideoCommon {
   public setVolume(volume: number) {
     this.player.setVolume(volume, volume);
     this.sendEvent(VideoCommon.volumeSetEvent);
+  }
+
+  public changePlayerSpeed(speed: number) {
+    this.player.setPlaybackParams(
+      this.player.getPlaybackParams().setSpeed(speed)
+    );
   }
 
   public destroy() {
@@ -224,7 +250,9 @@ export class Video extends VideoCommon {
       if (this._playbackTimeObserverActive) {
         this._removePlaybackTimeObserver();
       }
-      let am = utils.ad.getApplicationContext().getSystemService(android.content.Context.AUDIO_SERVICE);
+      const am = Utils.android
+        .getApplicationContext()
+        .getSystemService(android.content.Context.AUDIO_SERVICE);
       am.abandonAudioFocus(null);
     }
   }
@@ -247,7 +275,11 @@ export class Video extends VideoCommon {
     this.player.setOnPreparedListener(
       new android.media.MediaPlayer.OnPreparedListener({
         onPrepared: mp => {
-          CLog(CLogTypes.info, 'MediaPlayer.OnPreparedListener.onPrepared ---', `mp: ${mp}`);
+          CLog(
+            CLogTypes.info,
+            'MediaPlayer.OnPreparedListener.onPrepared ---',
+            `mp: ${mp}`
+          );
           if (this._owner.get()) {
             if (this._owner.get().muted === true) {
               mp.setVolume(0, 0);
@@ -273,14 +305,23 @@ export class Video extends VideoCommon {
               this._owner.get()._setupAspectRatio();
             }
 
-            if (this._owner.get().videoWidth !== 0 && this._owner.get().videoHeight !== 0) {
+            if (
+              this._owner.get().videoWidth !== 0 &&
+              this._owner.get().videoHeight !== 0
+            ) {
               this._owner
                 .get()
                 .nativeView.getSurfaceTexture()
-                .setDefaultBufferSize(this._owner.get().videoWidth, this._owner.get().videoHeight);
+                .setDefaultBufferSize(
+                  this._owner.get().videoWidth,
+                  this._owner.get().videoHeight
+                );
             }
 
-            if (this._owner.get().autoplay === true || this._owner.get().playState === STATE_PLAYING) {
+            if (
+              this._owner.get().autoplay === true ||
+              this._owner.get().playState === STATE_PLAYING
+            ) {
               this._owner.get().play();
             }
 
@@ -297,9 +338,16 @@ export class Video extends VideoCommon {
     this.player.setOnSeekCompleteListener(
       new android.media.MediaPlayer.OnSeekCompleteListener({
         onSeekComplete: mp => {
-          CLog(CLogTypes.info, 'MediaPlayer.OnSeekCompleteListener.onSeekComplete ---', `mp: ${mp}`);
+          CLog(
+            CLogTypes.info,
+            'MediaPlayer.OnSeekCompleteListener.onSeekComplete ---',
+            `mp: ${mp}`
+          );
           if (this._owner.get()) {
-            CLog(CLogTypes.info, 'Video.play ---  emitting seekToTimeCompleteEvent');
+            CLog(
+              CLogTypes.info,
+              'Video.play ---  emitting seekToTimeCompleteEvent'
+            );
             this._owner.get().sendEvent(VideoCommon.seekToTimeCompleteEvent);
           }
         }
@@ -318,11 +366,17 @@ export class Video extends VideoCommon {
           if (this._owner.get()) {
             this._owner.get().videoWidth = mp.getVideoWidth();
             this._owner.get().videoHeight = mp.getVideoHeight();
-            if (this._owner.get().videoWidth !== 0 && this._owner.get().videoHeight !== 0) {
+            if (
+              this._owner.get().videoWidth !== 0 &&
+              this._owner.get().videoHeight !== 0
+            ) {
               this._owner
                 .get()
                 .nativeView.getSurfaceTexture()
-                .setDefaultBufferSize(this._owner.get().videoWidth, this._owner.get().videoHeight);
+                .setDefaultBufferSize(
+                  this._owner.get().videoWidth,
+                  this._owner.get().videoHeight
+                );
               if (this._owner.get().fill === true) {
                 this._owner.get()._resetAspectRatio();
               } else {
@@ -337,7 +391,11 @@ export class Video extends VideoCommon {
     this.player.setOnCompletionListener(
       new android.media.MediaPlayer.OnCompletionListener({
         onCompletion: mp => {
-          CLog(CLogTypes.info, 'MediaPlayer.OnCompletionListener.onCompletion ---', `mp: ${mp}`);
+          CLog(
+            CLogTypes.info,
+            'MediaPlayer.OnCompletionListener.onCompletion ---',
+            `mp: ${mp}`
+          );
           if (this._owner.get()) {
             this._owner.get()._removePlaybackTimeObserver();
             CLog(CLogTypes.info, 'Video.play ---  emitting finishedEvent');
@@ -366,61 +424,80 @@ export class Video extends VideoCommon {
     CLog(CLogTypes.info, 'Video._setupMediaController');
     if (this.controls !== false || this.controls === undefined) {
       if (this.mediaController == null) {
-        CLog(CLogTypes.info, 'Video._setupMediaController ---', 'creating new MediaController');
-        this.mediaController = new android.widget.MediaController(this._context);
+        CLog(
+          CLogTypes.info,
+          'Video._setupMediaController ---',
+          'creating new MediaController'
+        );
+        this.mediaController = new android.widget.MediaController(
+          this._context
+        );
       } else {
         // Already setup
         return;
       }
 
       // 'getAudioSessionId' was added in API level 18, the current generated TNS typings are level 17
-      interface TNSMediaPlayerControlApiLevel18 extends android.widget.MediaController.MediaPlayerControl {
+      interface TNSMediaPlayerControlApiLevel18
+        extends android.widget.MediaController.MediaPlayerControl {
         getAudioSessionId(): number;
       }
 
-      const mediaPlayerControl = new android.widget.MediaController.MediaPlayerControl(<
-        TNSMediaPlayerControlApiLevel18
-      >{
-        canPause: () => {
-          return true;
-        },
-        canSeekBackward: () => {
-          return true;
-        },
-        canSeekForward: () => {
-          return true;
-        },
-        getAudioSessionId: () => {
-          return this._owner.get().audioSession;
-        },
-        getBufferPercentage: () => {
-          return this._owner.get().currentBufferPercentage;
-        },
-        getCurrentPosition: () => {
-          return this._owner.get().getCurrentTime();
-        },
-        getDuration: () => {
-          return this._owner.get().getDuration();
-        },
-        isPlaying: () => {
-          return this._owner.get().isPlaying();
-        },
-        pause: () => {
-          this._owner.get().pause();
-        },
-        seekTo: v => {
-          this._owner.get().seekToTime(v);
-        },
-        start: () => {
-          this._owner.get().play();
+      const mediaPlayerControl = new android.widget.MediaController.MediaPlayerControl(
+        <TNSMediaPlayerControlApiLevel18>{
+          canPause: () => {
+            return true;
+          },
+          canSeekBackward: () => {
+            return true;
+          },
+          canSeekForward: () => {
+            return true;
+          },
+          getAudioSessionId: () => {
+            return this._owner.get().audioSession;
+          },
+          getBufferPercentage: () => {
+            return this._owner.get().currentBufferPercentage;
+          },
+          getCurrentPosition: () => {
+            return this._owner.get().getCurrentTime();
+          },
+          getDuration: () => {
+            return this._owner.get().getDuration();
+          },
+          isPlaying: () => {
+            return this._owner.get().isPlaying();
+          },
+          pause: () => {
+            this._owner.get().pause();
+          },
+          seekTo: v => {
+            this._owner.get().seekToTime(v);
+          },
+          start: () => {
+            this._owner.get().play();
+          }
         }
-      });
+      );
 
-      CLog(CLogTypes.info, `Video._setupMediaController ---`, `mediaController.setMediaPlayer(${mediaPlayerControl})`);
+      CLog(
+        CLogTypes.info,
+        `Video._setupMediaController ---`,
+        `mediaController.setMediaPlayer(${mediaPlayerControl})`
+      );
       this.mediaController.setMediaPlayer(mediaPlayerControl);
-      CLog(CLogTypes.info, `Video._setupMediaController ---`, `mediaController.setAnchorView(${this.nativeView})`);
+      CLog(
+        CLogTypes.info,
+        `Video._setupMediaController ---`,
+        `mediaController.setAnchorView(${this.nativeView})`
+      );
       this.mediaController.setAnchorView(this.nativeView);
-      CLog(CLogTypes.info, `Video._setupMediaController ---`, `mediaController.setEnabled(true)`);
+      CLog(
+        CLogTypes.info,
+        `Video._setupMediaController ---`,
+        `mediaController.setEnabled(true)`
+      );
       this.mediaController.setEnabled(true);
     }
   }
@@ -448,14 +525,26 @@ export class Video extends VideoCommon {
       newHeight = viewHeight;
     }
 
-    CLog(CLogTypes.info, `Video._setupAspectRatio ---`, `newWidth: ${newWidth}, newHeight: ${newHeight}`);
+    CLog(
+      CLogTypes.info,
+      `Video._setupAspectRatio ---`,
+      `newWidth: ${newWidth}, newHeight: ${newHeight}`
+    );
 
     const xoff = (viewWidth - newWidth) / 2;
     const yoff = (viewHeight - newHeight) / 2;
-    CLog(CLogTypes.info, `Video._setupAspectRatio ---`, `xoff: ${xoff}, yoff: ${yoff}`);
+    CLog(
+      CLogTypes.info,
+      `Video._setupAspectRatio ---`,
+      `xoff: ${xoff}, yoff: ${yoff}`
+    );
 
     const txform = new android.graphics.Matrix();
-    CLog(CLogTypes.info, `Video._setupAspectRatio ---`, `txform: ${txform}, txform: ${txform}`);
+    CLog(
+      CLogTypes.info,
+      `Video._setupAspectRatio ---`,
+      `txform: ${txform}, txform: ${txform}`
+    );
 
     this.nativeView.getTransform(txform);
     txform.setScale(newWidth / viewWidth, newHeight / viewHeight);
@@ -479,10 +568,10 @@ export class Video extends VideoCommon {
     //   newWidth = viewWidth;
     // }
 
-    let xoff = (viewWidth - newWidth) / 2;
-    let yoff = (viewHeight - newHeight) / 2;
+    const xoff = (viewWidth - newWidth) / 2;
+    const yoff = (viewHeight - newHeight) / 2;
 
-    let txform = new android.graphics.Matrix();
+    const txform = new android.graphics.Matrix();
     txform.setScale(newWidth / viewWidth, newHeight / viewHeight);
     txform.postTranslate(xoff, yoff);
     this.nativeView.setTransform(txform);
@@ -492,7 +581,9 @@ export class Video extends VideoCommon {
     if (
       this._src === null ||
       this.textureSurface === null ||
-      (this._src !== null && typeof this._src === 'string' && this._src.length === 0)
+      (this._src !== null &&
+        typeof this._src === 'string' &&
+        this._src.length === 0)
     ) {
       // we have to protect In case something else calls this before we are ready
       // the Surface event will then call this when we are ready...
@@ -503,28 +594,50 @@ export class Video extends VideoCommon {
     // clear any old stuff
     this.release();
 
-    let am = utils.ad.getApplicationContext().getSystemService(android.content.Context.AUDIO_SERVICE);
-    am.requestAudioFocus(null, android.media.AudioManager.STREAM_MUSIC, android.media.AudioManager.AUDIOFOCUS_GAIN);
+    const am = Utils.android
+      .getApplicationContext()
+      .getSystemService(android.content.Context.AUDIO_SERVICE);
+    am.requestAudioFocus(
+      null,
+      android.media.AudioManager.STREAM_MUSIC,
+      android.media.AudioManager.AUDIOFOCUS_GAIN
+    );
 
     try {
       this.player = new android.media.MediaPlayer();
-      CLog(CLogTypes.info, `Video._openVideo ---`, `this.player: ${this.player}`);
+      CLog(
+        CLogTypes.info,
+        `Video._openVideo ---`,
+        `this.player: ${this.player}`
+      );
 
       if (this.audioSession !== null) {
-        CLog(CLogTypes.info, `Video._openVideo ---`, `setting audio session Id: ${this.audioSession}`);
+        CLog(
+          CLogTypes.info,
+          `Video._openVideo ---`,
+          `setting audio session Id: ${this.audioSession}`
+        );
         this.player.setAudioSessionId(this.audioSession);
       } else {
         this.audioSession = this.player.getAudioSessionId();
       }
 
-      CLog(CLogTypes.info, `Video._openVideo --- `, `setting up MediaPlayerListeners`);
+      CLog(
+        CLogTypes.info,
+        `Video._openVideo --- `,
+        `setting up MediaPlayerListeners`
+      );
       this._setupMediaPlayerListeners();
 
       if (!this._headers || this._headers.size() === 0) {
         this.player.setDataSource(this._src);
       } else {
-        let videoUri = android.net.Uri.parse(this._src);
-        this.player.setDataSource(utils.ad.getApplicationContext(), videoUri, this._headers);
+        const videoUri = android.net.Uri.parse(this._src);
+        this.player.setDataSource(
+          Utils.android.getApplicationContext(),
+          videoUri,
+          this._headers
+        );
       }
 
       this.player.setSurface(this.textureSurface);
@@ -536,9 +649,10 @@ export class Video extends VideoCommon {
         new android.media.MediaPlayer.OnErrorListener({
           onError: (mp, what, extra) => {
             const error = new Error();
-            this._owner
-              .get()
-              .sendEvent(VideoCommon.errorEvent, { error: { what: what, extra: extra }, stack: error.stack });
+            this._owner.get().sendEvent(VideoCommon.errorEvent, {
+              error: { what: what, extra: extra },
+              stack: error.stack
+            });
             return true;
           }
         })
@@ -546,8 +660,13 @@ export class Video extends VideoCommon {
 
       this._setupMediaController();
     } catch (ex) {
-      CLog(CLogTypes.error, `Video._openVideo --- error: ${ex}, stack: ${ex.stack}`);
-      this._owner.get().sendEvent(VideoCommon.errorEvent, { error: ex, stack: ex.stack });
+      CLog(
+        CLogTypes.error,
+        `Video._openVideo --- error: ${ex}, stack: ${ex.stack}`
+      );
+      this._owner
+        .get()
+        .sendEvent(VideoCommon.errorEvent, { error: ex, stack: ex.stack });
     }
   }
 
@@ -573,9 +692,9 @@ export class Video extends VideoCommon {
   private _addPlaybackTimeObserver() {
     CLog(CLogTypes.error, `Video._addPlaybackTimeObserver`);
     this._playbackTimeObserverActive = true;
-    this._playbackTimeObserver = setInterval(() => {
+    this._playbackTimeObserver = Utils.setInterval(() => {
       if (this.player.isPlaying) {
-        let _milliseconds = this.player.getCurrentPosition();
+        const _milliseconds = this.player.getCurrentPosition();
         this.notify({
           eventName: VideoCommon.currentTimeUpdatedEvent,
           object: this,
@@ -591,15 +710,17 @@ export class Video extends VideoCommon {
       // one last emit of the most up-to-date time index
       if (this.player !== null) {
         const _milliseconds = this.player.getCurrentPosition();
-        CLog(CLogTypes.info, 'Video._removePlaybackTimeObserver', 'emitting currentTimeUpdatedEvent');
-        this.notify({
-          eventName: VideoCommon.currentTimeUpdatedEvent,
-          object: this,
-          position: _milliseconds
+        CLog(
+          CLogTypes.info,
+          'Video._removePlaybackTimeObserver',
+          'emitting currentTimeUpdatedEvent'
+        );
+        this.sendEvent(VideoCommon.currentTimeUpdatedEvent, {
+          currentPosition: _milliseconds
         });
       }
 
-      clearInterval(this._playbackTimeObserver);
+      Utils.clearInterval(this._playbackTimeObserver);
       this._playbackTimeObserverActive = false;
     }
   }
@@ -615,8 +736,8 @@ export class Video extends VideoCommon {
   // }
 
   setMode(mode: string, fill: boolean) {
-    let viewWidth = this.nativeView.getWidth();
-    let viewHeight = this.nativeView.getHeight();
+    const viewWidth = this.nativeView.getWidth();
+    const viewHeight = this.nativeView.getHeight();
 
     if (mode === 'LANDSCAPE') {
       this.configureTransform(viewWidth, viewHeight, true, fill);
@@ -629,8 +750,8 @@ export class Video extends VideoCommon {
   }
 
   configureTransform(viewWidth, viewHeight, isLandscape, fill) {
-    let matrix = new android.graphics.Matrix();
-    let viewRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
+    const matrix = new android.graphics.Matrix();
+    const viewRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
     let bufferRect;
 
     if (isLandscape) {
@@ -639,39 +760,51 @@ export class Video extends VideoCommon {
       bufferRect = new android.graphics.RectF(0, 0, viewWidth, viewHeight);
     }
 
-    let centerX = viewRect.centerX();
-    let centerY = viewRect.centerY();
+    const centerX = viewRect.centerX();
+    const centerY = viewRect.centerY();
 
     let scaleX, scaleY;
 
-    let currentHeight = (viewWidth * this.videoHeight) / this.videoWidth;
-    let currentWidth = viewWidth;
+    const currentHeight = (viewWidth * this.videoHeight) / this.videoWidth;
+    const currentWidth = viewWidth;
 
     if (isLandscape) {
       if (fill) {
         scaleX = viewHeight / currentHeight;
-        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / currentWidth;
+        scaleY =
+          (currentWidth * this.videoHeight) / this.videoWidth / currentWidth;
 
         if (scaleY * currentWidth < viewWidth) {
           scaleY = viewWidth / currentWidth;
-          scaleX = (scaleY * currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
+          scaleX =
+            (scaleY * currentWidth * this.videoWidth) /
+            this.videoHeight /
+            currentHeight;
         } else if (scaleX * currentHeight < viewHeight) {
           scaleX = viewHeight / currentHeight;
-          scaleY = (scaleX * currentHeight * this.videoHeight) / this.videoWidth / currentWidth;
+          scaleY =
+            (scaleX * currentHeight * this.videoHeight) /
+            this.videoWidth /
+            currentWidth;
         }
       } else {
         scaleX = viewHeight / currentHeight;
-        scaleY = (scaleX * currentHeight * this.videoHeight) / this.videoWidth / currentWidth;
+        scaleY =
+          (scaleX * currentHeight * this.videoHeight) /
+          this.videoWidth /
+          currentWidth;
 
         if (scaleY * currentWidth > viewWidth) {
           scaleY = viewWidth / currentWidth;
-          scaleX = (currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
+          scaleX =
+            (currentWidth * this.videoWidth) / this.videoHeight / currentHeight;
         }
       }
     } else {
       if (fill) {
         scaleY = 1;
-        scaleX = (viewHeight * this.videoWidth) / this.videoHeight / currentWidth;
+        scaleX =
+          (viewHeight * this.videoWidth) / this.videoHeight / currentWidth;
         // if (scaleY * currentHeight < viewHeight) {
         //     scaleY = viewHeight / currentHeight;
         //     scaleX = (scaleY * currentHeight * this.videoWidth / this.videoHeight) / currentWidth;
@@ -682,12 +815,20 @@ export class Video extends VideoCommon {
         // }
       } else {
         scaleX = viewWidth / currentWidth;
-        scaleY = (currentWidth * this.videoHeight) / this.videoWidth / viewHeight;
+        scaleY =
+          (currentWidth * this.videoHeight) / this.videoWidth / viewHeight;
       }
     }
 
-    bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
-    matrix.setRectToRect(viewRect, bufferRect, android.graphics.Matrix.ScaleToFit.CENTER);
+    bufferRect.offset(
+      centerX - bufferRect.centerX(),
+      centerY - bufferRect.centerY()
+    );
+    matrix.setRectToRect(
+      viewRect,
+      bufferRect,
+      android.graphics.Matrix.ScaleToFit.CENTER
+    );
     matrix.postScale(scaleX, scaleY, centerX, centerY);
 
     if (isLandscape) {
