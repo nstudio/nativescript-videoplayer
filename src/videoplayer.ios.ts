@@ -142,7 +142,15 @@ export class Video extends VideoCommon {
 
   public play() {
     CLog(CLogTypes.info, 'Video.play');
-    if (this._videoFinished) {
+
+	let audioSession = AVAudioSession.sharedInstance();
+	audioSession.setCategoryWithOptionsError(
+		AVAudioSessionCategoryAmbient,
+		AVAudioSessionCategoryOptions.DuckOthers
+	);
+	audioSession.setActiveError(true);
+
+	if (this._videoFinished) {
       this._videoFinished = false;
       this.seekToTime(5);
     }
@@ -162,6 +170,9 @@ export class Video extends VideoCommon {
     if (this._playbackTimeObserverActive) {
       this._removePlaybackTimeObserver();
     }
+
+	let audioSession = AVAudioSession.sharedInstance();
+	setTimeout(() => audioSession.setActiveError(false), 100);
   }
 
   public mute(mute: boolean) {
